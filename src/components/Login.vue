@@ -37,7 +37,7 @@ export default {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
 
     .title {
-      margin: 20px 0;
+      margin: 5px 0;
       font-size: 20px;
       font-weight: bold;
     }
