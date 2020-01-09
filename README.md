@@ -156,10 +156,60 @@ npm run serve
 
 当然由于登录这个功能需要后端支持，帐号密码什么的都需要存在数据库中，所以暂时只有前端的功能演示，之后我们会一步步补齐哒！
 
-### 上手写
+### 理解组织关系
 
-有些同学可能会说：「啊！我 HTML 和 CSS 都没有学熟练，这个 Vue 项目我要如何开始呐？」
+有些同学可能会说：「啊！我 HTML 和 CSS 都没有学熟练，这个 Vue 项目我要如何开始学习呐？」
 
-接下来就是如何开始编写 Vue 的保姆级教程，刚开始写这里的时候，`Login.vue` 的功能还没有开始写，我会写一步记录一步，做一次提交。
+第一步自然应该是厘清项目中文件间组织关系。
 
-首先我先 `git commit` 当前的 "项目起始架构"。**「commit: 待补充序列号」**
+
+> 当前阶段是 "项目起始架构"，要回到此步骤：请回溯到： 
+> 
+> **`「commit: 10cee2e3dd65259e0ead30e9c0283a721afe85c8」`**
+
+#### 这些 .vue 文件是怎么组织起来的？
+
+<img width="700" src="http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-09-1C149988-8CE1-49E6-8AE6-97E48AA8B7B7.png">
+
+从上图你可以看出，这一切还是要基于一个 HTML 的文件。点开 `public/index.html`，你会看到 `body` 中只有一个什么内容都没有的 `div` 元素，却能够展示出浏览器当中呈现出的效果：
+```html
+<div id="app"></div>
+```
+这是由于 Vue 在编译过程中用 `src/App.vue` 内 `<template> ... </template>` 内的 HTML 替换掉原来此处的这个元素。
+
+**每一个 `.vue` 文件就是一个「组件」**，只是各个组件的意义可能不尽相同。比如 `App.vue` 可能只是作为一个树根，而 `Home。vue` 和 `About.vue`
+
+打开 Chrome 浏览器的开发者工具：`Windows: Ctrl + Shift + I`|`Mac: Option + Command + I`，这个东西以后我们会经常用到。
+
+![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-09-WeChat9fca497b248ea1c84a6cbdbb9e538af4.png)
+
+可以看到原本空空如也的 `<div id="app"></div>` 现在里面多了这么多元素。
+
+总结以上经历：在 `.vue` 文件中的 `<template></template>` 书写 HTML 和在 `index.html` 中并没有什么区别。
+
+只是因为 Vue 框架提供的功能，原本一个 HTML 文件中的大元素，可以将内容拆到好几个 `.vue` 文件中了。
+当我们点开 `App.vue`，可以看到：
+```html
+<div id="app">
+  <div id="nav">
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link>
+  </div>
+  <router-view/>
+</div>
+```
+`<router-link>` 和 `<router-view>` 是 Vue-Router 插件提供的组件，它并不是 HTML 原生的标签。
+
+如果你细心观察会发现：**其实`<router-link>` 就是一个 `a` 标签**，属性 `to` 其实就是 `a` 标签上的 `href`。
+
+而 `<router-view>` 中负责展示对应的路由：比如地址 `http://localhost:8080/about` 对应的就应该是 `src/views/About.vue`，这些控制对应关系的定义需要写在 `src/router/index.js` 中。
+
+这些就涉及到 Vue-Router 的内容了，我们不再做深入展开。
+
+#### 编写登录的表单
+
+既然在上面咱们画出了组件间的关系图，那么你应该能够理解「**一种业务逻辑应该写在专门的组件里**」这句话了吧！比如咱们的登录页面就应该写在 `Login.vue` 中。
+
+众所周知，登录时是需要输入的，常见的字段有 "手机号"、"用户名"、"邮箱地址" 等，然后是输入密码，或是较现代一些的 "使用短信验证码" 登录。**根据需求，我们就采用两个字段：学号/工号 和 密码**。
+
+
