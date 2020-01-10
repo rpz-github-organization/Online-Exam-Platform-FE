@@ -429,6 +429,9 @@ const res = await this.$axios.post('/login', {
 <button @click="submitLogin" class="submit">登录</button>
 ```
 
+在前端想后端用 JS 发送请求的过程，学名叫做「**AJAX**」，是一种 "是一种在无需重新加载整个网页的情况下，能够更新部分网页的技术"，要了解更多相关内容，请 [点击此链接](https://www.runoob.com/ajax/ajax-intro.html)
+ 查看相关教程。
+
 #### 查看请求返回结果
 
 打开 Chrome 的开发者工具，切换到 `Network` 标签页，这里是我们用来 **分析网络请求** 的地方。
@@ -461,4 +464,4 @@ const res = await this.$axios.post('/login', {
 
 （当然，这项工作有时候是后端的程序员们先将请求格式定义好告诉你，那咱们就照做即可）
 
-如果你想学习如何书写接口文档，那么请看本项目 `docs/接口文档示范.md` 中的内容。
+如果你想学习如何书写接口文档，那么点击此链接请看本项目 [`docs/接口文档示范.md`](https://github.com/rpz-github-organization/Online-Exam-Platform-FE/blob/master/docs/%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3%E7%A4%BA%E8%8C%83.md) 中的内容。
