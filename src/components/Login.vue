@@ -13,8 +13,11 @@
           <input v-model="password" type="password" name="password" placeholder="请输入密码" />
         </div>
         <br>
+        <div v-show="tipMessage.length > 0" class="row">
+          <p class="tip">{{ tipMessage }}</p>
+        </div>
         <div class="row">
-          <button class="submit">登录</button>
+          <button @click="submitLogin" class="submit">登录</button>
           <a href="/">忘记密码</a>
           <a href="/register">立即注册</a>
         </div>
@@ -31,7 +34,36 @@ export default {
     return {
       uid: '',
       password: '',
+
+      tipMessage: '',
     };
+  },
+  methods: {
+    validate() {
+      let res = true;
+      if (this.uid.length === 0) {
+        this.tipMessage = '还没有填写 学号/工号！';
+        res = false;
+      } else if (this.password.length === 0) {
+        this.tipMessage = '还没有填写 密码！';
+        res = false;
+      }
+      this.tipMessage = '';
+      return res;
+    },
+    async submitLogin() {
+      if (this.validate()) {
+        try {
+          const res = await this.$axios.post('http://localhost:8080/login', {
+            uid: this.uid,
+            password: this.password,
+          });
+          console.log(res);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
   },
 };
 </script>

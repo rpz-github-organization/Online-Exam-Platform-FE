@@ -2,7 +2,7 @@
 
 ## 新手引入
 
-`Version1: Edited in 2020-01-09`
+`Version1: Edited From 2020-01-09`
 
 ### 学会使用 Git 克隆本项目
 
@@ -225,7 +225,7 @@ npm run serve
 > 
 > `commit 0a7a019fbcd5d909f92d14024177dabffd057fd6`
 
-#### 开始编写登录表单的界面
+### 开始编写登录表单的界面
 
 既然在上面咱们画出了组件间的关系图，那么你应该能够理解「**一种业务逻辑应该写在专门的组件里**」这句话了吧！比如咱们的登录页面就应该写在 `Login.vue` 中。
 
@@ -267,7 +267,7 @@ npm run serve
 
 至此我们还没有开始涉及到 JavaScript 中的内容，还没有开始「**操作数据**」，而接下来我们就将走进 JavaScript 的部分啦！
 
-#### 让数据在页面中生效
+### 让数据在页面中生效
 
 **前置知识：** JavaScript 可以通过 `<input />` 这个 HTML 元素的 `value` 属性获取到输入的值。
 
@@ -301,14 +301,164 @@ npm run serve
 
 #### 安装和使用 Vue DevTools
 
-  为了能即时地查看 Vue 组件中的数据，Vue 官方推出了一个 Chrome 浏览器的插件。
+为了能即时地查看 Vue 组件中的数据，Vue 官方推出了一个 Chrome 浏览器的插件。
 
-  [点击这个百度云链接](https://pan.baidu.com/s/139hspAnspD7bJbo81xigmg)，密码是: `1hsv`
+[点击这个百度云链接](https://pan.baidu.com/s/139hspAnspD7bJbo81xigmg)，密码是: `1hsv`
 
-  下载好后你会得到 `vue-devtools.crx` ，在 Chrome 浏览器地址栏输入：`chrome://extensions/`，进入扩展程序页面，**一定要记得打开右上角的「开发者模式」**，然后把 `.crx` 文件拖进来安装即可。
+下载好后你会得到 `vue-devtools.crx` ，在 Chrome 浏览器地址栏输入：`chrome://extensions/`，进入扩展程序页面，**一定要记得打开右上角的「开发者模式」**，然后把 `.crx` 文件拖进来安装即可。
 
-  ![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-47443316-ACB1-421A-8FD2-EDA5CCC3269C.png)
+![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-47443316-ACB1-421A-8FD2-EDA5CCC3269C.png)
 
-  然后回到我们的 `http://localhost:8080/`，打开 Chrome 开发者工具，找到 `Vue` 标签卡，如果前面几个中没有，就点击最后的 `>>` 按钮在下拉菜单中。然后依次展开「组件树」，类似如下的图：
+然后回到我们的 `http://localhost:8080/`，打开 Chrome 开发者工具，找到 `Vue` 标签卡，如果前面几个中没有，就点击最后的 `>>` 按钮在下拉菜单中。然后依次展开「组件树」，类似如下的图：
 
-  ![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-D192D68C-BE0B-4038-9850-EA945CAD2056.png)
+![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-D192D68C-BE0B-4038-9850-EA945CAD2056.png)
+
+不要关闭开发者工具，在输入框中试着输入学号和密码，你会看到右边 Vue DevTools 中数据响应式地发生着变化。
+
+现在你已经实践了如何通过 Vue 来获取数据，接下来我们将要学习如何向后端服务器发送数据。
+
+> 若要恢复到教程的此处，请回溯到：
+> 
+> `commit: 1a5e47222ded593e7d9207e6c328690dde8b581c`
+
+### 与后端实现通信交互
+
+#### 安装发请求的工具
+
+每天淘宝网都会有许许多多的订单发生，用户打开商品详情页面，选择好款式下单付钱，这一切的行为都是在客户端，也就是我们口中说的「前端」操作的，而这背后，在阿里巴巴的服务器，也就是「后端」里中，还发生了许许多多顾客不可见的过程，而这一切都是通过「**网络 HTTP 请求**」实现的。
+
+所谓前端后端，也就是「离你更近的、你面前的电脑」与「为网站能运转而架设的服务器，它同样也是一台电脑，只不过 CPU 更多，内存、硬盘更大，性能更强而已。」
+
+在我们的登录功能中，用户输入完帐号密码后，是怎么把这两条字符串发送给服务器的呢？答案是：用一条 **HTTP 协议** 格式的报文。
+
+要发送出这样一条报文，NPM 的丰富资源让我们有许多库可以用来做这件事，而目前 Vue 社区最流行的就是 `axios`，下面我就带着你来一步步安装这个库：
+
+首先确保你的 "黑框框" 切换到这个项目文件夹中，然后执行:
+```bash
+npm install --save axios
+
+# 知道最后要出现类似以下代码，才算成功哟：
++ axios@0.19.1
+added 53 packages from 37 contributors, removed 33 packages and updated 1367 packages in 68.978s
+```
+
+找到 `src/main.js` 这个文件，打开后你需要像写 Python 时那样（**甚至语法都相似！**）引入我们需要的包，并且要让它成为 Vue 对象原型中的一个方法。你可能还不能理解所谓 `原型` 是什么，别着急，先记下这个名词，今后你会再在其他更需要你理解它的地方遇到。
+
+**一定要注意引入的顺序！**
+
+你可能会遇到如下报错：
+![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-E0D2A44C-435B-407E-9D6C-2D11C118C4B3.png)
+
+**解决方法：**
+
+把 `import axios from 'axios'`移到 `import App from './App.vue'` 之前。完整的代码应该如下所示：
+```js
+import Vue from 'vue';
+import axios from 'axios';          // 引入 axios
+import App from './App.vue';
+import router from './router';
+import store from './store';
+
+Vue.prototye.$axios = axios;        // 挂载到原型
+
+Vue.config.productionTip = false;
+
+new Vue({
+  router,
+  store,
+  render: h => h(App),
+}).$mount('#app');
+```
+
+#### 在组件中发送请求
+
+切换到 `Login.vue`，我们要开始使用一些 Vue 的其他特性功能了。
+
+我们想要实现的功能是："点击「登录」按钮就会发送请求"，那么我们 **就需要给登录按钮绑定一个「方法」作为回调，来接收用户在页面上触发的点击事件**。
+
+所谓「方法」，是一些「**定义在当前组件，可以在多处使用的 `function`**」，如果你还不熟悉怎么在 Vue 组件上定义 `methods`，请 [点击此链接](https://cn.vuejs.org/v2/guide/events.html#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95) 查看指引。
+
+我们在 `data()` 的下方新加一个 `methods` 属性：
+```js
+methods: {
+  async submitLogin() {
+    
+  },
+},
+```
+`submitLogin` 翻译为中文就是"提交登录"，定义的方式和 JS 定义函数的语法是一样的！但是为什么前面要加一个 `async` 呢？
+
+这是因为我们这个方法需要发送网络请求，**这很可能是一个耗时操作！**，所以我们倾向于将它做成「异步函数」，由于 Node.js 引擎 **非阻塞I/O** 的特性，所以不会卡住其他地方的代码执行。
+
+当然你也听出来了，这是一个比较难的概念，如果你暂时不能理解，这好办，你就先记住，**每一个需要发送请求的函数都要写成如下的格式：**
+```js
+async 这里名字你自己取() {
+  try {
+    const res 
+      = await this.$axios.HTTP方法名('请求地址',/*这里可能还有其他参数*/)
+    
+    /* 接下来是对拿到的返回结果 res 对象做解析 */
+  } catch (err) {
+    /* 这里是接收到了可能发生的错误 */
+    console.log(err);  // 先在控制台打印出来看看是什么错误吧！
+  }
+}
+```
+
+由于此时还没有实际的后端服务，所以我们就先随便给一个请求地址比如：`http://localhost:8080/login` ，由于安全性的考虑我们需要使用 HTTP 的 `POST` 请求，如果你也想问「为什么POST请求相对GET请求更安全」请看我的博客此文：[如何做一次较为安全的登录](https://blog.shenqingchuan.top/archives/%E5%A6%82%E4%BD%95%E5%81%9A%E4%B8%80%E6%AC%A1%E8%BE%83%E4%B8%BA%E5%AE%89%E5%85%A8%E7%9A%84%E7%99%BB%E5%BD%95)，这其中有提到原因。
+
+由于 axios 库的强大功能，使得我们可以只关注我们业务逻辑中的数据项，而不用过多在意 HTTP 报文的大部分内容该如何填写，axios 都帮我们默认做好了。
+
+我们要关注的是 `POST` 请求的 `Request Body` 部分，HTTP 报文中的另一个字段 `Content Type` 可以设置 `Request Body` 的格式，在 JS 里我们最好使用 JSON 格式，以为这个格式本身就来源于 JS 的 Object 对象格式，我们只需要给 axios 的请求方法传入一个 JS Object 对象即可，示例如下：
+```js
+const res = await this.$axios.post('/login', {
+  uid: this.uid,
+  password: this.password,
+});
+```
+看到这里你可能又有新的疑问了：这里的`this`是什么？
+
+`this` 是 JS 的关键字，本来的定义是「指向它的直接调用者，即函数运行时所在的环境」，然而为了方便程序员们使用，Vue 利用 `this` 在 `()=>{}` 模式下可以被继承进下一层的特性，**使得在 Vue 组件中的 `this` 只要没有特殊情况，都指向该 Vue 组件**。
+
+故而 `this.uid` 就是在 `data()` 函数中返回的对象中的那个 `uid`，`password` 也同理。
+
+至此报文就写完啦！接下来就是把这个方法和 "登录按钮" 的**点击事件**绑定。
+
+在登录按钮的 HTML 元素 `<button />` 上添加一个 Vue 的指令 `@click`，如果你对 `v-on` 这个指令不熟悉，请 [点击此链接]() 查看并预先学习，最后我们的结果应该是这样的：
+```html
+<button @click="submitLogin" class="submit">登录</button>
+```
+
+#### 查看请求返回结果
+
+打开 Chrome 的开发者工具，切换到 `Network` 标签页，这里是我们用来 **分析网络请求** 的地方。
+
+点击这个按钮可以清除之前的所有请求记录，方便我们只查看我们创建的这一次：
+
+![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-WeChatb2101bf27cd633730559af7cb9712d48.png)
+
+我们在输入框内填上测试的数据，然后尝试点击 "登录" 按钮后你会发现，右边多出了一个请求，我们可以看到这一则 HTTP 请求的详细报文信息：
+
+![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-WeChat91a19087963648687ecd12165c3bc9d4.png)
+
+- 在最上方它写出了请求的 URL 也就是请求的网络地址
+- 表明了它的 `Request Method` 是 `POST`
+- 请求最终的结果是 `405 Method Not Allowed`，由于 `localhost:8080` 就是我们的前端页面挂载的地址，在这里我们并没有实际的后端服务，这个服务器只允许客户端 "GET" 页面，故而显示 "方法不允许" 的结果。
+  
+  如果你想了解更多 HTTP 的状态码，请 [点击此链接](https://www.runoob.com/http/http-status-codes.html) 了解详情。
+
+- 在最下方你可以看到，我们的 `Request Payload` 请求中的"载荷"（这名词听着很玄乎其实就是传输的数据啦！）的确就是我们填写的两则数据字段 `uid` 和 `password`。
+
+因为我们创建的这次请求是 "注定失败" 的，所以根据预想，程序应该会走到 `try/catch` 的「接收错误」的部分，在控制台经 `console.log()` 打印出错误：
+
+![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-WeChat7f258e16d0e7b7421aba9fdc8da84ae7.png)
+
+等到后端服务建立至少一个 API 接口完成后，再补充如何解析真实 HTTP 返回结果吧！
+
+#### 不要忘记总结此请求的数据格式
+
+做后端的小哥哥小姐姐们要想和做前端的我们通力合作，就需要我们把我们发出的请求中的 JSON 数据格式描述清楚，并总结报告给他们。
+
+（当然，这项工作有时候是后端的程序员们先将请求格式定义好告诉你，那咱们就照做即可）
+
+如果你想学习如何书写接口文档，那么请看本项目 `docs/接口文档示范.md` 中的内容。
