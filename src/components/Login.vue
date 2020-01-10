@@ -13,8 +13,10 @@
           <input v-model="password" type="password" name="password" placeholder="请输入密码" />
         </div>
         <br>
-        <div v-show="tipMessage.length > 0" class="row">
-          <p class="tip">{{ tipMessage }}</p>
+        <div class="row">
+          <transition name="fade">
+            <p v-show="tipMessage.length > 0" class="tip">{{ tipMessage }}</p>
+          </transition>
         </div>
         <div class="row">
           <button @click="submitLogin" class="submit">登录</button>
@@ -47,8 +49,9 @@ export default {
       } else if (this.password.length === 0) {
         this.tipMessage = '还没有填写 密码！';
         res = false;
+      } else {
+        this.tipMessage = '';
       }
-      this.tipMessage = '';
       return res;
     },
     async submitLogin() {
@@ -136,6 +139,11 @@ export default {
           margin: 0 15px;
           color: dimgray;
         }
+
+        .tip {
+          color: #5379a5c4;
+          font-weight: bold;
+        }
       }
 
       .submit {
@@ -157,5 +165,12 @@ export default {
       }
     }
   }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
