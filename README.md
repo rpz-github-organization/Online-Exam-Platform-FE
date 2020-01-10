@@ -29,6 +29,16 @@ git clone https://github.com/rpz-github-organization/Online-Exam-Platform-FE.git
 
 耐心等待，到了又回到闪着光标时就说明克隆完成了。
 
+#### 如果教程更新了，我本地怎么同步？
+
+打开黑框框，将目录切换到本项目的文件夹中，输入以下命令：
+
+```bash
+git pull origin master
+```
+
+然后你就会看到一些文件名后面出现了 `+` 和 `-` ，表示它们经过了一些改动，等待又恢复到闪烁状态说明更新完成。
+
 ### 做前端必须要有 Node 和 NPM
 
 如果你还没有 Node 环境，请先 [点击此链接](http://nodejs.cn/download/) 去 Node.js 中文网下载。
@@ -139,7 +149,12 @@ npm config set registry https://registry.npm.taobao.org
 
 用 Visual Studio Code 打开本项目，然后按 `Win: Ctrl + J` | `Mac: Command + J` 呼出终端。
 
-输入以下命令开启 「开发服务器」：
+1. 输入以下命令「**安装依赖**」：
+```bash
+npm install
+```
+
+2. 输入以下命令「**开启开发服务器**」：
 ```bash
 npm run serve
 ```
@@ -254,3 +269,46 @@ npm run serve
 
 #### 让数据在页面中生效
 
+**前置知识：** JavaScript 可以通过 `<input />` 这个 HTML 元素的 `value` 属性获取到输入的值。
+
+> 做个实验吧！打开 Chrome 的开发者工具，切换到 `Console` 页，在`>`处输入以下 JS 代码：
+> 
+> ![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-327035C5-EA8B-4EF6-AF77-35E8997574F1.png)
+> 
+
+- 如果要在 Vue 的组件中 **存储数据**，必须先定义一个变量作为数据的"容器"。
+  
+  ```js
+  export default {
+    data() {
+      return {
+        uid: '',
+        password: '',
+      };
+    },
+  }
+  ```
+
+  **问题：data 为什么必须是一个函数？** 💁🏻请 [点击这里](https://cn.vuejs.org/v2/guide/components.html#data-%E5%BF%85%E9%A1%BB%E6%98%AF%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0) 寻找答案！
+
+- Vue 当中对于 `value` 值的获取有更方便的办法：在`<input />`使用「指令」`v-model`：
+  
+  ```html
+  <input v-model="uid" type="text" name="uid" placeholder="请输入你的学号或工号" />
+  ```
+
+  此处填写在 `v-model` 的 `uid` 就是你在 `data()` 中定义的"容器"。如果你对这个指令的用法有疑问，请 [点击这里](https://cn.vuejs.org/v2/guide/forms.html) 查看「输入绑定」的相关介绍。
+
+#### 安装和使用 Vue DevTools
+
+  为了能即时地查看 Vue 组件中的数据，Vue 官方推出了一个 Chrome 浏览器的插件。
+
+  [点击这个百度云链接](https://pan.baidu.com/s/139hspAnspD7bJbo81xigmg)，密码是: `1hsv`
+
+  下载好后你会得到 `vue-devtools.crx` ，在 Chrome 浏览器地址栏输入：`chrome://extensions/`，进入扩展程序页面，**一定要记得打开右上角的「开发者模式」**，然后把 `.crx` 文件拖进来安装即可。
+
+  ![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-47443316-ACB1-421A-8FD2-EDA5CCC3269C.png)
+
+  然后回到我们的 `http://localhost:8080/`，打开 Chrome 开发者工具，找到 `Vue` 标签卡，如果前面几个中没有，就点击最后的 `>>` 按钮在下拉菜单中。然后依次展开「组件树」，类似如下的图：
+
+  ![](http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-01-10-D192D68C-BE0B-4038-9850-EA945CAD2056.png)

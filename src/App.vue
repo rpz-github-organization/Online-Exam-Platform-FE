@@ -20,6 +20,10 @@
 #nav {
   padding: 30px;
 
+  a, a:hover, a:visited, a:link {
+    text-decoration: none
+  }
+
   a {
     font-weight: bold;
     color: #2c3e50;

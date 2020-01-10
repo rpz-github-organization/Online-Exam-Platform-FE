@@ -6,14 +6,19 @@
       <div class="form">
         <div class="row">
           <label for="uid">学号/工号</label>
-          <input type="text" name="uid" placeholder="请输入你的学号或工号" />
+          <input v-model="uid" type="text" name="uid" placeholder="请输入你的学号或工号" />
         </div>
         <div class="row">
           <label for="password">密码</label>
-          <input type="password" name="password" placeholder="请输入密码" />
+          <input v-model="password" type="password" name="password" placeholder="请输入密码" />
         </div>
-
-        <button class="submit">登录</button>
+        <br>
+        <div class="row">
+          <button class="submit">登录</button>
+          <a href="/">忘记密码</a>
+          <a href="/register">立即注册</a>
+        </div>
+        <br>
       </div>
     </div>
   </div>
@@ -22,6 +27,12 @@
 <script>
 export default {
   name: 'Login',
+  data() {
+    return {
+      uid: '',
+      password: '',
+    };
+  },
 };
 </script>
 
@@ -29,9 +40,9 @@ export default {
 <style scoped lang="less">
 .hello {
   .card {
-    width: 60vw;
-    margin: 0 auto;
-    padding: 20px 0;
+    width: 45vw;
+    margin: 5px auto;
+    padding: 10px 0;
     border-radius: 15px;
     border: 1px solid rgba(0, 0, 0, 0.20);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
@@ -49,7 +60,8 @@ export default {
       align-items: center;
 
       .row {
-        width: 100%;
+        width: 80%;
+        margin: 0 auto;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -67,7 +79,7 @@ export default {
         input[name='password']:focus {
           border: none;
           outline: none;
-          width: 35%;
+          width: 55%;
           line-height: 25px;
           margin: 15px 0;
           border-bottom: 1px solid rgba(0, 0, 0, 0.27);
@@ -75,12 +87,27 @@ export default {
         }
 
         input[name='uid']:focus,
-        input[name='password']:focus {
+        input[name='password']:focus,
+        input[name='uid']:hover,
+        input[name='password']:hover {
           font-size: 16px;
+        }
+
+        button {
+          margin: 0;
+          width: 80px;
+        }
+
+        a, a:hover, a:focus, a:visited, a:link {
+          text-decoration: none;
+          font-size: 14px;
+          margin: 0 15px;
+          color: dimgray;
         }
       }
 
       .submit {
+        margin-top: 20px;
         color: white;
         font-weight: bold;
         border: none;
