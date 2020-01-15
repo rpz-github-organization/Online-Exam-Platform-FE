@@ -1,25 +1,35 @@
 <template>
   <div class="hello">
-    <h4>{{ new Date().toLocaleString() }} - 欢迎来到 "教你写登录注册" 教程</h4>
     <div class="card login-container">
-      <div class="title">登录 · Login</div>
+      <div class="title">注册 · Register</div>
       <div class="form">
         <div class="row">
           <label for="uid">学号/工号</label>
           <input v-model="uid" type="text" name="uid" placeholder="请输入你的学号或工号" />
         </div>
         <div class="row">
+          <label for="email">邮箱</label>
+          <input v-model="email" type="text" name="email" placeholder="请输入你的邮箱">
+        </div>
+        <div class="row">
+          <label for="phone">电话</label>
+          <input v-model="phone" type="text" name="phone" placeholder="请输入你的电话">
+        </div>
+        <div class="row">
           <label for="password">密码</label>
           <input v-model="password" type="password" name="password" placeholder="请输入密码" />
+        </div>
+        <div class="row">
+          <label for="password">确认密码</label>
+          <input v-model="password" type="password" name="password_1" placeholder="再次输入密码...">
         </div>
         <br>
         <div v-show="tipMessage.length > 0" class="row">
           <p class="tip">{{ tipMessage }}</p>
         </div>
         <div class="row">
-          <button @click="submitLogin" class="submit">登录</button>
-          <a href="/">忘记密码</a>
-          <a href="/register">立即注册</a>
+          <button @click="submitregister" class="submit">注册</button>
+          <a href="/">返回登录</a>
         </div>
         <br>
       </div>
@@ -34,31 +44,68 @@ export default {
     return {
       uid: '',
       password: '',
+      email: '',
+      phone: '',
+      password_1: '',
+      identity: 0,
 
       tipMessage: '',
     };
   },
   methods: {
-    validate() {
+    validate() { // 表单验证
       let res = true;
-      if (this.uid.length === 0) {
+      if (this.uid.length === 10) {
         this.tipMessage = '还没有填写 学号/工号！';
+        res = false;
+      } else if (this.uid.length !== 10) {
+        this.tipMessage = '学号/工号 格式错误！';
         res = false;
       } else if (this.password.length === 0) {
         this.tipMessage = '还没有填写 密码！';
+        res = false;
+      } else if (this.password.length < 8) {
+        this.tipMessage = '密码长度不得小于8位';
+        res = false;
+      } else if (this.email.length === 0) {
+        this.tipMessage = '还没有填写 邮箱！';
+        res = false;
+      } else if (this.password_1.length === 0) {
+        this.tipMessage = '没有填写 确认密码！';
+        res = false;
+      } else if (this.phone.length === 0) {
+        this.tipMessage = '没有填写 电话！';
+        res = false;
+      } else if (this.phone !== 11) {
+        this.tipMessage = '电话格式错误！';
+        res = false;
+      } else if (this.password !== this.password_1) {
+        this.tipMessage = '两次密码输入不一致！';
         res = false;
       }
       this.tipMessage = '';
       return res;
     },
-    async submitLogin() {
+    async submitregister() {
       if (this.validate()) {
         try {
-          const res = await this.$axios.post('http://localhost:8081/login', {
-            uid: this.uid,
-            password: this.password,
-          });
-          console.log(res);
+          if (this.email.search('@sicnu.edu.cn') === -1) { // 学生注册
+            const res = await this.$axios.post('/rest/student', {
+              uid: this.uid,
+              email: this.email,
+              phone: this.phone,
+              password: this.password,
+            });
+            console.log(res);
+          } else { // 老师注册
+            const res = await this.$axios.post('/rest/teacher', {
+              uid: this.uid,
+              email: this.email,
+              phone: this.phone,
+              password: this.password,
+            });
+            console.log(res);
+          }
         } catch (err) {
           console.log(err);
         }
@@ -83,6 +130,7 @@ export default {
       margin: 5px 0;
       font-size: 20px;
       font-weight: bold;
+      text-align: center;
     }
 
     .form {
@@ -108,6 +156,9 @@ export default {
         input[name='uid'],
         input[name='password'],
         input[name='uid']:focus,
+        input[name='email'],
+        input[name='password_1'],
+        input[name='phone'],
         input[name='password']:focus {
           border: none;
           outline: none;
@@ -121,6 +172,9 @@ export default {
         input[name='uid']:focus,
         input[name='password']:focus,
         input[name='uid']:hover,
+        input[name='email']:hover,
+        input[name='password_1']:hover,
+        input[name='phone']:hover,
         input[name='password']:hover {
           font-size: 16px;
         }

@@ -6,7 +6,7 @@
         <el-dropdown @command="handleCommand">
           <el-avatar :size="40" :src="circleUrl" class="el-dropdown-link"></el-avatar>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="modify">修改资料</el-dropdown-item>
+            <el-dropdown-item command="modify">个人中心</el-dropdown-item>
             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
