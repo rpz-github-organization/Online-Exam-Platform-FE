@@ -48,13 +48,12 @@ export default {
         this.tipMessage = '还没有填写 密码！';
         res = false;
       }
-      this.tipMessage = '';
       return res;
     },
     async submitLogin() {
       if (this.validate()) {
         try {
-          const res = await this.$axios.post('http://localhost:8081/login', {
+          const res = await this.$axios.post('/login/id', {
             uid: this.uid,
             password: this.password,
           });
@@ -155,6 +154,11 @@ export default {
       .submit:hover {
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
       }
+    }
+    .tip{
+      color: brown;
+      text-align: center;
+      margin-top: -2%;
     }
   }
 }

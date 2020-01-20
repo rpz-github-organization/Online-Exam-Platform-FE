@@ -4,7 +4,7 @@
       <li class="header_title">考试系统</li>
       <li class="user_photo"  @click.stop="handlemenu">
         <el-dropdown @command="handleCommand">
-          <el-avatar :size="40" :src="circleUrl" class="el-dropdown-link"></el-avatar>
+          <el-avatar :size="40" :src="avatarUrl" class="el-dropdown-link"></el-avatar>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="modify">个人中心</el-dropdown-item>
             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -28,15 +28,19 @@ export default {
   name: 'header',
   data() {
     return {
-      circleUrl: 'https://tse2-mm.cn.bing.net/th/id/OIP.uC8OzPvFdPvVpsxjF7F8sQAAAA?w=206&h=170&c=7&o=5&dpr=1.25&pid=1.7',
+      avatarUrl: 'https://tse2-mm.cn.bing.net/th/id/OIP.uC8OzPvFdPvVpsxjF7F8sQAAAA?w=206&h=170&c=7&o=5&dpr=1.25&pid=1.7',
       authLevel: 0,
-      user_function: '',
     };
   },
   methods: {
     handleCommand(command) {
-      this.user_function = command;
-      console.log(this.user_function);
+      console.log(command);
+      if (command === 'modify') {
+        window.location.href = '/personal_center';
+      }
+    },
+    setauthLevel() {
+      this.$store.state.authLevel = this.authLevel;
     },
   },
 };
