@@ -1,8 +1,6 @@
 <template>
   <div class="body">
     <!-- <div/> class="top">考试安排表</div> -->
-    <button class="test" @click="getJoke">获取笑话</button>
-    <p> --- {{ jock }} --- </p>
     <div class="exam">
       <div class="one">
         <div class="name">
@@ -35,26 +33,6 @@ export default {
       name: '考试名字',
       time: '考试时间',
       detail: '考试信息'
-    }
-  },
-  methods: {
-  //   // async getJock () {
-  //   //   axios.get('https://autumnfish.cn/api/joke').then(function (response) {
-  //   //     this.joke = response
-  //   //   }, function (err) {
-  //   //     console.log(err)
-  //   //   })
-  //   // }
-
-    async getJoke () {
-      await this.$axios.get('https://autumnfish.cn/api/joke').then(
-        function (response) {
-          console.log(response)
-          this.joke = response
-        }, function (err) {
-          console.log(err)
-        }
-      )
     }
   }
 }
