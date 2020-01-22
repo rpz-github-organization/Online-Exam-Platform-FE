@@ -51,18 +51,21 @@ export default {
       this.tipMessage = '';
       return res;
     },
-    async submitLogin() {
-      if (this.validate()) {
-        try {
-          const res = await this.$axios.post('http://localhost:8080/login', {
-            uid: this.uid,
-            password: this.password,
-          });
-          console.log(res);
-        } catch (err) {
-          console.log(err);
-        }
-      }
+    // async submitLogin() {
+    //   if (this.validate()) {
+    //     try {
+    //       const res = await this.$axios.post('http://localhost:8080/login', {
+    //         uid: this.uid,
+    //         password: this.password,
+    //       });
+    //       console.log(res);
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   }
+    // },
+    submitLogin() {
+      window.location.href = '/index_stu';
     },
   },
 };

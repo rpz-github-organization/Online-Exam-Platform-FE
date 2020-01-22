@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-目前只完成了简要布局和一些简要功能的实现，具体美化细节还未处理。
-
-在【如何抓取数据】以及【根据数据的数量自动创捷模块】不知道如何实现。
-=======
 # 在线考试平台 - 前端
 
 ## 新手引入
@@ -470,4 +465,3 @@ const res = await this.$axios.post('/login', {
 （当然，这项工作有时候是后端的程序员们先将请求格式定义好告诉你，那咱们就照做即可）
 
 如果你想学习如何书写接口文档，那么点击此链接请看本项目 [`docs/接口文档示范.md`](https://github.com/rpz-github-organization/Online-Exam-Platform-FE/blob/master/docs/%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3%E7%A4%BA%E8%8C%83.md) 中的内容。
->>>>>>> 893dc43de29369a1c3158d693dcc1edf51b1b7b8
