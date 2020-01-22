@@ -71,6 +71,9 @@ export default {
     document
       .querySelector('body')
       .setAttribute('style', 'background-color: rgba(255, 251, 251, 0.87)');
+    const parent = document.getElementById('app');
+    const child = document.getElementById('nav');
+    parent.removeChild(child);
   },
 
   created() {
@@ -82,12 +85,6 @@ export default {
 
 };
 </script>
-
-<style scoped lang="less">
-  #nav {
-    display: none
-  }
-</style>
 
 <style scoped lang="less">
 .stu {
