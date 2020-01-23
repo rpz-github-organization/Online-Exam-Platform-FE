@@ -1,8 +1,8 @@
 <template>
-  <div class="body">
+  <div id="middle">
     <!-- <div/> class="top">考试安排表</div> -->
-    <!-- <button @click="copy" >复制</button> -->
-    <div class="exam" id="exam">
+    <button @click="copy" >复制</button>
+    <div id="exam">
       <div class="one">
         <div class="name">
           <img src="../assets/exam.png" alt="exam" />
@@ -20,25 +20,25 @@ export default {
   name: 'On',
   data() {
     return {
-      jock: '笑话',
       name: '考试名字',
       time: '考试时间',
       detail: '考试信息',
     };
   },
   // 尝试复制exam节点
-  // methods: {
-  //   copy() {
-  //     const exam = document.getElementById('exam');
-  //     const newExam = exam.cloneNode(true);
-  //     newExam.appendChild(exam);
-  //   },
-  // },
+  methods: {
+    copy() {
+      const middle = document.getElementById('middle');
+      const oldExam = document.getElementById('exam');
+      const newExam = oldExam.cloneNode(true);
+      middle.appendChild(newExam);
+    },
+  },
 };
 </script>
 
 <style lang="less" scoped>
-.body {
+#middle {
   margin: 15px 1px;
   width: 100%;
   flex-direction: column;
@@ -48,7 +48,7 @@ export default {
   //     height: 40px;
   //     line-height: 40px;
   //   }
-  .exam {
+  #exam {
     display: flex;
     flex-direction: column;
     border-radius: 10px;

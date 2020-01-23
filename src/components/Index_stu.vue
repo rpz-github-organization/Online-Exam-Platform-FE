@@ -10,7 +10,7 @@
         <button class="on" @click="ChangeToOn" :class="{active:isActive}">正在进行的考试</button>
         <button class="pass" @click="ChangeToPass" :class="{active:!isActive}">已经完成的考试</button>
       </div>
-      <div class="body">
+      <div class="middle">
       <On v-if="Seen" />
       <Pass v-if="!Seen" />
       </div>
@@ -138,7 +138,7 @@ export default {
       }
     }
 
-    .body{
+    .middle {
       width: 100%;
       flex-shrink: 1;
     }
