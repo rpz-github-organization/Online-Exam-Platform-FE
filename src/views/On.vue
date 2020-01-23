@@ -1,7 +1,7 @@
 <template>
   <div id="middle">
     <!-- <div/> class="top">考试安排表</div> -->
-    <button @click="copy" >复制</button>
+    <!-- <button @click="copyExam">复制</button> -->
     <div id="exam">
       <div class="one">
         <div class="name">
@@ -18,6 +18,7 @@
 <script>
 export default {
   name: 'On',
+
   data() {
     return {
       name: '考试名字',
@@ -27,7 +28,7 @@ export default {
   },
   // 尝试复制exam节点
   methods: {
-    copy() {
+    copyExam() {
       const middle = document.getElementById('middle');
       const oldExam = document.getElementById('exam');
       const newExam = oldExam.cloneNode(true);

@@ -1,6 +1,10 @@
 <template >
   <div class="stu">
-    <div class="title">在线考试查询系统</div>
+    <div class="title">
+      <img src="../assets/sicnu.png" class="sicnu" />
+      <img src="../assets/title.png" class="word" />
+      <!-- <div class="word">Online-Exam-Platform</div> -->
+    </div>
     <div class="navigate">
       这里是导航栏
       <br />高度暂定为50px，后面有内容再撑起来
@@ -11,20 +15,21 @@
         <button class="pass" @click="ChangeToPass" :class="{active:!isActive}">已经完成的考试</button>
       </div>
       <div class="middle">
-      <On v-if="Seen" />
-      <Pass v-if="!Seen" />
+        <On v-if="Seen" />
+        <Pass v-if="!Seen" />
       </div>
       <div class="right">
         <img src="../assets/head.png" alt="defaul" />
         <div class="hello">
           {{ name }}同学
-          <br /><br>
-          现在是
-          <br>
+          <br />
+          <br />现在是
+          <br />
           {{ new Date().toLocaleString('chinese', { hour12: false }).substring( 0, 15 ) }}
-          <br><br>
+          <br />
+          <br />
           {{ greeting }}
-          <br><br>
+          <br />
         </div>
       </div>
     </div>
@@ -32,12 +37,10 @@
 </template>
 
 <script>
-
 import On from '../views/On.vue';
 import Pass from '../views/Pass.vue';
 
 export default {
-
   name: 'IndexStu',
 
   components: {
@@ -79,33 +82,44 @@ export default {
     else if (d.getHours() >= 12 && d.getHours() < 18) this.greeting = '下午好！';
     else this.greeting = '晚上好！';
   },
-
+  // 删除 Home|About
   mounted() {
     const parent = document.getElementById('app');
     const child = document.getElementById('nav');
     parent.removeChild(child);
+    // const Body = document.getElementsByTagName('body');
+    // Body.style.margin = '0px';
   },
-
 };
 </script>
 
 <style scoped lang="less">
 .stu {
+  // margin: 0px;
   .title {
-    font-size: 20px;
-    font-weight: bold;
-    height: 50px;
-    line-height: 50px;
-    border: 0;
-  }
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    margin: 0px auto;
+    background-color: #276e51;
 
+    .sicnu {
+      height: 90px;
+      margin-top: 5px;
+      margin-left: 5px;
+    }
+
+      .word {
+        height: 60px;
+        margin-top: 33px;
+      }
+  }
   .navigate {
     font-size: 14px;
     font-weight: bold;
     height: 50px;
     line-height: 25px;
     background-color: rgb(120, 233, 125);
-    width: 90%;
     align-self: center;
     margin: auto;
     margin-top: 5px;
@@ -116,7 +130,7 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: nowrap;
-    height: 100%;
+    height: auto;
     width: 90%;
     margin: auto;
     // background-color: rgba(219, 215, 208, 0.177);
@@ -130,6 +144,7 @@ export default {
       margin-top: 15px;
       margin-right: 5px;
       width: 170px;
+      height: 230px;;
       padding-top: 20px;
       flex-shrink: 0;
 
@@ -146,7 +161,7 @@ export default {
     .left {
       display: flex;
       font-size: 16px;
-      margin-top: 10px;
+      margin-top: 15px;
       margin-right: 15px;
       flex-direction: column;
       justify-content: flex-start;
