@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <!-- <div/> class="top">考试安排表</div> -->
-    <button @click="copy" >复制</button>
+    <!-- <button @click="copy" >复制</button> -->
     <div class="exam" id="exam">
       <div class="one">
         <div class="name">
