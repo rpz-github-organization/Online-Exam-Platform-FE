@@ -1,7 +1,8 @@
 <template>
   <div class="body">
     <!-- <div/> class="top">考试安排表</div> -->
-    <div class="exam">
+    <button @click="copy" >复制</button>
+    <div class="exam" id="exam">
       <div class="one">
         <div class="name">
           <img src="../assets/exam.png" alt="exam" />
@@ -10,16 +11,6 @@
         <div class="time">{{time}}</div>
       </div>
       <div class="two">{{detail}}</div>
-    </div>
-    <div class="exam">
-      <div class="one">
-        <div class="name">
-          <img src="../assets/exam.png" alt="exam" />
-          考试名字
-        </div>
-        <div class="time">考试的时间</div>
-      </div>
-      <div class="two">考试的详细信息</div>
     </div>
   </div>
 </template>
@@ -35,6 +26,14 @@ export default {
       detail: '考试信息',
     };
   },
+  // 尝试复制exam节点
+  // methods: {
+  //   copy() {
+  //     const exam = document.getElementById('exam');
+  //     const newExam = exam.cloneNode(true);
+  //     newExam.appendChild(exam);
+  //   },
+  // },
 };
 </script>
 

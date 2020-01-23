@@ -71,9 +71,6 @@ export default {
     document
       .querySelector('body')
       .setAttribute('style', 'background-color: rgba(255, 251, 251, 0.87)');
-    const parent = document.getElementById('app');
-    const child = document.getElementById('nav');
-    parent.removeChild(child);
   },
 
   created() {
@@ -81,6 +78,12 @@ export default {
     if (d.getHours() < 12) this.greeting = '上午好！';
     else if (d.getHours() >= 12 && d.getHours() < 18) this.greeting = '下午好！';
     else this.greeting = '晚上好！';
+  },
+
+  mounted() {
+    const parent = document.getElementById('app');
+    const child = document.getElementById('nav');
+    parent.removeChild(child);
   },
 
 };
