@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="header">
-      <Header />
+      <Pheader />
     </div>
     <div id="nav">
       <router-link to="/">Home</router-link> |
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue';
+import Pheader from '@/components/Pheader.vue';
 
 export default {
   name: 'app',
   components: {
-    Header,
+    Pheader,
   },
 };
 </script>

@@ -26,7 +26,6 @@
           <div class="row">
             <label for="email">邮箱</label>
             <input v-model="email" type="text" name="email" placeholder="请输入你的邮箱">
-            <button @click="submitcheck" class="clicka">点击验证</button>
           </div>
           <div class="row">
             <label>验证码</label>
@@ -37,6 +36,7 @@
           <p class="tip">{{ this.tipMessage }}</p>
         </div>
         <div class="row">
+          <button @click="submitcheck" class="clicka">点击验证</button>
           <button @click="submitregister" class="submit">注册</button>
           <a href="/">返回登录</a>
         </div>
@@ -107,29 +107,25 @@ export default {
     async submitcheck() {
       try {
         if (this.email.search('@sicnu.edu.cn') === -1) { // 学生注册
-          const res = await this.$axios.post('/email/student', {
-            name: this.name,
-          });
-          const info = JSON.stringify(res);
-          const infoObject = JSON.parse(info);
-          if (infoObject.code === '400') {
-            console.log('发送成功');
-          } else {
-            console.log('出现错误，发送失败！');
-          }
-          console.log(infoObject);
-        } else { // 老师注册
-          const res = await this.$axios.post('/email/teacher', {
+          const res = await this.$axios.post(`${this.HOST}/register/email/student`, {
             email: this.email,
           });
-          const info = JSON.stringify(res);
-          const infoObject = JSON.parse(info);
-          if (infoObject.code === '400') {
+          const info = res.data;
+          if (info.code === 200) {
             console.log('发送成功');
           } else {
             console.log('出现错误，发送失败！');
           }
-          console.log(infoObject);
+        } else { // 老师注册
+          const res = await this.$axios.post(`${this.HOST}/register/email/teacher`, {
+            email: this.email,
+          });
+          const info = res.data;
+          if (info.code === 200) {
+            console.log('发送成功');
+          } else {
+            console.log('出现错误，发送失败！');
+          }
         }
       } catch (err) {
         console.log(err);
@@ -139,36 +135,36 @@ export default {
       if (this.validate()) {
         try {
           if (this.email.search('@sicnu.edu.cn') === -1) { // 学生注册
-            const res = await this.$axios.post('/register/student', {
-              uid: this.uid,
+            const res = await this.$axios.post(`${this.HOST}/register/student`, {
+              stu_id: this.uid,
               name: this.name,
               email: this.email,
-              phone: this.phone,
+              telephone: this.phone,
               password: this.password,
+              code: this.checkemail,
             });
-            const info = JSON.stringify(res);
-            const infoObject = JSON.parse(info);
-            if (infoObject.code === '400') {
+            const info = res.data;
+            if (info.code === 200) {
               console.log('注册成功');
+              window.location.href = '/';
             } else {
               console.log('出现错误，注册失败！');
             }
           } else { // 老师注册
-            const res = await this.$axios.post('/register/teacher', {
-              uid: this.uid,
+            const res = await this.$axios.post(`${this.HOST}/register/teacher`, {
+              stu_id: this.uid,
               name: this.name,
               email: this.email,
-              phone: this.phone,
+              telephone: this.phone,
               password: this.password,
+              code: this.checkemail,
             });
-            const info = JSON.stringify(res);
-            const infoObject = JSON.parse(info);
-            if (infoObject.code === '400') {
+            const info = res.data;
+            if (info.code === 200) {
               console.log('注册成功');
             } else {
               console.log('出现错误，注册失败！');
             }
-            console.log(infoObject);
           }
         } catch (err) {
           console.log(err);
@@ -217,19 +213,6 @@ export default {
           font-weight: bold;
         }
 
-        .clicka{
-          color: white;
-          font-weight: bold;
-          border: none;
-          border-radius: 20px;
-          width: 100px;
-          font-size: 15px;
-          background-color: #5379a5c4;
-          cursor: pointer;
-          outline: none;
-          transition: all 0.3s ease;
-        }
-
         .clicka:hover{
           box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
         }
@@ -241,6 +224,7 @@ export default {
         input[name='password_1'],
         input[name='phone'],
         input[name='checkemail'],
+        input[name='email'],
         input[name='password']:focus {
           border: none;
           outline: none;
@@ -250,15 +234,15 @@ export default {
           border-bottom: 1px solid rgba(0, 0, 0, 0.27);
           transition: all 0.5s ease;
         }
-        input[name='email']{
-          border: none;
-          outline: none;
-          width: 37%;
-          line-height: 25px;
-          margin: 15px 0;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.27);
-          transition: all 0.5s ease;
-        }
+        // input[name='email']{
+        //   border: none;
+        //   outline: none;
+        //   width: 37%;
+        //   line-height: 25px;
+        //   margin: 15px 0;
+        //   border-bottom: 1px solid rgba(0, 0, 0, 0.27);
+        //   transition: all 0.5s ease;
+        // }
 
         input[name='uid']:focus,
         input[name='name']:focus,
@@ -285,8 +269,9 @@ export default {
         }
       }
 
-      .submit {
+      .clicka,.submit {
         margin-top: 20px;
+        margin-left: 20px;
         color: white;
         font-weight: bold;
         border: none;

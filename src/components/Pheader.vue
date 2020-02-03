@@ -1,5 +1,5 @@
 <template>
-  <div id="header">
+  <div id="pheader">
     <ul class="header_list">
       <li class="header_title">考试系统</li>
       <li class="user_photo"  @click.stop="handlemenu">
@@ -24,23 +24,37 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
-  name: 'header',
+  name: 'pheader',
   data() {
     return {
       avatarUrl: 'https://tse2-mm.cn.bing.net/th/id/OIP.uC8OzPvFdPvVpsxjF7F8sQAAAA?w=206&h=170&c=7&o=5&dpr=1.25&pid=1.7',
-      authLevel: 0,
     };
+  },
+  computed: {
+    ...mapState(['uid']),
+    ...mapState(['authLevel']),
   },
   methods: {
     handleCommand(command) {
-      console.log(command);
       if (command === 'modify') {
         window.location.href = '/personal_center';
+      } else if (command === 'logout') {
+        console.log(this.uid);
+        this.$axios.post(`${this.HOST}/login/logout`, {
+          keyword: this.uid,
+        }).then((res) => {
+          const info = res.data;
+          if (info.code === 200) {
+            this.$store.commit('set_authLevel', 0);
+            console.log('退出登录');
+          } else {
+            console.log('操作失败');
+          }
+        });
       }
-    },
-    setauthLevel() {
-      this.$store.state.authLevel = this.authLevel;
     },
   },
 };
