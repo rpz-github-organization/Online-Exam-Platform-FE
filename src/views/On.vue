@@ -1,16 +1,25 @@
 <template>
   <div id="middle">
-    <!-- <div/> class="top">考试安排表</div> -->
     <!-- <button @click="copyExam">复制</button> -->
     <div id="exam">
       <div class="one">
         <div class="name">
           <img src="../assets/exam.png" alt="exam" />
+          {{ name }}
+        </div>
+        <div class="time">{{ time }}</div>
+      </div>
+      <div class="two">{{ detail }}</div>
+    </div>
+        <div id="exam">
+      <div class="one">
+        <div class="name">
+          <img src="../assets/exam.png" alt="exam" />
           {{name}}
         </div>
-        <div class="time">{{time}}</div>
+        <div class="time">{{ time }}</div>
       </div>
-      <div class="two">{{detail}}</div>
+      <div class="two">{{ detail }}</div>
     </div>
   </div>
 </template>
@@ -43,19 +52,16 @@ export default {
   margin: 15px 1px;
   width: 100%;
   flex-direction: column;
-  //   .top {
-  //     font-size: 15px;
-  //     font-weight: bold;
-  //     height: 40px;
-  //     line-height: 40px;
-  //   }
+
   #exam {
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
-    background-color: white;
-    border-style: outset;
-    margin: 5px auto;
+    background-color: #fff;
+    margin: 10px auto;
+    padding: 10px 3px;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
 
     .one {
       display: flex;
@@ -64,17 +70,22 @@ export default {
       flex-wrap: wrap;
       align-items: baseline;
       height: auto;
-      line-height: 50px;
-      padding-top: 15px;
-      color: rgb(27, 165, 230);
+      line-height: 30px;
+      padding-top: 10px;
+      // color: rgb(27, 165, 230);
 
       img {
         width: 15px;
       }
 
       .name {
-        font-size: 18px;
+        font-weight: bold;
         margin-left: 5px;
+      }
+      .name:hover {
+        font-size: 18px;
+        transition: all 0.8s ease;
+
       }
 
       .time {
@@ -87,7 +98,8 @@ export default {
       font-size: 14px;
       text-align: left;
       margin-left: 5px;
-      margin-bottom: 5px;
+      margin-top: 5px;
+      margin-bottom: 0px;
     }
   }
 }

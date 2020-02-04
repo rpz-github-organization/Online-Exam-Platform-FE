@@ -8,6 +8,8 @@ Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 
+Vue.prototype.HOST = 'api';
+
 new Vue({
   router,
   store,

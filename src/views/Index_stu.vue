@@ -1,18 +1,13 @@
-<template >
+<template>
   <div class="stu">
     <div class="title">
-      <img src="../assets/sicnu.png" class="sicnu" />
+      <!-- <img src="../assets/sicnu.png" class="sicnu" /> -->
       <img src="../assets/title.png" class="word" />
-      <!-- <div class="word">Online-Exam-Platform</div> -->
-    </div>
-    <div class="navigate">
-      这里是导航栏
-      <br />高度暂定为50px，后面有内容再撑起来
     </div>
     <div class="main">
       <div class="left">
-        <button class="on" @click="ChangeToOn" :class="{active:isActive}">正在进行的考试</button>
-        <button class="pass" @click="ChangeToPass" :class="{active:!isActive}">已经完成的考试</button>
+        <button class="on" @click="ChangeToOn" :class="{ notactive: !isActive }">正在进行的考试</button>
+        <button class="pass" @click="ChangeToPass" :class="{ notactive: isActive }">已经完成的考试</button>
       </div>
       <div class="middle">
         <On v-if="Seen" />
@@ -25,7 +20,7 @@
           <br />
           <br />现在是
           <br />
-          {{ new Date().toLocaleString('chinese', { hour12: false }).substring( 0, 15 ) }}
+          {{ new Date().toLocaleString("chinese", { hour12: false }).substring(0, 15) }}
           <br />
           <br />
           {{ greeting }}
@@ -37,8 +32,8 @@
 </template>
 
 <script>
-import On from '../views/On.vue';
-import Pass from '../views/Pass.vue';
+import On from './On.vue';
+import Pass from './Pass.vue';
 
 export default {
   name: 'IndexStu',
@@ -67,6 +62,18 @@ export default {
       this.Seen = false;
       this.isActive = false;
     },
+    // 从后台拉数据 data
+    // async getInfo() {
+    //   try {
+    //     const res = await this.$axios.post(`${this.HOST}/getstu_infor`, {
+    //       uid: this.uid,
+    //     });
+    //     const info = res.data;
+    //     console.log(info);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
   },
 
   beforeCreate() {
@@ -87,42 +94,23 @@ export default {
     const parent = document.getElementById('app');
     const child = document.getElementById('nav');
     parent.removeChild(child);
-    // const Body = document.getElementsByTagName('body');
-    // Body.style.margin = '0px';
   },
 };
 </script>
 
 <style scoped lang="less">
 .stu {
-  // margin: 0px;
   .title {
     display: flex;
     flex-direction: row;
-    height: 100px;
+    height: 80px;
     margin: 0px auto;
     background-color: #276e51;
 
-    .sicnu {
-      height: 90px;
-      margin-top: 5px;
-      margin-left: 5px;
+    .word {
+      height: 60px;
+      margin-top: 10px;
     }
-
-      .word {
-        height: 60px;
-        margin-top: 33px;
-      }
-  }
-  .navigate {
-    font-size: 14px;
-    font-weight: bold;
-    height: 50px;
-    line-height: 25px;
-    background-color: rgb(120, 233, 125);
-    align-self: center;
-    margin: auto;
-    margin-top: 5px;
   }
 
   .main {
@@ -144,7 +132,7 @@ export default {
       margin-top: 15px;
       margin-right: 5px;
       width: 170px;
-      height: 230px;;
+      height: 230px;
       padding-top: 20px;
       flex-shrink: 0;
 
@@ -160,8 +148,7 @@ export default {
 
     .left {
       display: flex;
-      font-size: 16px;
-      margin-top: 15px;
+      margin-top: 10px;
       margin-right: 15px;
       flex-direction: column;
       justify-content: flex-start;
@@ -171,20 +158,28 @@ export default {
 
       .on,
       .pass {
-        line-height: 30px;
-        margin: 5px;
-        border: 1px solid #96c2f1;
+        margin-top: 10px;
+        color: black;
+        // font-weight: bold;
+        border: none;
+        border-radius: 20px;
+        padding: 5px 10px;
+        width: 150px;
+        height: 30px;
+        font-size: 15px;
+        line-height: 15px;
+        background-color:  #5379a563;
         cursor: pointer;
-        background: #eff7ff;
-        border-radius: 10px;
-        outline: 0px;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
+        outline: none;
+        transition: all 0.3s ease;
       }
 
-      .active {
-        background: #9ab4ce59;
+      .notactive {
+        background: #5379a5c4;
+        color :white;
+        font-weight: bold;
         box-shadow: none;
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17)
       }
     }
   }

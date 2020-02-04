@@ -1,49 +1,69 @@
 <template>
-  <div class="body">
-    <!-- <div/> class="top">考试安排表</div> -->
-    <div class="exam">
+  <div id="middle">
+    <!-- <button @click="copyExam">复制</button> -->
+    <div id="exam">
       <div class="one">
         <div class="name">
-          <img id="exam" src="../assets/exam.png" alt="exam" />
-          考试名字
+          <img src="../assets/exam.png" alt="exam" />
+          {{name}}
           <img id="check" src="../assets/yes.png" alt />
         </div>
-        <div class="time">考试的时间</div>
+        <div class="time">{{time}}</div>
       </div>
-      <div class="two">考试的详细信息</div>
+      <div class="two">{{detail}}</div>
     </div>
-    <div class="exam">
+        <div id="exam">
       <div class="one">
         <div class="name">
-          <img id="exam" src="../assets/exam.png" alt="exam" />
-          考试名字
-          <img id="check" src="../assets/yes.png" alt />
+          <img src="../assets/exam.png" alt="exam" />
+          {{name}}
+          <img id="check" src="../assets/no.png" alt />
         </div>
-        <div class="time">考试的时间</div>
+        <div class="time">{{time}}</div>
       </div>
-      <div class="two">考试的详细信息</div>
+      <div class="two">{{detail}}</div>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Pass',
+
+  data() {
+    return {
+      name: '考试名字',
+      time: '考试时间',
+      detail: '考试信息',
+    };
+  },
+  // 尝试复制exam节点
+  methods: {
+    copyExam() {
+      const middle = document.getElementById('middle');
+      const oldExam = document.getElementById('exam');
+      const newExam = oldExam.cloneNode(true);
+      middle.appendChild(newExam);
+    },
+  },
+};
+</script>
+
 <style lang="less" scoped>
-.body {
+#middle {
   margin: 15px 1px;
   width: 100%;
   flex-direction: column;
-  //   .top {
-  //     font-size: 15px;
-  //     font-weight: bold;
-  //     height: 40px;
-  //     line-height: 40px;
-  //   }
-  .exam {
+
+  #exam {
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
-    background-color: white;
-    border-style: outset;
-    margin: 5px auto;
+    background-color: #fff;
+    margin: 10px auto;
+    padding: 10px 3px;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
 
     .one {
       display: flex;
@@ -52,17 +72,22 @@
       flex-wrap: wrap;
       align-items: baseline;
       height: auto;
-      line-height: 50px;
-      padding-top: 15px;
-      color: rgb(27, 165, 230);
+      line-height: 30px;
+      padding-top: 10px;
+      // color: rgb(27, 165, 230);
 
       img {
         width: 15px;
       }
 
       .name {
-        font-size: 18px;
+        font-weight: bold;
         margin-left: 5px;
+      }
+      .name:hover {
+        font-size: 18px;
+        transition: all 0.8s ease;
+
       }
 
       .time {
@@ -75,7 +100,8 @@
       font-size: 14px;
       text-align: left;
       margin-left: 5px;
-      margin-bottom: 5px;
+      margin-top: 5px;
+      margin-bottom: 0px;
     }
   }
 }
