@@ -2,7 +2,7 @@
   <div class="stu">
     <div class="title">
       <!-- <img src="../assets/sicnu.png" class="sicnu" /> -->
-      <img src="../assets/title_stu.png" class="word" />
+      <img src="../assets/title_tch.png" class="word" />
     </div>
     <div class="main">
       <div class="left">
@@ -16,9 +16,9 @@
         <PassExam v-if="!Seen" />
       </div>
       <div class="right">
-        <img src="../assets/head_stu.png" alt="defaul" />
+        <img src="../assets/head_tch.png" alt="defaul" />
         <div class="hello">
-          {{ name }}同学
+          {{ name }}老师
           <br />
           <br />现在是
           <br />
@@ -95,7 +95,7 @@ export default {
     flex-direction: row;
     height: 80px;
     margin: 0px auto;
-    background-color: #276e51;
+    background-color: #3367D6;
 
     .word {
       height: 60px;

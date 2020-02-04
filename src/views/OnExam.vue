@@ -43,6 +43,18 @@ export default {
       const newExam = oldExam.cloneNode(true);
       middle.appendChild(newExam);
     },
+    // 从后台拉数据 data
+    // async getInfo() {
+    //   try {
+    //     const res = await this.$axios.post(`${this.HOST}/getstu_infor`, {
+    //       uid: this.uid,
+    //     });
+    //     const info = res.data;
+    //     console.log(info);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
   },
 };
 </script>
