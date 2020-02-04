@@ -6,12 +6,14 @@
     </div>
     <div class="main">
       <div class="left">
-        <button class="on" @click="ChangeToOn" :class="{ notactive: !isActive }">正在进行的考试</button>
-        <button class="pass" @click="ChangeToPass" :class="{ notactive: isActive }">已经完成的考试</button>
+        <button class="onExam" @click="ChangeToOn" :class="{ notactive: !isActive }">
+          正在进行的考试</button>
+        <button class="passExam" @click="ChangeToPass" :class="{ notactive: isActive }">
+          已经完成的考试</button>
       </div>
       <div class="middle">
-        <On v-if="Seen" />
-        <Pass v-if="!Seen" />
+        <OnExam v-if="Seen" />
+        <PassExam v-if="!Seen" />
       </div>
       <div class="right">
         <img src="../assets/head.png" alt="defaul" />
@@ -32,15 +34,15 @@
 </template>
 
 <script>
-import On from './On.vue';
-import Pass from './Pass.vue';
+import OnExam from './OnExam.vue';
+import PassExam from './PassExam.vue';
 
 export default {
   name: 'IndexStu',
 
   components: {
-    On,
-    Pass,
+    OnExam,
+    PassExam,
   },
 
   data() {
@@ -156,8 +158,8 @@ export default {
       height: 100%;
       flex-shrink: 0;
 
-      .on,
-      .pass {
+      .onExam,
+      .passExam {
         margin-top: 10px;
         color: black;
         // font-weight: bold;
@@ -168,7 +170,7 @@ export default {
         height: 30px;
         font-size: 15px;
         line-height: 15px;
-        background-color:  #5379a563;
+        background-color: #5379a563;
         cursor: pointer;
         outline: none;
         transition: all 0.3s ease;
@@ -176,10 +178,10 @@ export default {
 
       .notactive {
         background: #5379a5c4;
-        color :white;
+        color: white;
         font-weight: bold;
         box-shadow: none;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17)
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
       }
     }
   }

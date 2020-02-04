@@ -5,15 +5,18 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    stu_uids: null,
+    uid: '',
   },
   // 改变state里面的值得方法
   mutations: {
-    stu_uid(state, data) {
-      state.stu_uids = data;
+    set_uid(state, uid) {
+      state.uid = uid;
     },
   },
   actions: {
+    set_uid(set, uid) {
+      set.commit('set_uid', uid);
+    },
   },
   modules: {
   },
