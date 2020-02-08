@@ -65,8 +65,8 @@ export default {
     // },
     submitLogin() {
       this.$store.dispatch('set_uid', this.uid);
-      // window.location.href = '/index_stu';
-      window.location.href = '/index_tch';
+      window.location.href = '/index_stu';
+      // window.location.href = '/index_tch';
     },
   },
 };

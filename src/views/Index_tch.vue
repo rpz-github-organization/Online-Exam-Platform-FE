@@ -68,9 +68,9 @@ export default {
 
   beforeCreate() {
     // 设置网页背景色
-    document
-      .querySelector('body')
-      .setAttribute('style', 'background-color: rgba(255, 251, 251, 0.87)');
+    // document
+    //   .querySelector('body')
+    //   .setAttribute('style', 'background-color: rgba(255, 251, 251, 0.87)');
   },
 
   created() {
@@ -88,14 +88,19 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style scopd lang="less">
 .stu {
+    height: 100%;
+  width: 100%;
+  border: 1px solid green;
+  position: fixed;
+  background: url(../assets/index_background_tch.gif);
   .title {
     display: flex;
     flex-direction: row;
     height: 80px;
     margin: 0px auto;
-    background-color: #3367D6;
+    background-color: #2850A7;
 
     .word {
       height: 60px;
@@ -125,6 +130,7 @@ export default {
       height: 230px;
       padding-top: 20px;
       flex-shrink: 0;
+      background-color: rgba(255, 251, 251, 0.87);
 
       img {
         width: 60px;

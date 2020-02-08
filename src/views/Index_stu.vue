@@ -1,15 +1,14 @@
 <template>
   <div class="stu">
     <div class="title">
-      <!-- <img src="../assets/sicnu.png" class="sicnu" /> -->
       <img src="../assets/title_stu.png" class="word" />
     </div>
     <div class="main">
       <div class="left">
-        <button class="onExam" @click="ChangeToOn" :class="{ notactive: !isActive }">
-          正在进行的考试</button>
-        <button class="passExam" @click="ChangeToPass" :class="{ notactive: isActive }">
-          已经完成的考试</button>
+        <button class="onExam" @click="ChangeToOn"
+        :class="{ notactive: !isActive }">正在进行的考试</button>
+        <button class="passExam" @click="ChangeToPass"
+        :class="{ notactive: isActive }">已经完成的考试</button>
       </div>
       <div class="middle">
         <OnExam v-if="Seen" />
@@ -22,7 +21,8 @@
           <br />
           <br />现在是
           <br />
-          {{ new Date().toLocaleString("chinese", { hour12: false }).substring(0, 15) }}
+          {{ new Date().toLocaleString("chinese", { hour12: false })
+          .substring(0,new Date().toLocaleString("chinese", { hour12: false }).length-3) }}
           <br />
           <br />
           {{ greeting }}
@@ -51,6 +51,7 @@ export default {
       greeting: '',
       Seen: true,
       isActive: true,
+      // backgroundImage: "url(" + require("../assets/index_background_stu.gif") + ")
     };
   },
 
@@ -67,10 +68,10 @@ export default {
   },
 
   beforeCreate() {
-    // 设置网页背景色
-    document
-      .querySelector('body')
-      .setAttribute('style', 'background-color: rgba(255, 251, 251, 0.87)');
+    // // 设置网页背景
+    // document
+    //   .querySelector('body')
+    //   .setAttribute('style', 'backgroundImage: src = "../assets/index_background_stu.gif"');
   },
 
   created() {
@@ -88,8 +89,22 @@ export default {
 };
 </script>
 
+<style lang="less">
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+</style>
+
 <style scoped lang="less">
 .stu {
+  height: 100%;
+  width: 100%;
+  border: 1px solid green;
+  position: fixed;
+  background: url(../assets/index_background_stu.gif);
+
   .title {
     display: flex;
     flex-direction: row;
@@ -125,6 +140,7 @@ export default {
       height: 230px;
       padding-top: 20px;
       flex-shrink: 0;
+      background-color: rgba(255, 251, 251, 0.87);
 
       img {
         width: 60px;
