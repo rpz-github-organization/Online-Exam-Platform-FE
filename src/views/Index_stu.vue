@@ -47,11 +47,10 @@ export default {
 
   data() {
     return {
-      name: '某某',
-      greeting: '',
+      name: '川师',
+      greeting: '你好！',
       Seen: true,
       isActive: true,
-      // backgroundImage: "url(" + require("../assets/index_background_stu.gif") + ")
     };
   },
 
@@ -65,13 +64,31 @@ export default {
       this.Seen = false;
       this.isActive = false;
     },
+
+    async getStuExamInfo() {
+      try {
+        const res = await this.$axios.post('', {
+          uid: this.uid,
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          this.name = info.stu_name;
+          const exam = info.data;
+          const examInfo = JSON.stringify(exam);
+          console.log(res);
+          // 将考试信息上传到Vuex
+          this.$store.dispatch('set_examInfo', examInfo);
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 
-  beforeCreate() {
-    // // 设置网页背景
-    // document
-    //   .querySelector('body')
-    //   .setAttribute('style', 'backgroundImage: src = "../assets/index_background_stu.gif"');
+  beforeMount() {
   },
 
   created() {
@@ -90,11 +107,11 @@ export default {
 </script>
 
 <style lang="less">
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-    }
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 </style>
 
 <style scoped lang="less">

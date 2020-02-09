@@ -1,50 +1,44 @@
 <template>
-  <div id="middle">
+<div>
+  <ul v-for="(exam,index) in exams" :key="index" id="middle">
     <!-- <button @click="copyExam">复制</button> -->
-    <div id="exam">
+    <li id="exam">
       <div class="one">
         <div class="name">
           <img src="../assets/exam.png" alt="exam" />
-          {{name}}
+          {{ exam.exam_name }}
           <img id="check" src="../assets/yes.png" alt />
         </div>
-        <div class="time">{{time}}</div>
-      </div>
-      <div class="two">{{detail}}</div>
-    </div>
-        <div id="exam">
-      <div class="one">
-        <div class="name">
-          <img src="../assets/exam.png" alt="exam" />
-          {{name}}
-          <img id="check" src="../assets/no.png" alt />
+        <div class="time">
+          {{ exam.begin_time }}
         </div>
-        <div class="time">{{time}}</div>
       </div>
-      <div class="two">{{detail}}</div>
-    </div>
+      <div class="two">{{ exam.exam_detail }}</div>
+    </li>
+  </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Pass',
+  name: 'On',
 
   data() {
     return {
       name: '考试名字',
       time: '考试时间',
       detail: '考试信息',
+      exams: [
+        {
+          exam_name: 'the first exam of c',
+          begin_time: '2019-01-01',
+          exam_detail: 'nothing',
+        }, {
+          exam_name: 'I dont know',
+          begin_time: '2019-12-01',
+          exam_detail: 'nothingnothingnothing',
+        }],
     };
-  },
-  // 尝试复制exam节点
-  methods: {
-    copyExam() {
-      const middle = document.getElementById('middle');
-      const oldExam = document.getElementById('exam');
-      const newExam = oldExam.cloneNode(true);
-      middle.appendChild(newExam);
-    },
   },
 };
 </script>
@@ -52,7 +46,8 @@ export default {
 <style lang="less" scoped>
 #middle {
   margin: 15px 1px;
-  width: 100%;
+  width: auto;
+  padding-left: 5px;
   flex-direction: column;
 
   #exam {
@@ -87,7 +82,6 @@ export default {
       .name:hover {
         font-size: 18px;
         transition: all 0.8s ease;
-
       }
 
       .time {

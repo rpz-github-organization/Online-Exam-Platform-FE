@@ -1,26 +1,22 @@
 <template>
-  <div id="middle">
-    <!-- <button @click="copyExam">复制</button> -->
-    <div id="exam">
+<div>
+  <ul v-for="(exam,index) in exams" :key="index" id="middle">
+    <li id="exam">
       <div class="one">
         <div class="name">
           <img src="../assets/exam.png" alt="exam" />
-          {{ name }}
+          {{ exam.exam_name }}
         </div>
-        <div class="time">{{ time }}</div>
-      </div>
-      <div class="two">{{ detail }}</div>
-    </div>
-        <div id="exam">
-      <div class="one">
-        <div class="name">
-          <img src="../assets/exam.png" alt="exam" />
-          {{name}}
+        <div class="time">
+          {{ exam.begin_time }}
         </div>
-        <div class="time">{{ time }}</div>
       </div>
-      <div class="two">{{ detail }}</div>
-    </div>
+      <div class="two">
+       <div class="two_text" >考试的科目：{{ exam.course }}</div>
+       <div class="two_text" >考试时长：{{exam.last_time}}小时</div>
+      </div>
+    </li>
+  </ul>
   </div>
 </template>
 
@@ -30,39 +26,34 @@ export default {
 
   data() {
     return {
-      name: '考试名字',
-      time: '考试时间',
-      detail: '考试信息',
+      exams: [
+        {
+          exam_name: 'The first exam of c',
+          course: 'English',
+          begin_time: '2019-01-01',
+          last_time: '2',
+
+        }, {
+          exam_name: 'I dont know',
+          course: 'Chinses',
+          begin_time: '2019-12-01',
+          last_time: '1.5',
+        }],
+      // exam: '',
     };
   },
-  // 尝试复制exam节点
-  methods: {
-    copyExam() {
-      const middle = document.getElementById('middle');
-      const oldExam = document.getElementById('exam');
-      const newExam = oldExam.cloneNode(true);
-      middle.appendChild(newExam);
-    },
-    // 从后台拉数据 data
-    // async getInfo() {
-    //   try {
-    //     const res = await this.$axios.post(`${this.HOST}/getstu_infor`, {
-    //       uid: this.uid,
-    //     });
-    //     const info = res.data;
-    //     console.log(info);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // },
-  },
+
+  // beforeMount() {
+  // this.exams = this.examInfo;
+  // },
 };
 </script>
 
 <style lang="less" scoped>
 #middle {
   margin: 15px 1px;
-  width: 100%;
+  width: auto;
+  padding-left: 5px;
   flex-direction: column;
 
   #exam {
@@ -96,8 +87,7 @@ export default {
       }
       .name:hover {
         font-size: 18px;
-        transition: all 0.8s ease;
-
+        transition: all 0.5s ease;
       }
 
       .time {
@@ -112,6 +102,12 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
+      display: flex;
+      flex-direction: row;
+
+      .two_text{
+        margin-right: 15px;
+      }
     }
   }
 }
