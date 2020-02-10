@@ -38,7 +38,7 @@ import OnExam from './OnExam.vue';
 import PassExam from './PassExam.vue';
 
 export default {
-  name: 'IndexStu',
+  name: 'indexStu',
 
   components: {
     OnExam,
@@ -47,6 +47,7 @@ export default {
 
   data() {
     return {
+      timestamp: '',
       name: '川师',
       greeting: '你好！',
       Seen: true,
@@ -64,31 +65,37 @@ export default {
       this.Seen = false;
       this.isActive = false;
     },
+  },
+  getTime() {
+    const timestamp = new Date().getTime();
+    this.timestamp = timestamp;
+  },
 
-    async getStuExamInfo() {
-      try {
-        const res = await this.$axios.post('', {
-          uid: this.uid,
-        });
-        const info = res.data;
-        console.log(info);
-        if (info.code === 200) {
-          this.name = info.stu_name;
-          const exam = info.data;
-          const examInfo = JSON.stringify(exam);
-          console.log(res);
-          // 将考试信息上传到Vuex
-          this.$store.dispatch('set_examInfo', examInfo);
-        } else {
-          console.log('请求失败');
-        }
-      } catch (err) {
-        console.log(err);
+  async getStuExamInfo() {
+    try {
+      const res = await this.$axios.post('/homePage/stu/id', {
+        stu_id: this.uid,
+        status: 0,
+      });
+      const info = res.data;
+      console.log(info);
+      if (info.code === 200) {
+        this.name = info.stu_name;
+        const onExam = info.data;
+        const onExamInfo = JSON.stringify(onExam);
+        console.log(onExamInfo);
+        // 将考试信息上传到Vuex
+        this.$store.dispatch('set_onEexamInfo', onExamInfo);
+      } else {
+        console.log('请求失败');
       }
-    },
+    } catch (err) {
+      console.log(err);
+    }
   },
 
   beforeMount() {
+    this.getStuExamInfo();
   },
 
   created() {
@@ -96,6 +103,8 @@ export default {
     if (d.getHours() < 12) this.greeting = '上午好！';
     else if (d.getHours() >= 12 && d.getHours() < 18) this.greeting = '下午好！';
     else this.greeting = '晚上好！';
+
+    this.getTime();
   },
   // 删除 Home|About
   mounted() {

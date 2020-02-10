@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import IndexStu from '../views/Index_stu.vue';
-import IndexTch from '../views/Index_tch.vue';
 
 
 Vue.use(VueRouter);
@@ -23,13 +21,13 @@ const routes = [
   },
   {
     path: '/index_stu',
-    name: 'IndexStu',
-    component: IndexStu,
+    name: 'indexStu',
+    component: () => import('../views/Index_stu.vue'),
   },
   {
     path: '/index_tch',
-    name: 'IndexTch',
-    component: IndexTch,
+    name: 'indexTch',
+    component: () => import('../views/Index_tch.vue'),
   },
 ];
 

@@ -1,45 +1,133 @@
 <template>
-<div>
-  <ul v-for="(exam,index) in exams" :key="index" id="middle">
-    <!-- <button @click="copyExam">复制</button> -->
-    <li id="exam">
-      <div class="one">
-        <div class="name">
-          <img src="../assets/exam.png" alt="exam" />
-          {{ exam.exam_name }}
-          <img id="check" src="../assets/yes.png" alt />
+  <div>
+    <ul v-for="(exam,index) in noExams" :key=" 'you' + index" id="middle">
+      <li id="exam">
+        <div class="one">
+          <div class="name name_no">
+            <img src="../assets/exam.png" alt="exam" />
+            {{ exam.exam_name }}
+            <img id="check" src="../assets/no.png" />
+          </div>
+          <div class="time">{{ exam.begin_time }}</div>
         </div>
-        <div class="time">
-          {{ exam.begin_time }}
+        <div class="two">
+          <div class="two_text">考试科目：{{ exam.course }}</div>
+          <div class="two_text">考试时长：{{ exam.last_time }}小时</div>
         </div>
-      </div>
-      <div class="two">{{ exam.exam_detail }}</div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+
+    <ul v-for="(exam,index) in yesExams" :key=" 'me' + index" id="middle">
+      <li id="exam">
+        <div class="one">
+          <div class="name name_yes">
+            <img src="../assets/exam.png" alt="exam" />
+            {{ exam.exam_name }}
+            <img id="check" src="../assets/yes.png" />
+          </div>
+          <div class="time">{{ exam.begin_time }}</div>
+        </div>
+        <div class="two">
+          <div class="two_text">考试科目：{{ exam.course }}</div>
+          <div class="two_text">考试时长：{{ exam.last_time }}小时</div>
+        </div>
+      </li>
+    </ul>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: 'On',
+  name: 'passExam',
 
   data() {
     return {
-      name: '考试名字',
-      time: '考试时间',
-      detail: '考试信息',
-      exams: [
-        {
-          exam_name: 'the first exam of c',
-          begin_time: '2019-01-01',
-          exam_detail: 'nothing',
-        }, {
-          exam_name: 'I dont know',
-          begin_time: '2019-12-01',
-          exam_detail: 'nothingnothingnothing',
-        }],
+      // noExams: [
+      //   {
+      //     exam_name: 'I dont know',
+      //     course: 'Chinses',
+      //     begin_time: '2019-12-01',
+      //     last_time: '1.5',
+      //   }, {
+      //     exam_name: 'The first exam of c',
+      //     course: 'English',
+      //     begin_time: '2019-01-01',
+      //     last_time: '2',
+      //   }],
+
+      // yesExams: [
+      //   {
+      //     exam_name: 'Idsa dont know',
+      //     course: 'Chinses',
+      //     begin_time: '2019-12-01',
+      //     last_time: '1.5',
+      //   }, {
+      //     exam_name: 'Thdsae first exam of c',
+      //     course: 'English',
+      //     begin_time: '2019-01-01',
+      //     last_time: '2',
+      //   }],
+
+      yesExams: '',
+      noExams: '',
     };
   },
+  methods: {
+    async getStuNoExamInfo() {
+      try {
+        const res = await this.$axios.post('', {
+          stu_id: this.uid,
+          status: 1,
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          const noExam = info.data;
+          const noExamInfo = JSON.stringify(noExam);
+          // 给noExams赋值
+          this.noExams = noExamInfo;
+          console.log(noExamInfo);
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async getStuYesExamInfo() {
+      try {
+        const res = await this.$axios.post('/homePage/stu/id', {
+          stu_id: this.uid,
+          status: 2,
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          const yesExam = info.data;
+          const yesExamInfo = JSON.stringify(yesExam);
+          // 给yesExam 赋值
+          this.yesExams = yesExamInfo;
+          console.log(yesExamInfo);
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+
+  created() {
+    this.getTime();
+  },
+
+  beforeMount() {
+    this.getStuNoExamInfo();
+    this.getStuYesExamInfo();
+  },
+
 };
 </script>
 
@@ -67,9 +155,8 @@ export default {
       flex-wrap: wrap;
       align-items: baseline;
       height: auto;
-      line-height: 30px;
+      // line-height: 30px;
       padding-top: 10px;
-      // color: rgb(27, 165, 230);
 
       img {
         width: 15px;
@@ -82,6 +169,12 @@ export default {
       .name:hover {
         font-size: 18px;
         transition: all 0.8s ease;
+      }
+      .name_no{
+        color: red;
+      }
+      .name_yes{
+        color: green;
       }
 
       .time {
@@ -96,6 +189,12 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
+      display: flex;
+      flex-direction: row;
+
+      .two_text {
+        margin-right: 15px;
+      }
     }
   }
 }

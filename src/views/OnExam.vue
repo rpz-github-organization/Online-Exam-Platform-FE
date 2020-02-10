@@ -1,6 +1,6 @@
 <template>
 <div>
-  <ul v-for="(exam,index) in exams" :key="index" id="middle">
+  <ul v-for="(exam,index) in exams" :key="'a'+index" id="middle">
     <li id="exam">
       <div class="one">
         <div class="name">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="two">
-       <div class="two_text" >考试的科目：{{ exam.course }}</div>
+       <div class="two_text" >考试科目：{{ exam.course }}</div>
        <div class="two_text" >考试时长：{{exam.last_time}}小时</div>
       </div>
     </li>
@@ -21,8 +21,9 @@
 </template>
 
 <script>
+
 export default {
-  name: 'On',
+  name: 'onExam',
 
   data() {
     return {
@@ -34,18 +35,22 @@ export default {
           last_time: '2',
 
         }, {
-          exam_name: 'I dont know',
+          exam_name: 'I don`t knowwww',
           course: 'Chinses',
           begin_time: '2019-12-01',
           last_time: '1.5',
         }],
+      // exam_num: '',
       // exam: '',
     };
   },
 
-  // beforeMount() {
-  // this.exams = this.examInfo;
-  // },
+  beforeMount() {
+    this.exams = this.onExamInfo;
+  },
+
+  mounted() {
+  },
 };
 </script>
 
@@ -75,7 +80,6 @@ export default {
       height: auto;
       line-height: 30px;
       padding-top: 10px;
-      // color: rgb(27, 165, 230);
 
       img {
         width: 15px;

@@ -13,16 +13,16 @@ export default new Vuex.Store({
     set_uid(state, uid) {
       state.uid = uid;
     },
-    set_examInfo(state, examInfo) {
-      state.examInfo = examInfo;
+    set_onExamInfo(state, onExamInfo) {
+      state.onExamInfo = onExamInfo;
     },
   },
   actions: {
     set_uid(set, uid) {
       set.commit('set_uid', uid);
     },
-    set_examInfo(set, examInfo) {
-      set.commit('set_examInfo', examInfo);
+    set_onExamInfo(set, onExamInfo) {
+      set.commit('set_onExamInfo', onExamInfo);
     },
   },
   modules: {
