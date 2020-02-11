@@ -11,9 +11,7 @@
           <div class="time">{{ exam.begin_time }}</div>
         </div>
         <div class="two">
-          <div class="two_text">考试科目：{{ exam.course }}</div>
-          <div class="two_text">考试时长：{{ exam.last_time }}小时</div>
-        </div>
+考试时长：{{ exam.last_time }}小时</div>
       </li>
     </ul>
 
@@ -28,9 +26,7 @@
           <div class="time">{{ exam.begin_time }}</div>
         </div>
         <div class="two">
-          <div class="two_text">考试科目：{{ exam.course }}</div>
-          <div class="two_text">考试时长：{{ exam.last_time }}小时</div>
-        </div>
+考试时长：{{ exam.last_time }}小时</div>
       </li>
     </ul>
 
@@ -43,40 +39,36 @@ export default {
 
   data() {
     return {
-      noExams: [
-        {
-          exam_name: 'I dont know',
-          course: 'Chinses',
-          begin_time: '2019-12-01',
-          last_time: '1.5',
-        }, {
-          exam_name: 'The first exam of c',
-          course: 'English',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        }],
+      // noExams: [
+      //   {
+      //     exam_name: 'I dont know',
+      //     begin_time: '2019-12-01',
+      //     last_time: '1.5',
+      //   }, {
+      //     exam_name: 'The first exam of c',
+      //     begin_time: '2019-01-01',
+      //     last_time: '2',
+      //   }],
 
-      yesExams: [
-        {
-          exam_name: 'Idsa dont know',
-          course: 'Chinses',
-          begin_time: '2019-12-01',
-          last_time: '1.5',
-        }, {
-          exam_name: 'Thdsae first exam of c',
-          course: 'English',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        }],
+      // yesExams: [
+      //   {
+      //     exam_name: 'Idsa dont know',
+      //     begin_time: '2019-12-01',
+      //     last_time: '1.5',
+      //   }, {
+      //     exam_name: 'Thdsae first exam of c',
+      //     begin_time: '2019-01-01',
+      //     last_time: '2',
+      //   }],
 
-      // yesExams: '',
-      // noExams: '',
+      yesExams: '',
+      noExams: '',
     };
   },
   methods: {
     async getStuNoExamInfo() {
       try {
-        const res = await this.$axios.post('', {
+        const res = await this.$axios.post('api/homePage/stu/id', {
           stu_id: this.uid,
           status: 1,
         });
@@ -98,7 +90,7 @@ export default {
 
     async getStuYesExamInfo() {
       try {
-        const res = await this.$axios.post('/homePage/stu/id', {
+        const res = await this.$axios.post('api/homePage/stu/id', {
           stu_id: this.uid,
           status: 2,
         });
@@ -185,12 +177,6 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
-      display: flex;
-      flex-direction: row;
-
-      .two_text {
-        margin-right: 15px;
-      }
     }
   }
 }

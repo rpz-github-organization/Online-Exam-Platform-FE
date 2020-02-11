@@ -22,12 +22,12 @@ const routes = [
   {
     path: '/index_stu',
     name: 'indexStu',
-    component: () => import('../views/Index_stu.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/Index_stu.vue'),
   },
   {
     path: '/index_tch',
     name: 'indexTch',
-    component: () => import('../views/Index_tch.vue'),
+    component: () => import(/* webpackChunkName: "about" */'../views/Index_tch.vue'),
   },
 ];
 

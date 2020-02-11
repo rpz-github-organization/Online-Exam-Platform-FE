@@ -5,14 +5,12 @@
         <div class="one">
           <div class="name">
             <img src="../assets/exam.png" alt="exam" />
-            {{ exam.exam_name }}
+            {{ exam.name }}
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
         <div class="two">
-          <div class="two_text">考试科目：{{ exam.course }}</div>
-          <div class="two_text">考试时长：{{exam.last_time}}小时</div>
-        </div>
+          考试时长：{{exam.last_time}}分钟</div>
       </li>
     </ul>
   </div>
@@ -25,28 +23,26 @@ export default {
 
   data() {
     return {
-      exams: [
-        {
-          exam_name: 'The first exam of c',
-          course: 'English',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        },
-        {
-          exam_name: 'I don`t knowwww',
-          course: 'Chinses',
-          begin_time: '2019-12-01',
-          last_time: '1.5',
-        },
-      ],
-      // exam: '',
+      // exams: [
+      //   {
+      //     name: 'The first exam of c',
+      //     begin_time: '2019-01-01',
+      //     last_time: '2',
+      //   },
+      //   {
+      //     name: 'I don`t knowwww',
+      //     begin_time: '2019-12-01',
+      //     last_time: '1.5',
+      //   },
+      // ],
+      exam: '',
     };
   },
 
   methods: {
     async getStuOnExamInfo() {
       try {
-        const res = await this.$axios.post('/homePage/stu/id', {
+        const res = await this.$axios.post('api/homePage/stu/id', {
           stu_id: this.uid,
           status: 0,
         });
@@ -65,9 +61,9 @@ export default {
       }
     },
   },
-  //   beforeMount() {
-  //     this.getStuOnExamInfo();
-  //   },
+  beforeMount() {
+    this.getStuOnExamInfo();
+  },
 };
 </script>
 
@@ -123,12 +119,6 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
-      display: flex;
-      flex-direction: row;
-
-      .two_text {
-        margin-right: 15px;
-      }
     }
   }
 }
