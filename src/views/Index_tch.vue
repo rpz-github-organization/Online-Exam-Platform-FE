@@ -6,8 +6,11 @@
     <div class="main">
       <div class="middle">
         <ul v-for="(course,index) in course" :key="index" class="course">
-          <li class="name">
-            <div class="name"><img src="../assets/course.png" />{{ course.name }}</div>
+          <li class="cour">
+            <div class="name">
+              <img src="../assets/course.png" />
+              {{ course.name }}
+            </div>
             <div class="details">
               学分：{{ course.credit }} <br/>
               学时：{{ course.school_hour }} <br/>
@@ -140,7 +143,6 @@ body {
         justify-content: space-between;
         margin-left: 4%;
         width: 25%;
-        height: 50px;
         padding-top: 10px;
         padding-left: 10px;
         background-color: #fff;
@@ -148,7 +150,13 @@ body {
         border: 1px solid rgba(0, 0, 0, 0.2);
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
 
-        .name {
+        .cour {
+          display: flex;
+          padding-left: 5px;
+          justify-content: flex-start;
+          flex-direction:column;
+
+          .name{
           display: flex;
           padding-left: 5px;
           justify-content: flex-start;
@@ -156,17 +164,23 @@ body {
           font-size: 18px;
           font-weight: bold;
           margin-left: 5px;
-        }
 
-        img {
-          width: 25px;
-          height: 25px;
-          margin-right: 5px;
-        }
+            img {
+              width: 25px;
+              height: 25px;
+              margin-right: 5px;
+            }
+          }
 
-        .name:hover {
-          font-size: 20px;
-          transition: all 0.5s ease;
+          .name:hover {
+            font-size: 20px;
+            transition: all 0.5s ease;
+           }
+
+          .details{
+            display:flex;
+            felxd
+          }
         }
       }
     }
