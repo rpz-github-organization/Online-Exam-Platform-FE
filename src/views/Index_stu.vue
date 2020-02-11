@@ -78,8 +78,7 @@ export default {
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
-          const stuInfoJson = info.data;
-          const stuInfo = JSON.stringify(stuInfoJson);
+          const stuInfo = info.data;
           this.name = stuInfo.name;
           if (stuInfo.sex === 'female') this.male = false;
         } else {

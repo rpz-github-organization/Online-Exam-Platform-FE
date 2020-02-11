@@ -58,8 +58,7 @@ export default {
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
-          const onExam = info.data;
-          const onExamInfo = JSON.stringify(onExam);
+          const onExamInfo = info.data;
           console.log(onExamInfo);
           this.exams = onExamInfo;
         } else {

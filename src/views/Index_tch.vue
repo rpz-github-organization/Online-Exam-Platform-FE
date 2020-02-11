@@ -5,17 +5,21 @@
     </div>
     <div class="main">
       <div class="middle">
-        <ul v-for="(course,index) in course" :key="index" class="course">
+        <ul v-for="(course, index) in course" :key="index" class="course">
           <li class="cour">
             <div class="name">
               <img src="../assets/course.png" />
               {{ course.name }}
             </div>
             <div class="details">
-              学分：{{ course.credit }} <br/>
-              学时：{{ course.school_hour }} <br/>
-              考试分数：{{ course.exam_score }} <be/>
-              平均分：{{ course.common_score }} <br/>
+              学分：{{ course.credit }}
+              <br />
+              学时：{{ course.school_hour }}
+              <br />
+              考试分数：{{ course.exam_score }}
+              <br />
+              平均分：{{ course.common_score }}
+              <br />
               卷面分占比：{{ course.exam_proportion }}
             </div>
           </li>
@@ -46,29 +50,118 @@ export default {
   data() {
     return {
       name: '川师',
+      male: true,
       greeting: '',
-      course: [{
-        name: 'English',
-        credit: 14,
-        school_hour: 36,
-        exam_score: 100,
-        common_socre: 87,
-        exam_proportion: '60%,',
-      }],
+      // course:'',
+      course: [
+        {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        }, {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        }, {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        }, {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        }, {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        }, {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        }, {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        },
+      ],
     };
+  },
+
+  methods: {
+    async getTchNameAndSex() {
+      try {
+        const res = await this.$axios.get(`${this.HOST}/PersonalData/getTeacher`, {
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          const teaInfo = info.data;
+          this.name = teaInfo.name;
+          if (teaInfo.sex === 'female') this.male = false;
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getCourseInfo() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/homePage/tea/id`, {
+          tea_id: this.uid,
+          status: 0,
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          const courseInfo = info.data;
+          console.log(courseInfo);
+          this.ecourse = courseInfo;
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 
   created() {
     const d = new Date();
     if (d.getHours() < 12) this.greeting = '上午好！';
-    else if (d.getHours() >= 12 && d.getHours() < 18) this.greeting = '下午好！';
-    else this.greeting = '晚上好！';
+    else if (d.getHours() >= 12 && d.getHours() < 18) {
+      this.greeting = '下午好！';
+    } else this.greeting = '晚上好！';
   },
   // 删除 Home|About
   mounted() {
     const parent = document.getElementById('app');
     const child = document.getElementById('nav');
     parent.removeChild(child);
+
+    this.getTchNameAndSex();
+    this.getCourseInfo();
   },
 };
 </script>
@@ -109,7 +202,6 @@ body {
     height: 100%;
     width: 90%;
     margin: auto;
-    // background-color: rgba(219, 215, 208, 0.177);
 
     .right {
       margin-left: 25px;
@@ -154,16 +246,16 @@ body {
           display: flex;
           padding-left: 5px;
           justify-content: flex-start;
-          flex-direction:column;
+          flex-direction: column;
 
-          .name{
-          display: flex;
-          padding-left: 5px;
-          justify-content: flex-start;
-          flex-wrap: nowrap;
-          font-size: 18px;
-          font-weight: bold;
-          margin-left: 5px;
+          .name {
+            display: flex;
+            padding-left: 5px;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: 5px;
 
             img {
               width: 25px;
@@ -173,13 +265,16 @@ body {
           }
 
           .name:hover {
-            font-size: 20px;
+            font-size: 22px;
             transition: all 0.5s ease;
-           }
+          }
 
-          .details{
-            display:flex;
-            felxd
+          .details {
+            margin-left: 15px;
+            margin-bottom: 10px;
+            margin-top: 5px;
+            text-align: start;
+            font-size: 14px;
           }
         }
       }

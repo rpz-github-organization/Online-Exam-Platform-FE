@@ -75,8 +75,7 @@ export default {
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
-          const noExam = info.data;
-          const noExamInfo = JSON.stringify(noExam);
+          const noExamInfo = info.data;
           // 给noExams赋值
           this.noExams = noExamInfo;
           console.log(noExamInfo);
@@ -97,8 +96,7 @@ export default {
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
-          const yesExam = info.data;
-          const yesExamInfo = JSON.stringify(yesExam);
+          const yesExamInfo = info.data;
           // 给yesExam 赋值
           this.yesExams = yesExamInfo;
           console.log(yesExamInfo);
