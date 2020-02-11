@@ -5,7 +5,7 @@
         <el-row>
             <div class="card_personal">
                 <div class="avatar">
-                    <el-avatar :size="70" :src="avatarUrl" class="avatar"></el-avatar>
+                    <el-avatar :size="70" class="avatar"></el-avatar>
                 </div>
                 <div class="rowa">
                     <label>学号:  {{this.uid}}</label>

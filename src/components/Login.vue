@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    <h4>{{ new Date().toLocaleString() }} - 欢迎来到 "教你写登录注册" 教程</h4>
     <div class="card login-container">
       <div class="title">登录 · Login</div>
       <div class="form">
@@ -24,7 +23,7 @@
           <button @click="submitLogin" class="submit">登录</button>
         </div>
         <div class="row" style="justify-content: flex-end;">
-          <a href="/">忘记密码</a>
+          <a href="/AddExam">忘记密码</a>
           <a href="/register">立即注册</a>
           <div class="phoneLogin" @click="phoneLogin">切换登录方式</div>
         </div>
@@ -95,6 +94,11 @@ export default {
             const infodata = info.data;
             const authlevel = infodata.authority;
             this.$store.dispatch('set_authLevel', authlevel);
+            if (authlevel === 0) {
+              window.location.href = '/IndexStu';
+            } else if (authlevel > 0 && authlevel < 99) {
+              window.location.href = '/IndexTea';
+            }
             console.log('登录成功');
           } else {
             console.log('登录失败');

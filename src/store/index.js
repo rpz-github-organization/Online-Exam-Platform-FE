@@ -7,23 +7,30 @@ export default new Vuex.Store({
   state: {
     authLevel: 0,
     uid: '',
+    examId: '2',
   },
   getters: {
   },
   mutations: {
-    set_uid(state, uid) {
+    setId(state, uid) {
       state.uid = uid;
     },
-    set_authLevel(state, authLevel) {
+    setAuthLevel(state, authLevel) {
       state.authLevel = authLevel;
+    },
+    setExamId(state, examId) {
+      state.examId = examId;
     },
   },
   actions: {
     set_uid(set, uid) {
-      set.commit('set_uid', uid);
+      set.commit('setId', uid);
     },
     set_authLevel(set, authLevel) {
-      set.commit('set_authLevel', authLevel);
+      set.commit('setAuthLevel', authLevel);
+    },
+    set_examId(set, examId) {
+      set.commit('setExamId', examId);
     },
   },
   modules: {

@@ -26,17 +26,24 @@
           <div class="row">
             <label for="email">邮箱</label>
             <input v-model="email" type="text" name="email" placeholder="请输入你的邮箱">
+            <button
+              @click="submitcheck()"
+              :disabled="isok"
+              class="clicka"
+              v-if="showbtn">
+                验证
+            </button>
+            <button class="clicka" v-else>{{ code }}</button>
           </div>
           <div class="row">
             <label>验证码</label>
             <input v-model="checkemail" type="text" name="checkemail" placeholder="请输入邮箱验证码">
           </div>
         <br>
-        <div v-show="this.tipMessage.length > 0" class="row">
+        <div v-show="this.tipMessage.length > 0" class="row" style="justify-content: center;">
           <p class="tip">{{ this.tipMessage }}</p>
         </div>
-        <div class="row">
-          <button @click="submitcheck" class="clicka">点击验证</button>
+        <div class="row" style="justify-content: center;">
           <button @click="submitregister" class="submit">注册</button>
           <a href="/">返回登录</a>
         </div>
@@ -61,7 +68,18 @@ export default {
       identity: 0,
 
       tipMessage: '',
+      code: '验证',
+      showbtn: true,
+      isok: false,
+      sec: 60,
     };
+  },
+  mounted() {
+    if (document.getElementById('nav')) {
+      const p = document.getElementById('app');
+      const c = document.getElementById('nav');
+      p.removeChild(c);
+    }
   },
   methods: {
     validate() { // 表单验证
@@ -105,30 +123,43 @@ export default {
       return res;
     },
     async submitcheck() {
-      try {
-        if (this.email.search('@sicnu.edu.cn') === -1) { // 学生注册
-          const res = await this.$axios.post(`${this.HOST}/register/email/student`, {
-            email: this.email,
-          });
-          const info = res.data;
-          if (info.code === 200) {
-            console.log('发送成功');
-          } else {
-            console.log('出现错误，发送失败！');
+      if (this.validate) {
+        try {
+          if (this.email.search('@sicnu.edu.cn') === -1) { // 学生注册
+            const res = await this.$axios.post(`${this.HOST}/register/email/student`, {
+              email: this.email,
+            });
+            const info = res.data;
+            if (info.code === 200) {
+              console.log('发送成功');
+              const timer = setInterval(() => {
+                this.sec = this.sec - 1;
+                this.code = `${this.sec}S`;
+                this.showbtn = false;
+                if (this.sec === 0) {
+                  clearInterval(timer);
+                  this.sec = 60;
+                  this.code = `${this.sec}S`;
+                  this.showbtn = true;
+                }
+              }, 1000);
+            } else {
+              console.log('出现错误，发送失败！');
+            }
+          } else { // 老师注册
+            const res = await this.$axios.post(`${this.HOST}/register/email/teacher`, {
+              email: this.email,
+            });
+            const info = res.data;
+            if (info.code === 200) {
+              console.log('发送成功');
+            } else {
+              console.log('出现错误，发送失败！');
+            }
           }
-        } else { // 老师注册
-          const res = await this.$axios.post(`${this.HOST}/register/email/teacher`, {
-            email: this.email,
-          });
-          const info = res.data;
-          if (info.code === 200) {
-            console.log('发送成功');
-          } else {
-            console.log('出现错误，发送失败！');
-          }
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err);
       }
     },
     async submitregister() {
@@ -162,6 +193,7 @@ export default {
             const info = res.data;
             if (info.code === 200) {
               console.log('注册成功');
+              window.location.href = '/';
             } else {
               console.log('出现错误，注册失败！');
             }
@@ -200,15 +232,15 @@ export default {
       align-items: center;
 
       .row {
-        width: 80%;
+        width: 90%;
         margin: 0 auto;
         display: flex;
         flex-direction: row;
-        justify-content: center;
         align-items: center;
 
         label {
-          width: 100px;
+          width: 20%;
+          margin-left: 10%;
           text-align: left;
           font-weight: bold;
         }
@@ -234,15 +266,6 @@ export default {
           border-bottom: 1px solid rgba(0, 0, 0, 0.27);
           transition: all 0.5s ease;
         }
-        // input[name='email']{
-        //   border: none;
-        //   outline: none;
-        //   width: 37%;
-        //   line-height: 25px;
-        //   margin: 15px 0;
-        //   border-bottom: 1px solid rgba(0, 0, 0, 0.27);
-        //   transition: all 0.5s ease;
-        // }
 
         input[name='uid']:focus,
         input[name='name']:focus,
@@ -257,7 +280,7 @@ export default {
         }
 
         button {
-          margin: 0;
+          margin: 0 10px;
           width: 80px;
         }
 

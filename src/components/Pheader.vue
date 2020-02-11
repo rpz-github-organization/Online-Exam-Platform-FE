@@ -1,7 +1,14 @@
 <template>
   <div id="pheader">
     <ul class="header_list">
-      <li class="header_title">考试系统</li>
+      <ul class="func">
+        <li v-if="authLevel===0"><el-link type="info" href="/SelectCourse">选课中心</el-link></li>
+        <li v-else-if="authLevel>0 && authLevel<=99"><el-link type="info">课程管理</el-link></li>
+        <li><el-link type="info">课程成绩中心</el-link></li>
+        <li v-if="authLevel===0"><el-link type="info">错题本</el-link></li>
+        <li v-else-if="authLevel>0 && authLevel<=99"><el-link type="info">评卷场</el-link></li>
+        <li v-if="authLevel===99"><el-link type="info">权限管理</el-link></li>
+      </ul>
       <li class="user_photo"  @click.stop="handlemenu">
         <el-dropdown @command="handleCommand">
           <el-avatar :size="40" :src="avatarUrl" class="el-dropdown-link"></el-avatar>
@@ -11,14 +18,6 @@
           </el-dropdown-menu>
         </el-dropdown>
       </li>
-      <ul class="func">
-        <li v-if="authLevel===0"><el-link type="info">选课中心</el-link></li>
-        <li v-else-if="authLevel>0 && authLevel<=99"><el-link type="info">课程管理</el-link></li>
-        <li><el-link type="info">课程成绩中心</el-link></li>
-        <li v-if="authLevel===0"><el-link type="info">错题本</el-link></li>
-        <li v-else-if="authLevel>0 && authLevel<=99"><el-link type="info">评卷场</el-link></li>
-        <li v-if="authLevel===99"><el-link type="info">权限管理</el-link></li>
-      </ul>
     </ul>
   </div>
 </template>
@@ -60,11 +59,30 @@ export default {
 };
 </script>
 
-<style>
-li{
-  display: inline-block;
-  margin-right: 20px;
+<style lang="less" scoped>
+#pheader{
+  width: 100%;
+  height: 8%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 9000;
+  background-color: whitesmoke;
+  .header_list{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .func{
+    display: flex;
+    text-align: right;
+    line-height: 40px;
+  }
+  li{
+    display: inline-block;
+    margin-right: 20px;
+  }
 }
+
 .header_list{
   align-items: center;
 }
@@ -75,9 +93,5 @@ li{
 }
 .user_photo{
   float: right;
-}
-.func{
-  text-align: right;
-  line-height: 40px;
 }
 </style>

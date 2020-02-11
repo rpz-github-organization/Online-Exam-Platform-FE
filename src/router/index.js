@@ -28,6 +28,26 @@ const routes = [
     name: 'personal_center',
     component: () => import('../components/personal_center.vue'),
   },
+  {
+    path: '/SelectCourse',
+    name: 'SelectCourse',
+    component: () => import('../views/SelectCourse'),
+  },
+  {
+    path: '/AddExam',
+    name: 'AddExam',
+    component: () => import('../views/AddExam'),
+  },
+  {
+    path: '/AddQuestion',
+    name: 'AddQuestion',
+    component: () => import('../views/AddQuestion'),
+  },
+  {
+    path: '/StuQuestion',
+    name: 'StuStudent',
+    component: () => import('../views/StuQuestion'),
+  },
 ];
 
 const router = new VueRouter({
