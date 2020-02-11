@@ -74,7 +74,6 @@ export default {
     async getStuNameAndSex() {
       try {
         const res = await this.$axios.post('api/PersonalData/getStudent', {
-          stu_id: this.uid,
         });
         const info = res.data;
         console.log(info);
