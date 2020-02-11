@@ -6,7 +6,7 @@
           <div class="name name_no">
             <img src="../assets/exam.png" alt="exam" />
             {{ exam.exam_name }}
-            <img id="check" src="../assets/no.png" />
+            <img id="check" src="../assets/exam_no.png" />
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
@@ -23,7 +23,7 @@
           <div class="name name_yes">
             <img src="../assets/exam.png" alt="exam" />
             {{ exam.exam_name }}
-            <img id="check" src="../assets/yes.png" />
+            <img id="check" src="../assets/exam_yes.png" />
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
@@ -43,34 +43,34 @@ export default {
 
   data() {
     return {
-      // noExams: [
-      //   {
-      //     exam_name: 'I dont know',
-      //     course: 'Chinses',
-      //     begin_time: '2019-12-01',
-      //     last_time: '1.5',
-      //   }, {
-      //     exam_name: 'The first exam of c',
-      //     course: 'English',
-      //     begin_time: '2019-01-01',
-      //     last_time: '2',
-      //   }],
+      noExams: [
+        {
+          exam_name: 'I dont know',
+          course: 'Chinses',
+          begin_time: '2019-12-01',
+          last_time: '1.5',
+        }, {
+          exam_name: 'The first exam of c',
+          course: 'English',
+          begin_time: '2019-01-01',
+          last_time: '2',
+        }],
 
-      // yesExams: [
-      //   {
-      //     exam_name: 'Idsa dont know',
-      //     course: 'Chinses',
-      //     begin_time: '2019-12-01',
-      //     last_time: '1.5',
-      //   }, {
-      //     exam_name: 'Thdsae first exam of c',
-      //     course: 'English',
-      //     begin_time: '2019-01-01',
-      //     last_time: '2',
-      //   }],
+      yesExams: [
+        {
+          exam_name: 'Idsa dont know',
+          course: 'Chinses',
+          begin_time: '2019-12-01',
+          last_time: '1.5',
+        }, {
+          exam_name: 'Thdsae first exam of c',
+          course: 'English',
+          begin_time: '2019-01-01',
+          last_time: '2',
+        }],
 
-      yesExams: '',
-      noExams: '',
+      // yesExams: '',
+      // noExams: '',
     };
   },
   methods: {
@@ -117,10 +117,6 @@ export default {
         console.log(err);
       }
     },
-  },
-
-  created() {
-    this.getTime();
   },
 
   beforeMount() {

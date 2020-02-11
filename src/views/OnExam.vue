@@ -1,27 +1,25 @@
 <template>
-<div>
-  <ul v-for="(exam,index) in exams" :key="'a'+index" id="middle">
-    <li id="exam">
-      <div class="one">
-        <div class="name">
-          <img src="../assets/exam.png" alt="exam" />
-          {{ exam.exam_name }}
+  <div>
+    <ul v-for="(exam,index) in exams" :key="'a'+index" id="listcontent" class="middle">
+      <li id="exam">
+        <div class="one">
+          <div class="name">
+            <img src="../assets/exam.png" alt="exam" />
+            {{ exam.exam_name }}
+          </div>
+          <div class="time">{{ exam.begin_time }}</div>
         </div>
-        <div class="time">
-          {{ exam.begin_time }}
+        <div class="two">
+          <div class="two_text">考试科目：{{ exam.course }}</div>
+          <div class="two_text">考试时长：{{exam.last_time}}小时</div>
         </div>
-      </div>
-      <div class="two">
-       <div class="two_text" >考试科目：{{ exam.course }}</div>
-       <div class="two_text" >考试时长：{{exam.last_time}}小时</div>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
   </div>
 </template>
 
-<script>
 
+<script>
 export default {
   name: 'onExam',
 
@@ -33,29 +31,48 @@ export default {
           course: 'English',
           begin_time: '2019-01-01',
           last_time: '2',
-
-        }, {
+        },
+        {
           exam_name: 'I don`t knowwww',
           course: 'Chinses',
           begin_time: '2019-12-01',
           last_time: '1.5',
-        }],
-      // exam_num: '',
+        },
+      ],
       // exam: '',
     };
   },
 
-  beforeMount() {
-    this.exams = this.onExamInfo;
+  methods: {
+    async getStuOnExamInfo() {
+      try {
+        const res = await this.$axios.post('/homePage/stu/id', {
+          stu_id: this.uid,
+          status: 0,
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          const onExam = info.data;
+          const onExamInfo = JSON.stringify(onExam);
+          console.log(onExamInfo);
+          this.exam = onExamInfo;
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
-
-  mounted() {
-  },
+  //   beforeMount() {
+  //     this.getStuOnExamInfo();
+  //   },
 };
 </script>
 
 <style lang="less" scoped>
-#middle {
+.middle {
   margin: 15px 1px;
   width: auto;
   padding-left: 5px;
@@ -109,7 +126,7 @@ export default {
       display: flex;
       flex-direction: row;
 
-      .two_text{
+      .two_text {
         margin-right: 15px;
       }
     }

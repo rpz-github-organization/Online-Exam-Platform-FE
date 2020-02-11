@@ -32,7 +32,7 @@ export default {
   name: 'Login',
   data() {
     return {
-      uid: '',
+      uid: '1234567891',
       password: '',
       tipMessage: '',
     };

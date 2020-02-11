@@ -15,7 +15,8 @@
         <PassExam v-if="!Seen" />
       </div>
       <div class="right">
-        <img src="../assets/head_stu.png" alt="defaul" />
+        <img v-if="male" src="../assets/head_stu_male.png" />
+        <img v-if="!male" src="../assets/head_stu_female.png" />
         <div class="hello">
           {{ name }}同学
           <br />
@@ -52,6 +53,7 @@ export default {
       greeting: '你好！',
       Seen: true,
       isActive: true,
+      male: true,
     };
   },
 
@@ -65,37 +67,33 @@ export default {
       this.Seen = false;
       this.isActive = false;
     },
-  },
-  getTime() {
-    const timestamp = new Date().getTime();
-    this.timestamp = timestamp;
-  },
-
-  async getStuExamInfo() {
-    try {
-      const res = await this.$axios.post('/homePage/stu/id', {
-        stu_id: this.uid,
-        status: 0,
-      });
-      const info = res.data;
-      console.log(info);
-      if (info.code === 200) {
-        this.name = info.stu_name;
-        const onExam = info.data;
-        const onExamInfo = JSON.stringify(onExam);
-        console.log(onExamInfo);
-        // 将考试信息上传到Vuex
-        this.$store.dispatch('set_onEexamInfo', onExamInfo);
-      } else {
-        console.log('请求失败');
+    getTime() {
+      const timestamp = new Date().getTime();
+      this.timestamp = timestamp;
+    },
+    async getStuNameAndSex() {
+      try {
+        const res = await this.$axios.post('api/PersonalData/getStudent', {
+          stu_id: this.uid,
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          const stuInfoJson = info.data;
+          const stuInfo = JSON.stringify(stuInfoJson);
+          this.name = stuInfo.stu_name;
+          if (stuInfo.sex === 'female') this.male = false;
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
+    },
   },
 
   beforeMount() {
-    this.getStuExamInfo();
+    this.getStuNameAndSex();
   },
 
   created() {
@@ -103,14 +101,14 @@ export default {
     if (d.getHours() < 12) this.greeting = '上午好！';
     else if (d.getHours() >= 12 && d.getHours() < 18) this.greeting = '下午好！';
     else this.greeting = '晚上好！';
-
-    this.getTime();
   },
   // 删除 Home|About
   mounted() {
     const parent = document.getElementById('app');
     const child = document.getElementById('nav');
     parent.removeChild(child);
+
+    this.getTime();
   },
 };
 </script>
