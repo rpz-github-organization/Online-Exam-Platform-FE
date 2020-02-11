@@ -26,7 +26,8 @@
         </ul>
       </div>
       <div class="right">
-        <img src="../assets/head_tch.png" alt="defaul" />
+        <img v-if="male" src="../assets/head_tch_male.png" />
+        <img v-if="!male" src="../assets/head_tch_female.png" />
         <div class="hello">
           {{ name }}老师
           <br />
@@ -61,14 +62,48 @@ export default {
           exam_score: 100,
           common_score: 87,
           exam_proportion: '60%',
-        }, {
+        },
+        {
           name: 'English',
           credit: 14,
           school_hour: 36,
           exam_score: 100,
           common_score: 87,
           exam_proportion: '60%',
-        }, {
+        },
+        {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        },
+        {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        },
+        {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        },
+        {
+          name: 'English',
+          credit: 14,
+          school_hour: 36,
+          exam_score: 100,
+          common_score: 87,
+          exam_proportion: '60%',
+        },
+        {
           name: 'English',
           credit: 14,
           school_hour: 36,
@@ -111,8 +146,9 @@ export default {
   methods: {
     async getTchNameAndSex() {
       try {
-        const res = await this.$axios.get(`${this.HOST}/PersonalData/getTeacher`, {
-        });
+        const res = await this.$axios.get(
+          `${this.HOST}/PersonalData/getTeacher`,
+        );
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
@@ -176,10 +212,8 @@ body {
 
 <style scopd lang="less">
 .tch {
-  height: 100%;
+  height: auto;
   width: 100%;
-  border: 1px solid green;
-  position: fixed;
   background: url(../assets/index_background_tch.gif);
   .title {
     display: flex;
@@ -199,7 +233,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: nowrap;
-    height: 100%;
+    height: auto;
     width: 90%;
     margin: auto;
 
@@ -225,6 +259,7 @@ body {
     .middle {
       display: flex;
       flex-wrap: wrap;
+      height: auto;
       width: 100%;
       margin-right: 15px;
       justify-content: flex-start;
@@ -235,6 +270,7 @@ body {
         justify-content: space-between;
         margin-left: 4%;
         width: 25%;
+        height: auto;
         padding-top: 10px;
         padding-left: 10px;
         background-color: #fff;
