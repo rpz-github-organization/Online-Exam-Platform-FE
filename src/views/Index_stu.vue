@@ -73,14 +73,14 @@ export default {
     },
     async getStuNameAndSex() {
       try {
-        const res = await this.$axios.post('api/PersonalData/getStudent', {
+        const res = await this.$axios.get(`${this.HOST}/PersonalData/getStudent`, {
         });
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
           const stuInfoJson = info.data;
           const stuInfo = JSON.stringify(stuInfoJson);
-          this.name = stuInfo.stu_name;
+          this.name = stuInfo.name;
           if (stuInfo.sex === 'female') this.male = false;
         } else {
           console.log('请求失败');

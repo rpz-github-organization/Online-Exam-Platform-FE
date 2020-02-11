@@ -68,7 +68,7 @@ export default {
   methods: {
     async getStuNoExamInfo() {
       try {
-        const res = await this.$axios.post('api/homePage/stu/id', {
+        const res = await this.$axios.post(`${this.HOST}/login//homePage/stu/id`, {
           stu_id: this.uid,
           status: 1,
         });
@@ -90,7 +90,7 @@ export default {
 
     async getStuYesExamInfo() {
       try {
-        const res = await this.$axios.post('api/homePage/stu/id', {
+        const res = await this.$axios.post(`${this.HOST}/homePage/stu/id`, {
           stu_id: this.uid,
           status: 2,
         });

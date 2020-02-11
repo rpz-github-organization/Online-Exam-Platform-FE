@@ -18,8 +18,17 @@
 
 
 <script>
+
+import { mapState } from 'vuex';
+
 export default {
   name: 'onExam',
+
+
+  computed: {
+    ...mapState(['uid']),
+  },
+
 
   data() {
     return {
@@ -35,14 +44,14 @@ export default {
       //     last_time: '1.5',
       //   },
       // ],
-      exam: '',
+      exams: '',
     };
   },
 
   methods: {
     async getStuOnExamInfo() {
       try {
-        const res = await this.$axios.post('api/homePage/stu/id', {
+        const res = await this.$axios.post(`${this.HOST}/homePage/stu/id`, {
           stu_id: this.uid,
           status: 0,
         });
@@ -52,7 +61,7 @@ export default {
           const onExam = info.data;
           const onExamInfo = JSON.stringify(onExam);
           console.log(onExamInfo);
-          this.exam = onExamInfo;
+          this.exams = onExamInfo;
         } else {
           console.log('请求失败');
         }

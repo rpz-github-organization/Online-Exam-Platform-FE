@@ -20,14 +20,40 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
-    path: '/index_stu',
+    path: '/indexStu',
     name: 'indexStu',
     component: () => import(/* webpackChunkName: "about" */ '../views/Index_stu.vue'),
   },
   {
-    path: '/index_tch',
+    path: '/indexTch',
     name: 'indexTch',
     component: () => import(/* webpackChunkName: "about" */'../views/Index_tch.vue'),
+
+  },
+  {
+    path: '/personal_center',
+    name: 'personal_center',
+    component: () => import('../components/personal_center.vue'),
+  },
+  {
+    path: '/SelectCourse',
+    name: 'SelectCourse',
+    component: () => import('../views/SelectCourse'),
+  },
+  {
+    path: '/AddExam',
+    name: 'AddExam',
+    component: () => import('../views/AddExam'),
+  },
+  {
+    path: '/AddQuestion',
+    name: 'AddQuestion',
+    component: () => import('../views/AddQuestion'),
+  },
+  {
+    path: '/StuQuestion',
+    name: 'StuStudent',
+    component: () => import('../views/StuQuestion'),
   },
 ];
 

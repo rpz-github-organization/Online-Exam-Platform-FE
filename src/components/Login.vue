@@ -1,12 +1,15 @@
 <template>
   <div class="hello">
-    <h4>{{ new Date().toLocaleString() }} - 欢迎来到 "教你写登录注册" 教程</h4>
     <div class="card login-container">
       <div class="title">登录 · Login</div>
       <div class="form">
-        <div class="row">
+        <div class="row" v-if="loginStatus == 'uid'">
           <label for="uid">学号/工号</label>
           <input v-model="uid" type="text" name="uid" placeholder="请输入你的学号或工号" />
+        </div>
+        <div class="row" v-if="loginStatus == 'phone'">
+          <label for="uid">电话</label>
+          <input v-model="uid" type="text" name="uid" placeholder="请输入你的电话" />
         </div>
         <div class="row">
           <label for="password">密码</label>
@@ -18,8 +21,11 @@
         </div>
         <div class="row">
           <button @click="submitLogin" class="submit">登录</button>
-          <a href="/">忘记密码</a>
+        </div>
+        <div class="row" style="justify-content: flex-end;">
+          <a href="/AddExam">忘记密码</a>
           <a href="/register">立即注册</a>
+          <div class="phoneLogin" @click="phoneLogin">切换登录方式</div>
         </div>
         <br />
       </div>
@@ -32,41 +38,75 @@ export default {
   name: 'Login',
   data() {
     return {
-      uid: '1234567891',
+      uid: '',
       password: '',
       tipMessage: '',
+      loginStatus: 'uid',
     };
   },
   methods: {
+    phoneLogin() {
+      if (this.loginStatus === 'uid') {
+        this.loginStatus = 'phone';
+      } else if (this.loginStatus === 'phone') {
+        this.loginStatus = 'uid';
+      }
+    },
     validate() {
       let res = true;
-      if (this.uid.length === 0) {
-        this.tipMessage = '还没有填写 学号/工号！';
-        res = false;
-      } else if (this.password.length === 0) {
-        this.tipMessage = '还没有填写 密码！';
-        res = false;
+      if (this.loginStatus === 'uid') {
+        if (this.uid.length === 0) {
+          this.tipMessage = '还没有填写 学号/工号！';
+          res = false;
+        } else if (this.password.length === 0) {
+          this.tipMessage = '还没有填写 密码！';
+          res = false;
+        }
+      } else if (this.loginStatus === 'phone') {
+        if (this.uid.length === 0) {
+          this.tipMessage = '还没有填写 电话！';
+          res = false;
+        } else if (this.password.length === 0) {
+          this.tipMessage = '还没有填写 密码！';
+          res = false;
+        }
       }
-      this.tipMessage = '';
       return res;
     },
-    // async submitLogin() {
-    //   if (this.validate()) {
-    //     try {
-    //       const res = await this.$axios.post('http://localhost:8080/login', {
-    //         uid: this.uid,
-    //         password: this.password,
-    //       });
-    //       console.log(res);
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   }
-    // },
-    submitLogin() {
-      this.$store.dispatch('set_uid', this.uid);
-      window.location.href = '/index_stu';
-      // window.location.href = '/index_tch';
+    async submitLogin() {
+      if (this.validate()) {
+        this.tipMessage = '';
+        try {
+          let finapi = '';
+          if (this.loginStatus === 'uid') {
+            finapi = 'id';
+          } else if (this.loginStatus === 'phone') {
+            finapi = 'phone';
+          }
+          const res = await this.$axios.post(`${this.HOST}/login/${finapi}`, {
+            keyword: this.uid,
+            password: this.password,
+          });
+          const info = res.data;
+          console.log(info);
+          if (info.code === 200) {
+            this.$store.dispatch('set_uid', this.uid);
+            const infodata = info.data;
+            const authlevel = infodata.authority;
+            this.$store.dispatch('set_authLevel', authlevel);
+            if (authlevel === 0) {
+              window.location.href = '/IndexStu';
+            } else if (authlevel > 0 && authlevel < 99) {
+              window.location.href = '/IndexTch';
+            }
+            console.log('登录成功');
+          } else {
+            console.log('登录失败');
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
     },
   },
 };
@@ -134,14 +174,10 @@ export default {
           width: 80px;
         }
 
-        a,
-        a:hover,
-        a:focus,
-        a:visited,
-        a:link {
+        .phoneLogin, a, a:hover, a:focus, a:visited, a:link {
           text-decoration: none;
-          font-size: 14px;
-          margin: 0 15px;
+          font-size: 12px;
+          margin: 20px 20px 0 20px;
           color: dimgray;
         }
       }
@@ -163,6 +199,11 @@ export default {
       .submit:hover {
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
       }
+    }
+    .tip{
+      color: brown;
+      text-align: center;
+      margin-top: -2%;
     }
   }
 }

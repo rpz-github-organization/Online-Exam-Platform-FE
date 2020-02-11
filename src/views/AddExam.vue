@@ -1,0 +1,152 @@
+<template>
+  <div id="AddExam">
+    <label class="title">建立考试</label>
+    <el-card class="exam_info">
+      <div class="exam_row">
+        <label class="examtitle">考试名称</label>
+        <el-input placeholder="请输入题目" v-model="examTitle" clearable>
+        </el-input>
+      </div>
+      <div class="exam_row">
+        <label class="examtitle">考试时间</label>
+        <div class="date">
+          <el-date-picker
+            v-model="date"
+            type="datetime"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            placeholder="请选择日期时间">
+          </el-date-picker>
+          <div class="con">
+            <span class="title min">考试时长</span>
+            <el-input v-model="examTime" placeholder="请输入考试时长" clearable></el-input>
+            <span class="dan">min</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button @click="submitExam">submit</button>
+      </div>
+    </el-card>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+
+export default {
+  name: 'AddExam',
+  mounted() {
+    if (document.getElementById('nav')) {
+      const p = document.getElementById('app');
+      const c = document.getElementById('nav');
+      p.removeChild(c);
+    }
+  },
+  data() {
+    return {
+      examTitle: '',
+      date: '',
+      examTime: '',
+      exam_id: '',
+    };
+  },
+  computed: {
+    ...mapState(['uid']),
+    ...mapState(['examId']),
+  },
+  methods: {
+    async submitExam() {
+      // this.$store.dispatch('set_examId', 2);
+      // console.log(this.examId);
+      // window.location.href = './AddQuestion';
+      const date = new Date(this.date.replace(/-/g, '/'));
+      const lastTime = parseInt(this.examTime, 10);
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
+          name: this.examTitle,
+          co_id: '1',
+          tea_id: this.uid,
+          begin_time: date.valueOf(),
+          last_time: lastTime,
+        });
+        const info = res.data;
+        console.log(info.data);
+        if (info.code === 200) {
+          // console.log(info.data);
+          this.$store.dispatch('set_examId', info.data);
+          console.log(this.examId);
+          window.location.href = './AddQuestion';
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+};
+</script>
+
+<style lang="less" scoped>
+#AddExam{
+  display: flex;
+  flex-direction: column;
+
+  .title{
+    color: #324E6C;
+    font-weight: bold;
+  }
+  .exam_info{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 25%;
+
+    .exam_row{
+      display: flex;
+      flex-direction: row;
+      margin: 10px 5px;
+
+      .examtitle{
+        font-weight: bold;
+        width: 20%;
+        text-align: left;
+        margin-top: 5px;
+        color: #5D6670;
+      }
+      .date{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      .con{
+        display: flex;
+        flex-direction: row;
+      }
+      .min{
+        width: 50%;
+        margin: 10px 5px 10px 30px;
+        color: #5D6670;
+      }
+      .dan{
+        margin: 10px;
+      }
+    }
+    button{
+      color: white;
+      margin: 10px 0;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      padding: 5px 10px;
+      width: 80px;
+      font-size: 15px;
+      background-color: #5379a5c4;
+      cursor: pointer;
+      outline: none;
+    }
+    button:hover{
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
+    }
+  }
+}
+</style>

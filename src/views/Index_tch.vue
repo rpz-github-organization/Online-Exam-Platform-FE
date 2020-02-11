@@ -7,8 +7,14 @@
       <div class="middle">
         <ul v-for="(course,index) in course" :key="index" class="course">
           <li class="name">
-            <img src="../assets/course.png" />
-            <div class="name">{{ course }}</div>
+            <div class="name"><img src="../assets/course.png" />{{ course.name }}</div>
+            <div class="details">
+              学分：{{ course.credit }} <br/>
+              学时：{{ course.school_hour }} <br/>
+              考试分数：{{ course.exam_score }} <be/>
+              平均分：{{ course.common_score }} <br/>
+              卷面分占比：{{ course.exam_proportion }}
+            </div>
           </li>
         </ul>
       </div>
@@ -38,7 +44,14 @@ export default {
     return {
       name: '川师',
       greeting: '',
-      course: ['English', 'Chinese', 'English', 'English', 'English'],
+      course: [{
+        name: 'English',
+        credit: 14,
+        school_hour: 36,
+        exam_score: 100,
+        common_socre: 87,
+        exam_proportion: '60%,',
+      }],
     };
   },
 
@@ -148,6 +161,7 @@ body {
         img {
           width: 25px;
           height: 25px;
+          margin-right: 5px;
         }
 
         .name:hover {
