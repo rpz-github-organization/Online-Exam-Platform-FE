@@ -1,77 +1,55 @@
 <template>
   <div>
-    <ul v-for="(exam,index) in noExams" :key=" 'you' + index" id="middle">
+    <ul v-for="(exam,index) in exams" :key="index" class="middle">
       <li id="exam">
         <div class="one">
-          <div class="name name_no">
+          <div class="name" :class="{ yescolor: exam.yes }">
             <img src="../assets/exam.png" alt="exam" />
-            {{ exam.exam_name }}
-            <img id="check" src="../assets/exam_no.png" />
+            {{ exam.name }}
+            <img v-if="!exam.yes" src="../assets/exam_no.png" />
+            <img v-if="exam.yes" src="../assets/exam_yes.png" />
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
-        <div class="two">
-考试时长：{{ exam.last_time }}小时</div>
+        <div class="two">考试时长：{{ exam.last_time }}小时</div>
       </li>
     </ul>
-
-    <ul v-for="(exam,index) in yesExams" :key=" 'me' + index" id="middle">
-      <li id="exam">
-        <div class="one">
-          <div class="name name_yes">
-            <img src="../assets/exam.png" alt="exam" />
-            {{ exam.exam_name }}
-            <img id="check" src="../assets/exam_yes.png" />
-          </div>
-          <div class="time">{{ exam.begin_time }}</div>
-        </div>
-        <div class="two">
-考试时长：{{ exam.last_time }}小时</div>
-      </li>
-    </ul>
-
+    <div class="buttons" v-if="pagerSeen">
+      <button @click="upPage" class="changepage">上一页</button>
+      <div class="text">当前第 {{ nowpage }} 页 ，共 {{ totalpage }} 页</div>
+      <button @click="downPage" class="changepage">下一页</button>
+    </div>
   </div>
 </template>
 
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
 export default {
-  name: 'passExam',
+  name: 'PassExam',
 
   data() {
     return {
-      // noExams: [
-      //   {
-      //     exam_name: 'I dont know',
-      //     begin_time: '2019-12-01',
-      //     last_time: '1.5',
-      //   }, {
-      //     exam_name: 'The first exam of c',
-      //     begin_time: '2019-01-01',
-      //     last_time: '2',
-      //   }],
-
-      // yesExams: [
-      //   {
-      //     exam_name: 'Idsa dont know',
-      //     begin_time: '2019-12-01',
-      //     last_time: '1.5',
-      //   }, {
-      //     exam_name: 'Thdsae first exam of c',
-      //     begin_time: '2019-01-01',
-      //     last_time: '2',
-      //   }],
-
       yesExams: '',
       noExams: '',
+      exams: '',
+      PassExamInfo_All: '',
+      exam_num: '',
+      start: 0,
+      nowpage: 1,
+      totalpage: '',
+      pagerSeen: true,
     };
   },
   methods: {
     async getStuNoExamInfo() {
       try {
-        const res = await this.$axios.post(`${this.HOST}/login//homePage/stu/id`, {
-          stu_id: this.uid,
-          status: 1,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/login//homePage/stu/id`,
+          {
+            stu_id: this.uid,
+            status: 3,
+          }
+        );
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
@@ -86,7 +64,6 @@ export default {
         console.log(err);
       }
     },
-
     async getStuYesExamInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/homePage/stu/id`, {
@@ -107,6 +84,43 @@ export default {
         console.log(err);
       }
     },
+    addYesExamToNoExam() {
+      let noexam = this.noExams;
+      let yesexam = this.yesExams;
+      noexam.forEach(item => {
+        item.yes = false;
+      });
+      yesexam.forEach(item => {
+        item.yes = true;
+      });
+      this.onExamInfo_All = noexam.concat(yesexam);
+    },
+    upPage() {
+      if (this.start !== 0) {
+        this.start -= 5;
+        this.showPage();
+        this.nowpage -= 1;
+      }
+    },
+    downPage() {
+      if (this.nowpage !== this.totalpage) {
+        this.start += 5;
+        this.showPage();
+        this.nowpage += 1;
+      }
+    },
+    pager() {
+      let exam_num = this.passExamInfo_All.length;
+      if (exam_num <= 5) {
+        this.pagerSeen = false;
+      } else {
+        const page_num = parseInt(exam_num / 5) + 1; // 判断页数
+        this.totalpage = page_num;
+      }
+    },
+    showPage() {
+      this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
+    },
   },
 
   beforeMount() {
@@ -114,11 +128,16 @@ export default {
     this.getStuYesExamInfo();
   },
 
+  mounted() {
+    this.addYesExamToNoExam();
+    this.pager();
+    this.showPage();
+  },
 };
 </script>
 
 <style lang="less" scoped>
-#middle {
+.middle {
   margin: 15px 1px;
   width: auto;
   padding-left: 5px;
@@ -151,15 +170,13 @@ export default {
       .name {
         font-weight: bold;
         margin-left: 5px;
+        color: red;
       }
       .name:hover {
         font-size: 18px;
         transition: all 0.8s ease;
       }
-      .name_no{
-        color: red;
-      }
-      .name_yes{
+      .yescolor {
         color: green;
       }
 
@@ -175,6 +192,37 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
+    }
+  }
+  .buttons {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .text {
+      width: auto;
+      height: 50px;
+      line-height: 50px;
+      font-size: 16px;
+    }
+
+    .changepage {
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 20px;
+      margin: 10px 20px;
+      width: 80px;
+      height: 30px;
+      font-size: 15px;
+      background-color: #5379a5c4;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .changepage:hover {
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
     }
   }
 }

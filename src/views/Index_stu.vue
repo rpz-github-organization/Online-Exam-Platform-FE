@@ -8,7 +8,7 @@
         <button class="onExam" @click="ChangeToOn"
         :class="{ notactive: !isActive }">正在进行的考试</button>
         <button class="passExam" @click="ChangeToPass"
-        :class="{ notactive: isActive }">已经完成的考试</button>
+        :class="{ notactive: isActive }">已经结束的考试</button>
       </div>
       <div class="middle">
         <OnExam v-if="Seen" />

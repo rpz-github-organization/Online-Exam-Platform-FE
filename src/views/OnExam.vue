@@ -1,19 +1,23 @@
 <template>
   <div>
-    <ul v-for="(exam,index) in exams" :key="'a'+index" id="all" class="middle">
+    <ul v-for="(exam,index) in exams" :key="'a'+index" class="middle">
       <li id="exam">
         <div class="one">
-          <div class="name">
+          <div class="name" :class="{ yescolor: exam.yes }">
             <img src="../assets/exam.png" alt="exam" />
             {{ exam.name }}
+            <img v-if="!exam.yes" src="../assets/exam_no.png" />
+            <img v-if="exam.yes" src="../assets/exam_yes.png" />
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
         <div class="two">考试时长：{{exam.last_time}}分钟</div>
       </li>
     </ul>
-    <div class="page">
-      <div id="page"></div>
+    <div class="buttons" v-if="pagerSeen">
+      <button @click="upPage" class="changepage">上一页</button>
+      <div class="text">当前第 {{ nowpage }} 页 ，共 {{ totalpage }} 页</div>
+      <button @click="downPage" class="changepage">下一页</button>
     </div>
   </div>
 </template>
@@ -23,7 +27,7 @@
 import { mapState } from 'vuex';
 
 export default {
-  name: 'onExam',
+  name: 'OnExam',
 
   computed: {
     ...mapState(['uid']),
@@ -31,98 +35,20 @@ export default {
 
   data() {
     return {
-      // exams: '',
-      exams: [
-        {
-          name: 'Idsa dont know',
-          begin_time: '2019-12-01',
-          last_time: '1.5',
-        },
-        {
-          name: 'Thdsae first exam of c',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        },
-        {
-          name: 'Thdsae first exam of c',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        },
-        {
-          name: 'Thdsae first exam of c',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        }, {
-          name: 'Thdsae first exam of c',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        }, {
-          name: 'Thdsae first exam of c',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        }, {
-          name: 'Thdsae first exam of c',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        }, {
-          name: 'Thdsae first exam of c',
-          begin_time: '2019-01-01',
-          last_time: '2',
-        }
-      ],
+      exams: '',
+      exam_num: '',
+      start: 0,
+      nowpage: 1,
+      totalpage: '',
+      pagerSeen: true,
+      yesExams: '',
+      noExams: '',
+      onExamInfo_All: '',
     };
   },
 
   methods: {
-    getzz() {
-      var a = $('ul#all li');
-      var zz = new Array(a.length);
-      for (var i = 0; i < a.length; i++) {
-        zz[i] = a[i].innerHTML;
-      } //div的字符串数组付给zz
-      return zz;
-    },
-    change(e) {
-      pageno = e;
-      if (e < 1) {
-        e = 1;
-        pageno = 1; //就等于第1页 ， 当前页为1
-      }
-      if (e > pageall) {
-        //如果输入页大于最大页
-        e = pageall;
-        pageno = pageall; //输入页和当前页都=最大页
-      }
-      $('#all').html(''); //全部清空
-      var html = '';
-      for (var i = 0; i < pagesize; i++) {
-        html += '<li>' + zz[(e - 1) * pagesize + i] + '</li>'; //创建一页的li列表
-        if (zz[(e - 1) * pagesize + i + 1] == null) break; //超出最后的范围跳出
-      }
-      $('ul#all').html(html); //给ul列表写入html
-      var ye = '';
-      for (var j = 1; j <= pageall; j++) {
-        if (e == j) {
-          ye =
-            ye +
-            "<span><a href='#' onClick='change(" +
-            j +
-            ")' style='color:#FF0000'>" +
-            j +
-            '</a></span> ';
-        } else {
-          ye = ye + "<a href='#' onClick='change(" + j + ")'>" + j + '</a> ';
-        }
-      }
-      var pageContent = '';
-      pageContent += '第<span id="a2">' + pageno + '</span>/';
-      pageContent += '<span id="a1">' + pageall + '</span>页';
-      pageContent += '<span id="a3">' + ye + '</span>';
-      pageContent += '<a href="#" onClick="change(--pageno)">上一页</a>';
-      pageContent += '<a href="#" onClick="change(++pageno)">下一页</a>';
-      $('#page').html(pageContent);
-    },
-    async getStuOnExamInfo() {
+    async getStunoExamInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/homePage/stu/id`, {
           stu_id: this.uid,
@@ -131,9 +57,7 @@ export default {
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
-          const onExamInfo = info.data;
-          console.log(onExamInfo);
-          this.exams = onExamInfo;
+          this.noExams = info.data;
         } else {
           console.log('请求失败');
         }
@@ -141,20 +65,73 @@ export default {
         console.log(err);
       }
     },
+    async getStuyesExamInfo() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/homePage/stu/id`, {
+          // stu_id: this.uid,
+          stu_id: '2018110257',
+          status: 1,
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          this.noExams = info.data;
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    addYesExamToNoExam() {
+      let noexam = this.noExams;
+      let yesexam = this.yesExams;
+      noexam.forEach(item => {
+        item.yes = false;
+      });
+      yesexam.forEach(item => {
+        item.yes = true;
+      });
+      this.onExamInfo_All = noexam.concat(yesexam);
+      console.log(this.passExamInfo_All);
+    },
+    upPage() {
+      if (this.start !== 0) {
+        this.start -= 5;
+        this.showPage();
+        this.nowpage -= 1;
+      }
+    },
+    downPage() {
+      if (this.nowpage !== this.totalpage) {
+        this.start += 5;
+        this.showPage();
+        this.nowpage += 1;
+      }
+    },
+    pager() {
+      let exam_num = this.onExamInfo_All.length;
+      if (exam_num <= 5) {
+        this.pagerSeen = false;
+      } else {
+        const page_num = parseInt(exam_num / 5) + 1; // 判断页数
+        this.totalpage = page_num;
+      }
+    },
+    showPage() {
+      this.exams = this.onExamInfo_All.slice(this.start, this.start + 5);
+    },
   },
-  // beforeMount() {
-  //   this.getStuOnExamInfo();
-  // },
+
+  beforeMount() {
+    this.getStunoExamInfo();
+    this.getStuyesExamInfo();
+  },
+
   mounted() {
-    var zz = getzz();
-    var pageno = 1; //当前页
-    var pagesize = 5; //每页多少条信息
-    if (zz.length % pagesize == 0) {
-      var pageall = zz.length / pagesize;
-    } else {
-      var pageall = parseInt(zz.length / pagesize) + 1;
-    } //一共多少页
-    this.change(1);
+    this.addYesExamToNoExam();
+    this.pager();
+    this.showPage();
   },
 };
 </script>
@@ -211,6 +188,37 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
+    }
+  }
+  .buttons {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .text {
+      width: auto;
+      height: 50px;
+      line-height: 50px;
+      font-size: 16px;
+    }
+
+    .changepage {
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 20px;
+      margin: 10px 20px;
+      width: 80px;
+      height: 30px;
+      font-size: 15px;
+      background-color: #5379a5c4;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .changepage:hover {
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
     }
   }
 }
