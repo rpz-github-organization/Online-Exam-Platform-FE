@@ -73,8 +73,10 @@ export default {
     },
     async getStuNameAndSex() {
       try {
-        const res = await this.$axios.get(`${this.HOST}/PersonalData/getStudent`, {
-        });
+        const res = await this.$axios.get(
+          `${this.HOST}/PersonalData/getStudent`,
+          {},
+        );
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
@@ -116,6 +118,11 @@ html,
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+
+.header {
+  margin-bottom: 0px;
 }
 </style>
 
@@ -123,8 +130,7 @@ body {
 .stu {
   height: 100%;
   width: 100%;
-  border: 1px solid green;
-  position: fixed;
+  margin-top: 47px;
   background: url(../assets/index_background_stu.gif);
 
   .title {
@@ -146,9 +152,8 @@ body {
     justify-content: space-between;
     flex-wrap: nowrap;
     height: auto;
-    width: 90%;
-    margin: auto;
-    // background-color: rgba(219, 215, 208, 0.177);
+    width: 100%;
+    background: url(../assets/index_background_stu.gif);
 
     .right {
       margin-left: 25px;
@@ -157,7 +162,7 @@ body {
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
       font-size: 16px;
       margin-top: 15px;
-      margin-right: 5px;
+      margin-right: 50px;
       width: 170px;
       height: 230px;
       padding-top: 20px;
@@ -177,7 +182,8 @@ body {
     .left {
       display: flex;
       margin-top: 10px;
-      margin-right: 15px;
+      margin-right: 20px;
+      margin-left: 50px;
       flex-direction: column;
       justify-content: flex-start;
       width: 150px;

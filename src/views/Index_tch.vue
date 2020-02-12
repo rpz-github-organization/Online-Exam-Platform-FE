@@ -5,7 +5,7 @@
     </div>
     <div class="main">
       <div class="middle">
-        <ul v-for="(course, index) in course" :key="index" class="course">
+        <ul v-for="(course, index) in courses" :key="index" class="course">
           <li class="cour">
             <div class="name">
               <img src="../assets/course.png" />
@@ -33,7 +33,7 @@
           <br />
           <br />现在是
           <br />
-          {{ new Date().toLocaleString("chinese", { hour12: false }).substring(0, 15) }}
+           {{ new Date().toLocaleString("chinese", { hour12: false }).substring(0, 15) }}
           <br />
           <br />
           {{ greeting }}
@@ -53,93 +53,7 @@ export default {
       name: '川师',
       male: true,
       greeting: '',
-      // course:'',
-      course: [
-        {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        },
-        {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        },
-        {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        },
-        {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        },
-        {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        },
-        {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        },
-        {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        }, {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        }, {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        }, {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        }, {
-          name: 'English',
-          credit: 14,
-          school_hour: 36,
-          exam_score: 100,
-          common_score: 87,
-          exam_proportion: '60%',
-        },
-      ],
+      courses: '',
     };
   },
 
@@ -165,15 +79,15 @@ export default {
     async getCourseInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/homePage/tea/id`, {
-          tea_id: this.uid,
-          status: 0,
+          // tea_id: this.uid,
+          tea_id: '2018110257',
         });
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
           const courseInfo = info.data;
           console.log(courseInfo);
-          this.ecourse = courseInfo;
+          this.courses = courseInfo;
         } else {
           console.log('请求失败');
         }
@@ -207,14 +121,20 @@ html,
 body {
   margin: 0;
   padding: 0;
+  height: 100%
+}
+.header {
+  margin-bottom: 0px;
 }
 </style>
 
 <style scopd lang="less">
 .tch {
-  height: auto;
+  height: 100%;
   width: 100%;
+  margin-top: 47px;
   background: url(../assets/index_background_tch.gif);
+
   .title {
     display: flex;
     flex-direction: row;
@@ -234,17 +154,17 @@ body {
     justify-content: space-between;
     flex-wrap: nowrap;
     height: auto;
-    width: 90%;
-    margin: auto;
+    width: 100%;
+    background: url(../assets/index_background_tch.gif);
 
     .right {
-      margin-left: 25px;
+      // margin-left: 25px;
       border-radius: 10px;
       border: 1px solid rgba(0, 0, 0, 0.2);
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
       font-size: 16px;
       margin-top: 15px;
-      margin-right: 5px;
+      margin-right: 50px;
       width: 170px;
       height: 230px;
       padding-top: 20px;
@@ -262,6 +182,7 @@ body {
       height: auto;
       width: 100%;
       margin-right: 15px;
+      margin-left: 50px;
       justify-content: flex-start;
       align-content: flex-start;
 
