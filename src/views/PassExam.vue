@@ -29,15 +29,13 @@ export default {
 
   data() {
     return {
-      yesExams: '',
-      noExams: '',
       exams: '',
       PassExamInfo_All: '',
       exam_num: '',
       start: 0,
       nowpage: 1,
       totalpage: '',
-      pagerSeen: true,
+      pagerSeen: false,
     };
   },
   methods: {
@@ -53,10 +51,8 @@ export default {
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
-          const noExamInfo = info.data;
-          // 给noExams赋值
-          this.noExams = noExamInfo;
-          console.log(noExamInfo);
+          return info.data;
+          // console.log(noExamInfo);
         } else {
           console.log('请求失败');
         }
@@ -73,10 +69,8 @@ export default {
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
-          const yesExamInfo = info.data;
-          // 给yesExam 赋值
-          this.yesExams = yesExamInfo;
-          console.log(yesExamInfo);
+          return info.data;
+          // console.log(yesExamInfo);
         } else {
           console.log('请求失败');
         }
@@ -84,16 +78,19 @@ export default {
         console.log(err);
       }
     },
-    addYesExamToNoExam() {
-      let noexam = this.noExams;
-      let yesexam = this.yesExams;
+    async addYesExamToNoExam() {
+      const noexam = await this.getStunoExamInfo();
+      const yesexam = await this.getStuyesExamInfo();
       noexam.forEach(item => {
         item.yes = false;
       });
+      console.log('111yes', noexam);
       yesexam.forEach(item => {
         item.yes = true;
       });
-      this.onExamInfo_All = noexam.concat(yesexam);
+      this.passExamInfo_All = noexam.concat(yesexam);
+      this.pager();
+      this.showPage();
     },
     upPage() {
       if (this.start !== 0) {
@@ -112,10 +109,10 @@ export default {
     pager() {
       let exam_num = this.passExamInfo_All.length;
       if (exam_num <= 5) {
-        this.pagerSeen = false;
       } else {
         const page_num = parseInt(exam_num / 5) + 1; // 判断页数
         this.totalpage = page_num;
+        this.pagerSeen = true;
       }
     },
     showPage() {
@@ -126,12 +123,7 @@ export default {
   beforeMount() {
     this.getStuNoExamInfo();
     this.getStuYesExamInfo();
-  },
-
-  mounted() {
     this.addYesExamToNoExam();
-    this.pager();
-    this.showPage();
   },
 };
 </script>
@@ -160,7 +152,6 @@ export default {
       flex-wrap: wrap;
       align-items: baseline;
       height: auto;
-      // line-height: 30px;
       padding-top: 10px;
 
       img {
