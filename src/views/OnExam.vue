@@ -56,7 +56,7 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          // console.log(info.data);
+          console.log(info.data);
           return info.data;
         } else {
           console.log('请求失败');
@@ -74,7 +74,8 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          // console.log(info.data);
+          console.log(info.data);
+          // this.noexam = await this.getStunoExamInfo();
           return info.data;
         } else {
           console.log('请求失败');
@@ -127,8 +128,6 @@ export default {
   },
 
   beforeMount() {
-    this.getStunoExamInfo();
-    this.getStuyesExamInfo();
     this.addYesExamToNoExam();
   },
 };

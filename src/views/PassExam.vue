@@ -24,8 +24,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'PassExam',
+
+  computed: {
+    ...mapState(['uid']),
+  },
 
   data() {
     return {
@@ -42,17 +47,16 @@ export default {
     async getStuNoExamInfo() {
       try {
         const res = await this.$axios.post(
-          `${this.HOST}/login//homePage/stu/id`,
+          `${this.HOST}/homePage/stu/id`,
           {
             stu_id: this.uid,
             status: 3,
           }
         );
         const info = res.data;
-        console.log(info);
         if (info.code === 200) {
+          console.log(info.data);
           return info.data;
-          // console.log(noExamInfo);
         } else {
           console.log('请求失败');
         }
@@ -67,10 +71,9 @@ export default {
           status: 2,
         });
         const info = res.data;
-        console.log(info);
         if (info.code === 200) {
+          console.log(info.data);
           return info.data;
-          // console.log(yesExamInfo);
         } else {
           console.log('请求失败');
         }
@@ -79,12 +82,11 @@ export default {
       }
     },
     async addYesExamToNoExam() {
-      const noexam = await this.getStunoExamInfo();
-      const yesexam = await this.getStuyesExamInfo();
+      const noexam = await this.getStuNoExamInfo();
+      const yesexam = await this.getStuYesExamInfo();
       noexam.forEach(item => {
         item.yes = false;
       });
-      console.log('111yes', noexam);
       yesexam.forEach(item => {
         item.yes = true;
       });
@@ -121,8 +123,6 @@ export default {
   },
 
   beforeMount() {
-    this.getStuNoExamInfo();
-    this.getStuYesExamInfo();
     this.addYesExamToNoExam();
   },
 };
