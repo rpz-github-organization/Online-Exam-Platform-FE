@@ -69,13 +69,11 @@ export default {
       try {
         const res = await this.$axios.post(`${this.HOST}/homePage/stu/id`, {
           stu_id: this.uid,
-          // stu_id: '2018110257',
           status: 1,
         });
         const info = res.data;
         if (info.code === 200) {
           console.log(info.data);
-          // this.noexam = await this.getStunoExamInfo();
           return info.data;
         } else {
           console.log('请求失败');
