@@ -46,13 +46,10 @@ export default {
   methods: {
     async getStuNoExamInfo() {
       try {
-        const res = await this.$axios.post(
-          `${this.HOST}/homePage/stu/id`,
-          {
-            stu_id: this.uid,
-            status: 3,
-          }
-        );
+        const res = await this.$axios.post(`${this.HOST}/homePage/stu/id`, {
+          stu_id: this.uid,
+          status: 3,
+        });
         const info = res.data;
         if (info.code === 200) {
           console.log(info.data);
@@ -97,15 +94,15 @@ export default {
     upPage() {
       if (this.start !== 0) {
         this.start -= 5;
-        this.showPage();
         this.nowpage -= 1;
+        this.showPage();
       }
     },
     downPage() {
       if (this.nowpage !== this.totalpage) {
         this.start += 5;
-        this.showPage();
         this.nowpage += 1;
+        this.showPage();
       }
     },
     pager() {
@@ -119,6 +116,7 @@ export default {
     },
     showPage() {
       this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
+      scrollTo(0,0)
     },
   },
 

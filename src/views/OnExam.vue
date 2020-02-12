@@ -100,15 +100,15 @@ export default {
     upPage() {
       if (this.start !== 0) {
         this.start -= 5;
-        this.showPage();
         this.nowpage -= 1;
+        this.showPage();
       }
     },
     downPage() {
       if (this.nowpage !== this.totalpage) {
         this.start += 5;
-        this.showPage();
         this.nowpage += 1;
+        this.showPage();
       }
     },
     // 获得页数
@@ -124,6 +124,7 @@ export default {
     // 控制显示的exams
     showPage() {
       this.exams = this.onExamInfo_All.slice(this.start, this.start + 5);
+      scrollTo(0,0)
     },
   },
 
