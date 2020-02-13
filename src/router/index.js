@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -22,6 +23,17 @@ const routes = [
     path: '/register',
     name: 'register',
     component: () => import('../components/register.vue'),
+  },
+  {
+    path: '/indexStu',
+    name: 'indexStu',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Index_stu.vue'),
+  },
+  {
+    path: '/indexTch',
+    name: 'indexTch',
+    component: () => import(/* webpackChunkName: "about" */'../views/Index_tch.vue'),
+
   },
   {
     path: '/personal_center',

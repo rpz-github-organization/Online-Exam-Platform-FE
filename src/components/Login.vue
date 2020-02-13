@@ -11,7 +11,7 @@
           <label for="password">密码</label>
           <input v-model="password" type="password" name="password" placeholder="请输入密码" />
         </div>
-        <br>
+        <br />
         <div v-show="tipMessage.length > 0" class="row">
           <p class="tip">{{ tipMessage }}</p>
         </div>
@@ -22,7 +22,7 @@
           <a href="/AddExam">忘记密码</a>
           <a href="/register">立即注册</a>
         </div>
-        <br>
+        <br />
       </div>
     </div>
   </div>
@@ -68,7 +68,7 @@ export default {
             if (authlevel === 0) {
               window.location.href = '/IndexStu';
             } else if (authlevel > 0 && authlevel < 99) {
-              window.location.href = '/IndexTea';
+              window.location.href = '/IndexTch';
             }
             console.log('登录成功');
           } else {
@@ -91,7 +91,7 @@ export default {
     margin: 5px auto;
     padding: 10px 0;
     border-radius: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.20);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
 
     .title {
@@ -120,10 +120,10 @@ export default {
           font-weight: bold;
         }
 
-        input[name='uid'],
-        input[name='password'],
-        input[name='uid']:focus,
-        input[name='password']:focus {
+        input[name="uid"],
+        input[name="password"],
+        input[name="uid"]:focus,
+        input[name="password"]:focus {
           border: none;
           outline: none;
           width: 55%;
@@ -133,10 +133,10 @@ export default {
           transition: all 0.5s ease;
         }
 
-        input[name='uid']:focus,
-        input[name='password']:focus,
-        input[name='uid']:hover,
-        input[name='password']:hover {
+        input[name="uid"]:focus,
+        input[name="password"]:focus,
+        input[name="uid"]:hover,
+        input[name="password"]:hover {
           font-size: 16px;
         }
 

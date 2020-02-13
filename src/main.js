@@ -13,6 +13,8 @@ axios.defaults.headers.post['Content-Type'] = 'Content-Type:application/x-www-fo
 
 Vue.config.productionTip = false;
 
+Vue.prototype.HOST = 'api';
+
 new Vue({
   router,
   store,

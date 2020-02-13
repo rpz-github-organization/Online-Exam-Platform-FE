@@ -11,6 +11,7 @@ export default new Vuex.Store({
   },
   getters: {
   },
+  // 改变state里面的值得方法
   mutations: {
     setId(state, uid) {
       state.uid = uid;
