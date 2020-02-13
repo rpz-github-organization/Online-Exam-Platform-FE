@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul v-for="(exam,index) in exams" :key="index" class="middle">
-      <li id="exam">
+      <li id="exam" @click.stop="toDetail(exam.exam_id)">
         <div class="one">
           <div class="name" :class="{ yescolor: exam.yes }">
             <img src="../assets/exam.png" alt="exam" />
@@ -81,6 +81,7 @@ export default {
     async addYesExamToNoExam() {
       const noexam = await this.getStuNoExamInfo();
       const yesexam = await this.getStuYesExamInfo();
+      // add stuts code
       noexam.forEach(item => {
         item.yes = false;
       });
@@ -92,8 +93,7 @@ export default {
         let timestamp = item.begin_time;
         let newDate = new Date();
         newDate.setTime(timestamp);
-        item.begin_time = newDate.toLocaleDateString();
-        // console.log()
+        item.begin_time = newDate.toLocaleString();
       });
       this.passExamInfo_All = examInfo;
       this.pager();
@@ -125,6 +125,10 @@ export default {
     showPage() {
       this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
       scrollTo(0, 0);
+    },
+    toDetail(examId) {
+      this.$store.dispatch('set_examId', examId);
+      window.location.href = '/StuExamDetail';
     },
   },
 
@@ -171,6 +175,7 @@ export default {
       }
       .name:hover {
         font-size: 18px;
+        cursor: pointer;
         transition: all 0.8s ease;
       }
       .yescolor {

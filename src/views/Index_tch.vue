@@ -104,29 +104,13 @@ export default {
       this.greeting = '下午好！';
     } else this.greeting = '晚上好！';
   },
-  // 删除 Home|About
-  mounted() {
-    const parent = document.getElementById('app');
-    const child = document.getElementById('nav');
-    parent.removeChild(child);
 
+  mounted() {
     this.getTchNameAndSex();
     this.getCourseInfo();
   },
 };
 </script>
-
-<style lang="less">
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%
-}
-.header {
-  margin-bottom: 0px;
-}
-</style>
 
 <style scopd lang="less">
 .tch {
