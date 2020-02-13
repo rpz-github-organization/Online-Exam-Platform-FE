@@ -38,7 +38,7 @@ export default {
   display: inline;
 }
 .header{
-  margin-bottom: 5%;
+  margin-bottom: 60px;
 }
 #nav {
   padding: 50px;

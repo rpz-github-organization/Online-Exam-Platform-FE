@@ -2,12 +2,30 @@
   <div id="pheader">
     <ul class="header_list">
       <ul class="func">
-        <li v-if="authLevel===0"><el-link type="info" href="/SelectCourse">选课中心</el-link></li>
-        <li v-else-if="authLevel>0 && authLevel<=99"><el-link type="info">课程管理</el-link></li>
-        <li><el-link type="info">课程成绩中心</el-link></li>
-        <li v-if="authLevel===0"><el-link type="info">错题本</el-link></li>
-        <li v-else-if="authLevel>0 && authLevel<=99"><el-link type="info">评卷场</el-link></li>
-        <li v-if="authLevel===99"><el-link type="info">权限管理</el-link></li>
+        <li v-if="authLevel===0">
+          <el-link type="info" href="/IndexStu">首页</el-link>
+        </li>
+        <li v-if="authLevel>0 && authLevel<=99">
+          <el-link type="info" href="/IndexTch">首页</el-link>
+        </li>
+        <li v-if="authLevel===0">
+          <el-link type="info" href="/SelectCourse">选课中心</el-link>
+        </li>
+        <li v-else-if="authLevel>0 && authLevel<=99">
+          <el-link type="info">课程管理</el-link>
+        </li>
+        <li>
+          <el-link type="info">课程成绩中心</el-link>
+        </li>
+        <li v-if="authLevel===0">
+          <el-link type="info">错题本</el-link>
+        </li>
+        <li v-else-if="authLevel>0 && authLevel<=99">
+          <el-link type="info">评卷场</el-link>
+        </li>
+        <li v-if="authLevel===99">
+          <el-link type="info">权限管理</el-link>
+        </li>
       </ul>
       <li class="user_photo"  @click.stop="handlemenu">
         <el-dropdown @command="handleCommand">
@@ -62,7 +80,7 @@ export default {
 <style lang="less" scoped>
 #pheader{
   width: 100%;
-  height: 8%;
+  height: 60px;
   top: 0;
   left: 0;
   position: fixed;

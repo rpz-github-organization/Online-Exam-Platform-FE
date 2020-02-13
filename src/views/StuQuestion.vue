@@ -222,18 +222,17 @@ export default {
 
 <style lang="less" scoped>
 #stuQuestion{
-  margin-top: 100px;
   display: flex;
   flex-direction: column;
-  [v-cloak] {
-    display: none;
-  }
+  margin: auto 0px;
+  background: url(../assets/index_background_stu.gif);
 
   .res_time{
     display: flex;
     justify-content: flex-start;
     margin-left: 5%;
     font-weight: bold;
+    margin-top: 20px;
     position: fixed;
   }
   .paper{
