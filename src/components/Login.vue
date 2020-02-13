@@ -3,13 +3,9 @@
     <div class="card login-container">
       <div class="title">登录 · Login</div>
       <div class="form">
-        <div class="row" v-if="loginStatus == 'uid'">
+        <div class="row">
           <label for="uid">学号/工号</label>
           <input v-model="uid" type="text" name="uid" placeholder="请输入你的学号或工号" />
-        </div>
-        <div class="row" v-if="loginStatus == 'phone'">
-          <label for="uid">电话</label>
-          <input v-model="uid" type="text" name="uid" placeholder="请输入你的电话" />
         </div>
         <div class="row">
           <label for="password">密码</label>
@@ -25,7 +21,6 @@
         <div class="row" style="justify-content: flex-end;">
           <a href="/AddExam">忘记密码</a>
           <a href="/register">立即注册</a>
-          <div class="phoneLogin" @click="phoneLogin">切换登录方式</div>
         </div>
         <br>
       </div>
@@ -41,35 +36,17 @@ export default {
       uid: '',
       password: '',
       tipMessage: '',
-      loginStatus: 'uid',
     };
   },
   methods: {
-    phoneLogin() {
-      if (this.loginStatus === 'uid') {
-        this.loginStatus = 'phone';
-      } else if (this.loginStatus === 'phone') {
-        this.loginStatus = 'uid';
-      }
-    },
     validate() {
       let res = true;
-      if (this.loginStatus === 'uid') {
-        if (this.uid.length === 0) {
-          this.tipMessage = '还没有填写 学号/工号！';
-          res = false;
-        } else if (this.password.length === 0) {
-          this.tipMessage = '还没有填写 密码！';
-          res = false;
-        }
-      } else if (this.loginStatus === 'phone') {
-        if (this.uid.length === 0) {
-          this.tipMessage = '还没有填写 电话！';
-          res = false;
-        } else if (this.password.length === 0) {
-          this.tipMessage = '还没有填写 密码！';
-          res = false;
-        }
+      if (this.uid.length === 0) {
+        this.tipMessage = '还没有填写 学号/工号！';
+        res = false;
+      } else if (this.password.length === 0) {
+        this.tipMessage = '还没有填写 密码！';
+        res = false;
       }
       return res;
     },
@@ -77,13 +54,7 @@ export default {
       if (this.validate()) {
         this.tipMessage = '';
         try {
-          let finapi = '';
-          if (this.loginStatus === 'uid') {
-            finapi = 'id';
-          } else if (this.loginStatus === 'phone') {
-            finapi = 'phone';
-          }
-          const res = await this.$axios.post(`${this.HOST}/login/${finapi}`, {
+          const res = await this.$axios.post(`${this.HOST}/login/id`, {
             keyword: this.uid,
             password: this.password,
           });

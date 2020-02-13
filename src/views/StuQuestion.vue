@@ -39,28 +39,31 @@
             </el-card>
           </div>
           <div class="ques">
-            <el-card class="ques_card">
-              <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
+            <el-card class="ques_card" v-if="this.isShowS">
+              <div v-for="(item,index) in counterS"
+              :key="index"
+              v-bind:id="('counterS'+(index+1))">
                 <label>选择题-{{ index+1 }}</label>
-                <singleQues :index="index"></singleQues>
+                <singleQues :index="index"
+                :SingleQ="singleList[index]"></singleQues>
               </div>
             </el-card>
-            <el-card class="ques_card">
+            <el-card class="ques_card" v-if="this.isShowJ">
               <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
                 <label>判断题-{{ index+1 }}</label>
-                <judgeQues ref="judge" :index="index"/>
+                <judgeQues ref="judge" :index="index" :JudgeQ="judgeList[index]"/>
               </div>
             </el-card>
-            <el-card class="ques_card">
+            <el-card class="ques_card" v-if="this.isShowD">
               <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
                 <label>讨论题-{{ index+1 }}</label>
-                <discussionQues :index="index"/>
+                <discussionQues :index="index" :DiscussionQ="discussionList[index]"/>
               </div>
             </el-card>
-            <el-card class="ques_card">
+            <el-card class="ques_card" v-if="this.isShowP">
               <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
                 <label>编程题-{{ index+1 }}</label>
-                <programQues :index="index"/>
+                <programQues :index="index" :ProgramQ="programList[index]"/>
               </div>
             </el-card>
           </div>
@@ -83,22 +86,23 @@ export default {
     discussionQues,
     programQues,
   },
-  mounted() {
-    if (document.getElementById('nav')) {
-      const p = document.getElementById('app');
-      const c = document.getElementById('nav');
-      p.removeChild(c);
-    }
-  },
   computed: {
     ...mapState(['uid']),
   },
   data() {
     return {
-      counterS: ['', ''],
-      counterJ: ['', ''],
-      counterD: ['', ''],
-      counterP: ['', ''],
+      counterS: [],
+      counterJ: [],
+      counterD: [],
+      counterP: [],
+      singleList: [],
+      judgeList: [],
+      discussionList: [],
+      programList: [],
+      isShowS: false,
+      isShowJ: false,
+      isShowD: false,
+      isShowP: false,
     };
   },
   created() {
@@ -114,13 +118,100 @@ export default {
       });
     },
     async Begin() {
-      console.log('a');
+      // console.log('a');
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getStuExam`, {
-          exam_id: 1,
-          stu_id: 2018110214,
+          exam_id: 65,
+          stu_id: this.uid,
         });
-        console.log(res);
+        const info = res.data;
+        if (info.code === 200) {
+          const infodata = info.data;
+          // console.log(info);
+          infodata.forEach((item) => {
+            if (item.type === 'Single') {
+              this.counterS.push(item);
+              // console.log(this.counterS);
+            } else if (item.type === 'Judge') {
+              this.counterJ.push(item);
+            } else if (item.type === 'Discussion') {
+              this.counterD.push(item);
+            } else if (item.type === 'Program') {
+              // console.log(item);
+              this.counterP.push(item);
+            }
+          });
+          this.GetQuestion();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async GetQuestion() {
+      // console.log('this ouke');
+      try {
+        // console.log(this.counterP);
+        this.counterS.forEach(async (item) => {
+          if (item.question_id) {
+            const questionId = parseInt(item.question_id, 10);
+            const res = await this.$axios.post(`${this.HOST}/exam/getQuestion`, {
+              question_id: questionId,
+            });
+            const info = res.data;
+            // console.log(info.data);
+            const infodata = info.data;
+            this.singleList.push(infodata);
+            if (this.counterS.length === this.singleList.length) {
+              this.isShowS = true;
+            }
+          }
+        });
+        this.counterJ.forEach(async (item) => {
+          if (item.question_id) {
+            const questionId = parseInt(item.question_id, 10);
+            const res = await this.$axios.post(`${this.HOST}/exam/getQuestion`, {
+              question_id: questionId,
+            });
+            const info = res.data;
+            // console.log(info.data);
+            const infodata = info.data;
+            this.judgeList.push(infodata);
+            if (this.counterJ.length === this.judgeList.length) {
+              this.isShowJ = true;
+            }
+          }
+        });
+        this.counterD.forEach(async (item) => {
+          if (item.question_id) {
+            const questionId = parseInt(item.question_id, 10);
+            const res = await this.$axios.post(`${this.HOST}/exam/getQuestion`, {
+              question_id: questionId,
+            });
+            const info = res.data;
+            // console.log(info.data);
+            const infodata = info.data;
+            this.discussionList.push(infodata);
+            if (this.counterD.length === this.discussionList.length) {
+              this.isShowD = true;
+            }
+          }
+        });
+        this.counterP.forEach(async (item) => {
+          if (item.question_id) {
+            const questionId = parseInt(item.question_id, 10);
+            const res = await this.$axios.post(`${this.HOST}/exam/getQuestion`, {
+              question_id: questionId,
+            });
+            const info = res.data;
+            // console.log(info.data);
+            const infodata = info.data;
+            this.programList.push(infodata);
+            if (this.counterP.length === this.programList.length) {
+              this.isShowP = true;
+            }
+          }
+        });
       } catch (err) {
         console.log(err);
       }
@@ -134,6 +225,9 @@ export default {
   margin-top: 100px;
   display: flex;
   flex-direction: column;
+  [v-cloak] {
+    display: none;
+  }
 
   .res_time{
     display: flex;
@@ -148,7 +242,7 @@ export default {
     margin-top: 50px;
   }
   .menu{
-    width: 12%;
+    width: 20%;
     height: 100%;
     margin-left: 5%;
     position: fixed;
@@ -156,11 +250,10 @@ export default {
     .selectType{
       background-color: #7CC68C;
       padding: 5px 10px;
-      margin-bottom: 30%;
       border-radius: 4px
     }
     .question_list{
-      margin: 10% 0 30% 0;
+      margin: 20px 0 30px 0;
       flex-wrap: wrap;
       display: flex;
     }
@@ -182,7 +275,7 @@ export default {
     }
   }
   .ques{
-    margin-left: 25%;
+    margin-left: 30%;
     width: 60%;
 
     .ques_card{

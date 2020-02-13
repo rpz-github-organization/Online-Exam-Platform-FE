@@ -31,13 +31,6 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'SelectCourse',
-  mounted() {
-    if (document.getElementById('nav')) {
-      const p = document.getElementById('app');
-      const c = document.getElementById('nav');
-      p.removeChild(c);
-    }
-  },
   computed: {
     ...mapState(['uid']),
   },

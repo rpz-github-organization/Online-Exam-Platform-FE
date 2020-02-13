@@ -2,8 +2,8 @@
     <div id="singleQues">
         <el-card class="single_card">
             <div class="single_row">
-                <label>{{ index + 1 }}.</label>
-                <label>qqqqqqqqqqq</label>
+                <label class="index">{{ index + 1 }}.</label>
+                <label>{{ timu }}</label>
             </div>
             <div class="single_row op">
                 <el-radio v-model="answer" label="A">
@@ -27,11 +27,23 @@ export default {
       type: Number,
       required: true,
     },
+    JudgeQ: {
+      required: false,
+    },
   },
   data() {
     return {
       answer: '',
+      timu: '',
     };
+  },
+  created() {
+    this.Question();
+  },
+  methods: {
+    Question() {
+      this.timu = this.JudgeQ.question;
+    },
   },
 };
 </script>
@@ -47,21 +59,24 @@ export default {
     flex-direction: column;
   }
   .single_row{
-      display: flex;
-      justify-content: flex-start;
-      margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
 
-      .answer{
-          margin-left: 20px;
-      }
-      .Al{
-          margin-right: 20px;
-      }
+    .index{
+      margin-top: 3px;
+    }
+    .answer{
+      margin-left: 20px;
+    }
+    .Al{
+      margin-right: 20px;
+    }
   }
   .op{
-      display: flex;
-      width: 90%;
-      margin-left: 5%;
+    display: flex;
+    width: 90%;
+    margin-left: 5%;
   }
 }
 </style>

@@ -19,6 +19,7 @@ export default {
 
 <style lang="less" scoped>
 .home {
+  margin-top: 10%;
   .logo {
     width: 50px;
   }

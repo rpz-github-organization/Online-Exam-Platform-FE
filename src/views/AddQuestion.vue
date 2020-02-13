@@ -94,13 +94,6 @@ import program from '../components/teacher/Program.vue';
 
 export default {
   name: 'AddQuestion',
-  mounted() {
-    if (document.getElementById('nav')) {
-      const p = document.getElementById('app');
-      const c = document.getElementById('nav');
-      p.removeChild(c);
-    }
-  },
   components: {
     single,
     judge,

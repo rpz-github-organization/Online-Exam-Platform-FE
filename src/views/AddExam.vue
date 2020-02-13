@@ -35,13 +35,6 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'AddExam',
-  mounted() {
-    if (document.getElementById('nav')) {
-      const p = document.getElementById('app');
-      const c = document.getElementById('nav');
-      p.removeChild(c);
-    }
-  },
   data() {
     return {
       examTitle: '',

@@ -2,10 +2,6 @@
   <div id="app">
     <Pheader />
     <div class="header"></div>
-    <div id="nav">
-      <router-link to="/">Login</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
   </div>
 </template>

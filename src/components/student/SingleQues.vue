@@ -2,8 +2,8 @@
     <div id="singleQues">
         <el-card class="single_card">
             <div class="single_row">
-                <label>{{ index + 1 }}.</label>
-                <label>qqqqqqqqqqq</label>
+                <label class="index">{{ index + 1 }}.</label>
+                <label>{{ timu }}</label>
             </div>
             <div class="single_row op">
                 <el-radio v-model="answer" label="A">
@@ -41,15 +41,36 @@ export default {
       type: Number,
       required: true,
     },
+    SingleQ: {
+      required: false,
+    },
   },
   data() {
     return {
       answer: '',
-      optionA: 'aa',
-      optionB: 'aa',
-      optionC: 'aa',
-      optionD: 'aa',
+      optionA: '',
+      optionB: '',
+      optionC: '',
+      optionD: '',
+      timu: '',
     };
+  },
+  created() {
+    this.Question();
+  },
+  methods: {
+    Question() {
+      this.timu = this.SingleQ.question;
+      const oplist = this.SingleQ.options.split(';');
+      const a = oplist[0];
+      const b = oplist[1];
+      const c = oplist[2];
+      const d = oplist[3];
+      this.optionA = a;
+      this.optionB = b;
+      this.optionC = c;
+      this.optionD = d;
+    },
   },
 };
 </script>
@@ -65,24 +86,27 @@ export default {
     flex-direction: column;
   }
   .single_row{
-      display: flex;
-      justify-content: flex-start;
-      margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
 
-      .answer{
-          margin-left: 20px;
-      }
-      .Al{
-          margin-right: 20px;
-      }
-      .options{
-          text-align: left;
-      }
+    .index{
+      margin-top: 3px;
+    }
+    .answer{
+      margin-left: 20px;
+    }
+    .Al{
+      margin-right: 20px;
+    }
+    .options{
+      text-align: left;
+    }
   }
   .op{
-      display: flex;
-      width: 90%;
-      margin-left: 5%;
+    display: flex;
+    width: 90%;
+    margin-left: 5%;
   }
 }
 </style>
