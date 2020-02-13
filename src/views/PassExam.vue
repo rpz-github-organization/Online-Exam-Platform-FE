@@ -87,7 +87,15 @@ export default {
       yesexam.forEach(item => {
         item.yes = true;
       });
-      this.passExamInfo_All = noexam.concat(yesexam);
+      let examInfo = noexam.concat(yesexam);
+      examInfo.forEach((item, arr) => {
+        let timestamp = item.begin_time;
+        let newDate = new Date();
+        newDate.setTime(timestamp);
+        item.begin_time = newDate.toLocaleDateString();
+        // console.log()
+      });
+      this.passExamInfo_All = examInfo;
       this.pager();
       this.showPage();
     },
@@ -116,7 +124,7 @@ export default {
     },
     showPage() {
       this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
-      scrollTo(0,0)
+      scrollTo(0, 0);
     },
   },
 

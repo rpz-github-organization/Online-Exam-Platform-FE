@@ -56,7 +56,7 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log(info.data);
+          console.log('no',info.data);
           return info.data;
         } else {
           console.log('请求失败');
@@ -73,7 +73,7 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log(info.data);
+          console.log('yes',info.data);
           return info.data;
         } else {
           console.log('请求失败');
@@ -91,9 +91,20 @@ export default {
       yesexam.forEach(item => {
         item.yes = true;
       });
-      this.onExamInfo_All = noexam.concat(yesexam);
+      let examInfo = noexam.concat(yesexam);
+      examInfo.forEach((item, arr) => {
+        let timestamp = item.begin_time;
+        let newDate = new Date();
+        newDate.setTime(timestamp)
+        item.begin_time = newDate.toLocaleDateString();
+        // console.log()
+      });
+      this.onExamInfo_All = examInfo;
       this.pager();
       this.showPage();
+    },
+    changrTimestampToDate() {
+      let timestamp = this.noexam.bigin_time;
     },
     upPage() {
       if (this.start !== 0) {
@@ -122,7 +133,7 @@ export default {
     // 控制显示的exams
     showPage() {
       this.exams = this.onExamInfo_All.slice(this.start, this.start + 5);
-      scrollTo(0,0)
+      scrollTo(0, 0);
     },
   },
 
