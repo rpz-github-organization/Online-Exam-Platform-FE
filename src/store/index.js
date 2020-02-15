@@ -22,6 +22,9 @@ export default new Vuex.Store({
     setExamId(state, examId) {
       state.examId = examId;
     },
+    setCoId(state, coId) {
+      state.coId = coId;
+    },
   },
   actions: {
     set_uid(set, uid) {
@@ -32,6 +35,9 @@ export default new Vuex.Store({
     },
     set_examId(set, examId) {
       set.commit('setExamId', examId);
+    },
+    set_coId(set, coId) {
+      set.commit('setCoId', coId);
     },
   },
   modules: {

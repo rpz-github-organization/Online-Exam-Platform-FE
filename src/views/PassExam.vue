@@ -1,6 +1,7 @@
 <template>
   <div>
     <ul v-for="(exam,index) in exams" :key="index" class="middle">
+      <!-- <li id="exam" @click.stop="toDetail(exam.exam_id)">       -->
       <li id="exam" @click.stop="toDetail(exam.exam_id)">
         <div class="one">
           <div class="name" :class="{ yescolor: exam.yes }">
@@ -126,10 +127,10 @@ export default {
       this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
       scrollTo(0, 0);
     },
-    toDetail(examId) {
-      this.$store.dispatch('set_examId', examId);
-      window.location.href = '/StuExamDetail';
-    },
+    // toDetail(examId) {
+    //   this.$store.dispatch('set_examId', examId);
+    //   window.location.href = '/StuExamDetail';
+    // },
   },
 
   beforeMount() {
@@ -175,7 +176,7 @@ export default {
       }
       .name:hover {
         font-size: 18px;
-        cursor: pointer;
+        // cursor: pointer;
         transition: all 0.8s ease;
       }
       .yescolor {

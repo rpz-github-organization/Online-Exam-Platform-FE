@@ -1,33 +1,34 @@
 <template>
   <div class="body">
-    <div class="main" v-for="(exam,index) in exams" :key="index">
-      <div class="name">{{ exam.name }}</div>
+    <div class="main">
+      <div class="name">{{ exams.name }}</div>
       <div class="row">
-        <div>考试科目：{{ exam.co_name }}</div>
-        <div>任课老师：{{ exam.tea_name }}</div>
-        <div>考试开始时间：{{ exam.begin_time }}</div>
-        <div>考试时长：{{ exam.last_time }} 分钟</div>
+        <div>考试科目：{{ exams.co_name }}</div>
+        <div>任课老师：{{ exams.tea_name }}</div>
+        <div>考试开始时间：{{ exams.begin_time }}</div>
+        <div>考试时长：{{ exams.last_time }} 分钟</div>
       </div>
     </div>
     <div class="goExam">
-      <button class="goToExam" @click="goToExam" v-if="this.status">参加考试</button>
-      <button class="goToExam" :class="{ grey: !this.status}" v-if="!this.status">考试还未开始</button>
+      <button class="goToExam" @click="goToExam" v-if="exams.status">参加考试</button>
+      <button class="goToExam" :class="{ grey: !exams.status}" v-if="!exams.status">考试还未开始</button>
+      <button class="goToExam" :class="{ grey: 'this.status == -1'}"
+      v-if="exams.status == -1">错误</button>
     </div>
   </div>
 </template>
 
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
 import { mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['uid']),
     ...mapState(['examId']),
   },
 
   data() {
     return {
-      status: '',
       exams: '',
     };
   },
@@ -37,35 +38,31 @@ export default {
     },
     async getStuExamInfo() {
       try {
-        const res = await this.$axios.post(`${this.HOST}/homePage/stu/-----`, {
-          stu_id: this.uid,
+        const res = await this.$axios.post(`${this.HOST}/exam/stuExamInfo`, {
           exam_id: this.examId,
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log(info.data);
-          this.exams = info.data;
-          this.timestampToDate();
+          console.log(info.data)
+          return info.data;
+        } else {
+          console.log('请求失败');
         }
-        console.log('请求失败');
       } catch (err) {
         console.log(err);
       }
     },
-    timestampToDate() {
-      this.exams.forEach((item) => {
-        const timestamp = item.begin_time;
-        const newDate = new Date();
-        newDate.setTime(timestamp);
-        // eslint-disable-next-line no-param-reassign
-        item.begin_time = newDate.toLocaleString();
-        this.status = item.status;
-      });
-      console.log(this.exams);
+    async timestampToDate() {
+      let exam = await this.getStuExamInfo();
+      let timestamp = exam.begin_time;
+      let newDate = new Date();
+      newDate.setTime(timestamp);
+      exam.begin_time = newDate.toLocaleString();
+      this.exams = exam;
     },
   },
   mounted() {
-    this.getStuExamInfo();
+    this.timestampToDate();
   },
 };
 </script>

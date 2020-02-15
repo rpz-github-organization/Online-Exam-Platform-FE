@@ -7,7 +7,7 @@
       <div class="middle">
         <ul v-for="(course, index) in courses" :key="index" class="course">
           <li class="cour">
-            <div class="name">
+            <div class="name" @click.stop="toDetail(course.co_id)">
               <img src="../assets/course.png" />
               {{ course.name }}
             </div>
@@ -94,6 +94,10 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    toDetail(coId) {
+      this.$store.dispatch('set_coId', coId);
+      window.location.href = '/TeaCourseDetail';
     },
   },
 
