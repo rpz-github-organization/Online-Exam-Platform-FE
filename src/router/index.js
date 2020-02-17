@@ -36,9 +36,14 @@ const routes = [
 
   },
   {
-    path: '/personal_center',
-    name: 'personal_center',
-    component: () => import('../components/personal_center.vue'),
+    path: '/personalStu',
+    name: 'personalStu',
+    component: () => import('../components/personal_stu.vue'),
+  },
+  {
+    path: '/personalTch',
+    name: 'personalTch',
+    component: () => import('../components/personal_tch.vue'),
   },
   {
     path: '/SelectCourse',

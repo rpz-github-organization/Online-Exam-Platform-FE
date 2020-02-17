@@ -57,7 +57,11 @@ export default {
   methods: {
     handleCommand(command) {
       if (command === 'modify') {
-        window.location.href = '/personal_center';
+        if (this.authLevel === 0) {
+          window.location.href = '/personalStu';
+        } else if (this.authLevel > 0 && this.authLevel < 99) {
+          window.location.href = '/personalTch';
+        }
       } else if (command === 'logout') {
         console.log(this.uid);
         this.$axios.post(`${this.HOST}/login/logout`, {
