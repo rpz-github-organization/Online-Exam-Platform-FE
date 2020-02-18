@@ -12,7 +12,15 @@
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
-        <div class="two">考试时长：{{ exam.last_time }}小时</div>
+        <div class="two">
+          <div>考试时长：{{exam.last_time}}分钟</div>
+          <div class="green" v-if="exam._judge && exam.yes">
+            <img src="../assets/exam_status/green.png" /> 已完成评分
+          </div>
+          <div class="orange" v-if="!exam._judge && exam.yes">
+            <img src="../assets/exam_status/orange.png" /> 未完成评分
+          </div>
+        </div>
       </li>
     </ul>
     <div class="buttons" v-if="pagerSeen">
@@ -195,6 +203,21 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      img {
+        width: 15px;
+      }
+      .green {
+        color: green;
+        margin-right: 15px;
+      }
+      .orange {
+        color: orange;
+        margin-right: 15px;
+      }
     }
   }
   .buttons {

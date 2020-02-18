@@ -3,7 +3,7 @@
     <ul v-for="(exam,index) in exams" :key="index" class="middle">
       <li id="exam">
         <div class="one">
-          <div class="name" :class="{ yescolor: exam.yes }"  @click.stop="toDetail(exam.exam_id)" >
+          <div class="name" :class="{ yescolor: exam.yes }" @click.stop="toDetail(exam.exam_id)">
             <img src="../assets/exam.png" alt="exam" />
             {{ exam.name }}
             <img v-if="!exam.yes" src="../assets/exam_no.png" />
@@ -11,7 +11,15 @@
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
-        <div class="two">考试时长：{{exam.last_time}}分钟</div>
+        <div class="two">
+          <div>考试时长：{{exam.last_time}}分钟</div>
+          <div class="green" v-if="exam._judge">
+            <img src="../assets/exam_status/green.png" > 已完成评分
+          </div>
+          <div class="orange" v-if="!exam._judge">
+            <img src="../assets/exam_status/orange.png" > 未完成评分
+          </div>
+        </div>
       </li>
     </ul>
     <div class="buttons" v-if="pagerSeen">
@@ -90,8 +98,9 @@ export default {
       yesexam.forEach(item => {
         item.yes = true;
       });
+      //  转换时间戳
       let examInfo = noexam.concat(yesexam);
-      examInfo.forEach((item) => {
+      examInfo.forEach(item => {
         let timestamp = item.begin_time;
         let newDate = new Date();
         newDate.setTime(timestamp);
@@ -100,9 +109,6 @@ export default {
       this.onExamInfo_All = examInfo;
       this.pager();
       this.showPage();
-    },
-    changrTimestampToDate() {
-      let timestamp = this.noexam.bigin_time;
     },
     upPage() {
       if (this.start !== 0) {
@@ -198,6 +204,21 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
+      display:flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      img{
+        width: 15px;
+      }
+      .green{
+        color: green;
+        margin-right: 15px;
+      }
+      .orange{
+        color: orange;
+        margin-right: 15px;
+      }
     }
   }
   .buttons {

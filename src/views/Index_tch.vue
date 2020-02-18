@@ -16,11 +16,6 @@
               <br />
               学时：{{ course.school_hour }}
               <br />
-              考试分数：{{ course.exam_score }}
-              <br />
-              平均分：{{ course.common_score }}
-              <br />
-              卷面分占比：{{ course.exam_proportion }}
             </div>
           </li>
         </ul>
@@ -199,6 +194,7 @@ export default {
             justify-content: flex-start;
             flex-wrap: nowrap;
             font-size: 20px;
+            cursor: pointer;
             font-weight: bold;
             margin-left: 5px;
 
