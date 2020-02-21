@@ -154,13 +154,14 @@ export default {
         border: 0;
       }
       .table th {
-        background-color: #adadad;
+        background-color: #adadad88;
         color: #000000;
       }
       .table,
       .table th,
       .table td {
         font-size: 17px;
+        height: 30px;
         text-align: center;
         padding: 4px;
         border-collapse: collapse;
