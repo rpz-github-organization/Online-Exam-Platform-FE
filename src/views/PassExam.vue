@@ -87,7 +87,7 @@ export default {
         console.log(err);
       }
     },
-    async addYesExamToNoExam() {
+    async addNoExamToYesExam() {
       const noexam = await this.getStuNoExamInfo();
       const yesexam = await this.getStuYesExamInfo();
       // add stuts code
@@ -97,7 +97,7 @@ export default {
       yesexam.forEach(item => {
         item.yes = true;
       });
-      let examInfo = noexam.concat(yesexam);
+      let examInfo = yesexam.concat(noexam);
       examInfo.forEach((item, arr) => {
         let timestamp = item.begin_time;
         let newDate = new Date();
@@ -142,7 +142,7 @@ export default {
   },
 
   beforeMount() {
-    this.addYesExamToNoExam();
+    this.addNoExamToYesExam();
   },
 };
 </script>

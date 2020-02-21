@@ -3,23 +3,27 @@
     <div class="bodyimg">
       <div class="main">
         <div class="name">{{ course.name }}</div>
-        <div class="row">
-          <div>教师：{{ course.teacherName }}</div>
-          <div>学分：{{ course.credit }} 学分</div>
-          <div>学时：{{ course.school_hour }} 学时</div>
-          <div>学生人数：{{ course.stu_num }} 人</div>
+        <div class="detail">
+          <div class="row">
+            <div>教师：{{ course.teacherName }}</div>
+            <div>学分：{{ course.credit }} 学分</div>
+          </div>
+          <div class="row">
+            <div>学生人数：{{ course.stu_num }} 人</div>
+            <div>学时：{{ course.school_hour }} 学时</div>
+          </div>
         </div>
         <table class="table">
           <tr>
-            <th>考试名字</th>
+            <th style="padding-left: 25px;">考试名字</th>
             <th>考试时间</th>
             <th>考试时长</th>
             <th>考试状态</th>
           </tr>
           <tr class="exams" v-for="(exam,index) in exams" :key="index">
-            <td >{{ exam.exam_name }} </td>
-            <td> {{ exam.begin_time}} </td>
-            <td> {{ exam.last_time }} 分钟 </td>
+            <td>{{ exam.exam_name }}</td>
+            <td>{{ exam.begin_time}}</td>
+            <td>{{ exam.last_time }} 分钟</td>
             <td class="status">
               <div class="orange" v-if="exam.status == 0">
                 <img src="../assets/exam_status/orange.png" /> 考试未开始
@@ -88,7 +92,8 @@ export default {
         const timestamp = item.begin_time;
         const newDate = new Date();
         newDate.setTime(timestamp);
-        this.exams.begin_time = newDate.toLocaleString();
+        // eslint-disable-next-line no-param-reassign
+        item.begin_time = newDate.toLocaleString();
       });
     },
   },
@@ -127,24 +132,29 @@ export default {
         font-weight: bold;
         margin-bottom: 30px;
       }
-      .row {
+      .detail {
         font-size: 18px;
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-around;
         text-align: start;
-        div {
-          margin-bottom: 15px;
-          margin-left: 10px;
+        .row {
+          display: flex;
+          flex-direction: column;
+
+          div {
+            margin-bottom: 15px;
+            margin-left: 10px;
+          }
         }
       }
 
       .table table {
         width: 90%;
-        border-radius: 15px;
         border: 0;
       }
       .table th {
-        background-color: #96c7ed;
+        background-color: #adadad;
         color: #000000;
       }
       .table,
@@ -155,11 +165,19 @@ export default {
         padding: 4px;
         border-collapse: collapse;
       }
-      .table th,
-      .table td {
-        border: 1px solid #73b4e7;
-        border-width: 1px 0 1px 0;
-        border: 2px inset #ffffff;
+      table tr:first-child th:first-child {
+        border-top-left-radius: 15px;
+      }
+
+      table tr:first-child th:last-child {
+        border-top-right-radius: 15px;
+      }
+      table tr:last-child td:first-child {
+        border-bottom-left-radius: 15px;
+      }
+
+      table tr:last-child td:last-child {
+        border-bottom-right-radius: 15px;
       }
       .table tr {
         border: 1px solid #ffffff;
@@ -187,7 +205,7 @@ export default {
         }
       }
       .table tr:nth-child(odd) {
-        background-color: #dcecf9;
+        background-color: #adadad1e;
       }
       .table tr:nth-child(even) {
         background-color: #ffffff;
