@@ -60,6 +60,11 @@ const routes = [
     name: 'StuStudent',
     component: () => import('../views/StuQuestion'),
   },
+  {
+    path: '/ScoreCenter',
+    name: 'ScoreCenter',
+    component: () => import('../views/ScoreCenter'),
+  },
 ];
 
 const router = new VueRouter({

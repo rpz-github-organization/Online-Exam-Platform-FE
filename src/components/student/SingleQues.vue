@@ -3,7 +3,7 @@
         <el-card class="single_card">
             <div class="single_row">
                 <label class="index">{{ index + 1 }}.</label>
-                <label>{{ timu }}</label>
+                <label class="timu">{{ timu }}</label>
             </div>
             <div class="single_row op">
                 <el-radio v-model="answer" label="A">
@@ -53,10 +53,22 @@ export default {
       optionC: '',
       optionD: '',
       timu: '',
+      info: {},
     };
   },
   created() {
     this.Question();
+  },
+  watch: {
+    answer(val) {
+      this.info = {
+        question_id: this.SingleQ.question_id,
+        answer: val,
+        score: 0,
+        type: 'Single',
+      };
+      this.$emit('func', this.info);
+    },
   },
   methods: {
     Question() {
@@ -92,6 +104,12 @@ export default {
 
     .index{
       margin-top: 3px;
+    }
+    .timu{
+      word-wrap:break-word;
+      width: 800px;
+      text-align: left;
+      margin-left: 5px;
     }
     .answer{
       margin-left: 20px;

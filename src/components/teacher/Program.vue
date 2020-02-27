@@ -11,22 +11,30 @@
         </el-input>
       </div>
       <div class="ques_row">
-        <label class="ques_label">标准样例:</label>
+        <div class="left">
+          <label>标准样例:</label>
+          <button class="add" @click="Addstd()">add</button>
+        </div>
         <div class="example">
           <label>样例输入</label>
           <el-input
+          v-for="(item, index) in answer_input"
+          :key="item.index"
           type="textarea"
-          v-model="answer_input"
+          v-model="answer_input[index]"
           class="std"
           autosize>
           </el-input>
           <label>样例输出</label>
           <el-input
+          v-for="(it, index) in answer_output"
+          :key="it.index"
           type="textarea"
-          v-model="answer_output"
+          v-model="answer_output[index]"
           class="std"
           autosize>
           </el-input>
+          <label>注：一个输入框为一个输入/输出，若本题无输入，不填样例输入</label>
         </div>
       </div>
       <div class="ques_row">
@@ -99,11 +107,13 @@ export default {
       }],
 
       question: '',
-      answer_input: '',
-      answer_output: '',
+      answer_input: [''],
+      answer_output: [''],
       tea_id: '',
       tip: '',
       tag: '',
+      type: '',
+      test_case: [],
       questionid: null,
       score: null,
       isChange: false,
@@ -123,16 +133,28 @@ export default {
       }
       return res;
     },
+
+    Addstd() {
+      this.answer_input.push('');
+      this.answer_output.push('');
+    },
+
+    testCase() {
+      const len = this.answer_output.length;
+      for (let i = 0; i < len; i += 1) {
+        this.test_case.push({ input: this.answer_input[i], output: this.answer_output[i] });
+      }
+    },
+
     async getInfo() {
       if (this.questionid === null) {
         try {
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
-            type: 'Program',
+            type: this.type,
             question: this.question,
-            input: this.answer_input,
-            output: this.answer_output,
             tag: this.tag,
             tea_id: this.uid,
+            test_case: this.test_case,
           });
           const info = res.data;
           if (info.code === 200) {
@@ -141,7 +163,7 @@ export default {
             const scoreN = parseInt(this.score, 10);
             try {
               const response = await this.$axios.post(`${this.HOST}/exam/addQuestionToExam`, {
-                type: 'Program',
+                type: this.type,
                 question_id: quesid,
                 num: this.index + 1,
                 score: scoreN,
@@ -167,7 +189,7 @@ export default {
         const scoreN = parseInt(this.score, 10);
         try {
           const response = await this.$axios.post(`${this.HOST}/exam/addQuestionToExam`, {
-            type: 'Program',
+            type: this.type,
             question_id: quesid,
             num: this.index + 1,
             score: scoreN,
@@ -188,13 +210,12 @@ export default {
         try {
           const quesid = parseInt(this.questionid, 10);
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
-            type: 'Program',
+            type: this.type,
             question_id: quesid,
             question: this.question,
-            input: this.answer_input,
-            output: this.answer_output,
             tag: this.tag,
             tea_id: this.uid,
+            test_case: this.test_case,
           });
           const info = res.data;
           if (info.code === 200) {
@@ -210,7 +231,13 @@ export default {
       }
     },
     async SubmitProgram() {
-      console.log(this.isChange);
+      if (this.answer_input) {
+        this.type = 'Normal_Program';
+      } else {
+        this.type = 'SpecialJudge_Program';
+      }
+      this.testCase();
+      console.log(this.test_case);
       if (!this.isSubmit()) {
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',
@@ -245,8 +272,23 @@ export default {
     flex-direction: row;
     margin: 10px;
 
+    .left{
+      width:15%;
+      display: flex;
+      flex-direction: column;
+
+      label{
+        padding: 5px;
+        text-align: left;
+      }
+      .add{
+        width: 50px;
+        margin-left: 20%;
+        border-radius: 5px;
+      }
+    }
     .select{
-        width: 100%;
+      width: 100%;
     }
     .ques_label{
       width: 15%;
@@ -263,6 +305,7 @@ export default {
         padding: 10px 0;
       }
       .std{
+        margin-bottom: 10px;
         .el-textarea__inner{
             background-color: #DCDDDD;
             font-weight: bold;

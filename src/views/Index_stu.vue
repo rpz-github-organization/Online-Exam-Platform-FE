@@ -102,14 +102,6 @@ export default {
     else if (d.getHours() >= 12 && d.getHours() < 18) this.greeting = '下午好！';
     else this.greeting = '晚上好！';
   },
-  // 删除 Home|About
-  mounted() {
-    const parent = document.getElementById('app');
-    const child = document.getElementById('nav');
-    parent.removeChild(child);
-
-    this.getTime();
-  },
 };
 </script>
 
