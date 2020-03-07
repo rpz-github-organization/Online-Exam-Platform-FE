@@ -90,19 +90,18 @@ export default {
 
   data() {
     return {
-      index_01: 0, // -1
-      index_02: 0, // -1
-      num: 1, // -1
+      index_01: -1,
+      index_02: -1,
+      num: -1,
       exam: {
         name: 'First C examination',
         stu_name: 'Xiao Ming',
         tea_name: 'Mr.Lee',
-        begin_time: '2020-01-01 下午2:00',
+        begin_time: '1234567890000',
         Ques: [
           {
             // num: '一',
-            type: '选择题',
-            isactive: '',
+            type: 'Single',
             detail: [
               {
                 num: 1,
@@ -185,7 +184,7 @@ export default {
             total: 30,
           },
           {
-            type: '填空题',
+            type: 'Judge',
             detail: [
               {
                 num: 1,
@@ -201,15 +200,15 @@ export default {
         grade: 82,
       },
       question: {
-        // type: 'Single',
-        type: 'Discussion',
-        question:
-          'What should u do?dsads fddf  dsfe dsf ewfds fdsfefds  e ef sdfs?',
-        // options: '1323;243232;3432;44324',
-        // answer: 'A',
-        answer: 'This is the correct answer',
-        // stu_answer: 'D',
-        stu_answer: 'this is the student`s answer',
+        type: 'Single',
+        // type: 'Discussion',
+        // question:
+        //   'What should u do?dsads fddf  dsfe dsf ewfds fdsfefds  e ef sdfs?',
+        options: '1323;243232;3432;44324',
+        answer: 'A',
+        // answer: 'This is the correct answer',
+        stu_answer: 'D',
+        // stu_answer: 'this is the student`s answer',
         score: '10',
         getScore: '0',
       },
@@ -221,14 +220,16 @@ export default {
     },
     async getStuExamInfo() {
       try {
-        const res = await this.$axios.post(`${this.HOST}/exam/getStuExam`, {
+        const res = await this.$axios.post(`${this.HOST}/exam/---`, {
           exam_id: this.examId,
           stu_id: this.uid,
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log('999', info.data);
-          return info.data;
+          console.log('data', info.data);
+          this.exam = info.data;
+          this.timestampToDate();
+          this.toChinese();
         } else {
           console.log('请求失败');
         }
@@ -236,13 +237,28 @@ export default {
         console.log(err);
       }
     },
-    async timestampToDate() {
-      let exam = await this.getStuExamInfo();
-      let timestamp = exam.begin_time;
+    // 转换时间戳
+    timestampToDate() {
+      let timestamp = this.exam.begin_time;
       let newDate = new Date();
       newDate.setTime(timestamp);
-      exam.begin_time = newDate.toLocaleString();
-      this.exams = exam;
+      this.exam.begin_time = newDate.toLocaleString();
+    },
+    // 转换 Single 为中文
+    toChinese() {
+      let Ques = this.exam.Ques;
+      console.log('Ques:', Ques);
+      Ques.forEach(item => {
+        if (item.type == 'Single') {
+          item.type = '选择题';
+        } else if (item.type == 'Judge') {
+          item.type = '判断题';
+        } else if (item.type == 'Discussion') {
+          item.type = '讨论题';
+        } else if (item.type == 'Program') {
+          item.type = '编程题';
+        }
+      });
     },
     async getQuesDetail(num, index_1, index_2) {
       this.index_01 = index_1;
@@ -256,8 +272,9 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log(info.data);
+          console.log('question:', info.data);
           this.question = info.data;
+          this.splitOptions();
         } else {
           console.log('请求失败');
         }
@@ -268,14 +285,15 @@ export default {
     splitOptions() {
       if (this.question.option) {
         this.question.options = this.question.options.split(';');
-        console.log('question:',this.question);
+        // console.log('question:', this.question);
       }
     },
   },
   mounted() {
-    this.splitOptions();
-    // this.timestampToDate();
     // this.getStuExamInfo();
+    this.timestampToDate();
+    this.splitOptions();
+    this.toChinese();
   },
 };
 </script>

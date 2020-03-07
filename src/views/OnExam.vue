@@ -18,7 +18,7 @@
             <img src="../assets/exam_status/green.png" > 已完成评分(点击查看)
           </div>
           <div class="orange" v-if="!exam._judge && exam.yes"
-           style="cursor:pointer" @click="toCheckGrades(exam.exam_id)">
+           style="cursor:pointer" >
             <img src="../assets/exam_status/orange.png" > 未完成评分
           </div>
         </div>
