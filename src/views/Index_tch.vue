@@ -40,8 +40,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'indexStu',
+
+  computed: {
+    ...mapState(['uid']),
+  },
 
   data() {
     return {
@@ -74,8 +80,8 @@ export default {
     async getCourseInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/homePage/tea/id`, {
-          // tea_id: this.uid,
-          tea_id: '2018110257',
+          tea_id: this.uid,
+          // tea_id: '2018110257',
         });
         const info = res.data;
         console.log(info);

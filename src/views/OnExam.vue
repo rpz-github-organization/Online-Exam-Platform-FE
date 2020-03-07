@@ -13,10 +13,12 @@
         </div>
         <div class="two">
           <div>考试时长：{{exam.last_time}}分钟</div>
-          <div class="green" v-if="exam._judge && exam.yes">
-            <img src="../assets/exam_status/green.png" > 已完成评分
+          <div class="green" v-if="exam._judge && exam.yes"
+          @click="toCheckGrades" style="cursor:pointer">
+            <img src="../assets/exam_status/green.png" > 已完成评分(点击查看)
           </div>
-          <div class="orange" v-if="!exam._judge && exam.yes">
+          <div class="orange" v-if="!exam._judge && exam.yes"
+           style="cursor:pointer" @click="toCheckGrades(exam.exam_id)">
             <img src="../assets/exam_status/orange.png" > 未完成评分
           </div>
         </div>
@@ -143,6 +145,11 @@ export default {
       this.$store.dispatch('set_examId', examId);
       window.location.href = '/StuExamDetail';
     },
+    toCheckGrades(examId){
+      this.$store.dispatch('set_examId', examId);
+      // console.log(examId);
+      window.location.href = '/StuExamGrades';
+    }
   },
 
   beforeMount() {
