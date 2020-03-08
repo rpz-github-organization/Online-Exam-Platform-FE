@@ -98,8 +98,7 @@ export default {
     },
     async getStuDoneExamInfo() {
       try {
-        const res = await this.$axios.post(
-          `${this.HOST}/exam/getStuScoreInfo`,
+        const res = await this.$axios.post(`${this.HOST}/exam/getStuScoreInfo`,
           {
             stu_id: this.uid,
           }
