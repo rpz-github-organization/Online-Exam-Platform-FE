@@ -32,11 +32,11 @@
           <img
           src='../assets/head_stu.jpg'
           class="head"
-          v-if="authLevel === 0 "/>
+          v-if="this.authLevel === 0 "/>
           <img
           src='../assets/head_tch.jpg'
           class="head"
-          v-if="authLevel>0"/>
+          v-else/>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="modify">个人中心</el-dropdown-item>
             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -57,6 +57,9 @@ export default {
       avatarUrl: '../assets/head_stu.jpg',
     };
   },
+  // created() {
+  //   console.log(this.authLevel);
+  // },
   computed: {
     ...mapState(['uid']),
     ...mapState(['authLevel']),
@@ -70,14 +73,14 @@ export default {
           window.location.href = '/personalTch';
         }
       } else if (command === 'logout') {
-        console.log(this.uid);
+        // console.log(this.uid);
         this.$axios.post(`${this.HOST}/login/logout`, {
           keyword: this.uid,
         }).then((res) => {
           const info = res.data;
           if (info.code === 200) {
-            this.$store.commit('set_authLevel', 0);
-            console.log('退出登录');
+            this.$store.dispatch('set_authLevel', 0);
+            window.location.href = '/';
           } else {
             console.log('操作失败');
           }

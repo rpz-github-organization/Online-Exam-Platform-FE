@@ -70,6 +70,11 @@ const routes = [
     name: 'ScoreCenter',
     component: () => import('../views/ScoreCenter'),
   },
+  {
+    path: '/ExamInfo',
+    name: 'ExamInfo',
+    component: () => import('../components/ExamInfo'),
+  },
 ];
 
 const router = new VueRouter({

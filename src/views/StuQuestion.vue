@@ -1,6 +1,6 @@
 <template>
     <div id="stuQuestion">
-      <label class="res_time">距离考试结束还剩-min</label>
+      <label class="res_time">{{ new Date().toLocaleString() }}</label>
       <div class="paper">
           <div class="menu">
             <el-card>
@@ -125,8 +125,18 @@ export default {
   },
   created() {
     this.Begin();
+    this.WindowJudge();
   },
   methods: {
+    WindowJudge() {
+      let co = 0;
+      window.onblur = function () {
+        co += 1;
+        if (co > 3) {
+          console.log('考试结束');
+        }
+      };
+    },
     JumpTo(key, counterW) {
       const PageId = document.querySelector(`#${counterW}${key}`);
       // console.log(PageId.offsetTop);

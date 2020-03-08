@@ -10,7 +10,8 @@
                 type="textarea"
                 placeholder="请输入内容"
                 autosize
-                v-model="answer">
+                v-model="answer"
+                @paste.native.capture.prevent="handlePaste">
                 </el-input>
             </div>
         </el-card>
@@ -52,6 +53,8 @@ export default {
   methods: {
     Question() {
       this.timu = this.DiscussionQ.question;
+    },
+    handlePaste() {
     },
   },
 };

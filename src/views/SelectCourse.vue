@@ -1,8 +1,5 @@
 <template>
     <div id="SelectCourse">
-        <div class="title">
-          <label>选课中心</label>
-        </div>
         <div class="row">
           <div class="left">
             <button @click="UnderSelect()" :class="{ button_active: isSelect==0 }">可选课程</button>
@@ -10,17 +7,67 @@
           </div>
           <div class="right">
             <el-card v-if="isSelect == -1">
-              欢迎进入选课中心
+              <div class="tip" style="text-align: center;font-weight: bold">
+                欢迎进入选课中心
+              </div>
+              <div class="tip">
+                1.选课时，相同课程只能选择一位老师。
+              </div>
+              <div class="tip">
+                2.退课时，只能对一门课程进行操作，若是想退多门所选课程，请重复操作。
+              </div>
+              <div class="tip" style="font-weight: bold">
+                祝您选课愉快！
+              </div>
             </el-card>
-            <el-card v-if="isSelect !== -1">
-              <el-card class="Course" v-for="course in courses" :key="course">
-                <div class="Cardrow">
-                  <label class="title">{{ course.courseName }}</label>
-                  <label class="time">{{ course.courseTimeon }}-{{ course.courseTimeend }}</label>
-                </div>
-                <div class="teacher">{{ course.courseTeacher }}</div>
-              </el-card>
+            <el-card v-if="isSelect !== -1 && status === 'yixuan'">
+              <el-checkbox-group v-model="deleteList" :max="1">
+                <el-card
+                class="Course"
+                v-for="(course, index) in coursePass"
+                :key="index">
+                  <div class="Cardrow">
+                    <label class="title">{{ course.courseName }}</label>
+                    <label class="time">
+                      {{ course.courseTimeon }}---{{ course.courseTimeend }}
+                    </label>
+                  </div>
+                  <div class="Cardrow">
+                    <div class="teacher">{{ course.courseTeacher }}</div>
+                    <el-checkbox :label="index">{{ }}</el-checkbox>
+                  </div>
+                </el-card>
+              </el-checkbox-group>
             </el-card>
+            <el-card v-if="isSelect !== -1 && status === 'kexuan'">
+              <el-checkbox-group v-model="addList">
+                <el-card
+                class="Course"
+                v-for="(course, index) in courseOn"
+                :key="index">
+                  <div class="Cardrow">
+                    <label class="title">{{ course.courseName }}</label>
+                    <label class="time">
+                      {{ course.courseTimeon }}---{{ course.courseTimeend }}
+                    </label>
+                  </div>
+                  <div class="Cardrow">
+                    <div class="teacher">{{ course.courseTeacher }}</div>
+                    <el-checkbox :label="index">{{ }}</el-checkbox>
+                  </div>
+                </el-card>
+              </el-checkbox-group>
+            </el-card>
+            <div class="button_row">
+              <el-button
+              class="submit"
+              @click="SubmitAdd()"
+              v-show="isSelect !== -1&& status === 'kexuan'">提交选课</el-button>
+              <el-button
+              class="submit"
+              @click="SubmitDelete()"
+              v-show="isSelect !== -1&& status === 'yixuan'">退课</el-button>
+            </div>
           </div>
         </div>
     </div>
@@ -37,47 +84,136 @@ export default {
   data() {
     return {
       isSelect: -1,
-      courses: [
-        {
-          courseName: 'C语言程序设计', courseTeacher: 'xxx', courseTimeon: '2020年1月', courseTimeend: '2020年6月',
-        }, {
-          courseName: 'C语言程序设计', courseTeacher: 'xxx', courseTimeon: '2020年1月', courseTimeend: '2020年6月',
-        }],
+      addList: [],
+      deleteList: [],
+      status: '',
+      coursePass: [], // 已选课程
+      courseOn: [], // 可选课程
     };
   },
-
   methods: {
+    // 提交选课
+    async SubmitAdd() {
+      console.log(this.addList);
+      try {
+        const data = [];
+        this.addList.forEach((item) => {
+          data.push({
+            co_id: this.courseOn[item].co_id,
+            tea_id: this.courseOn[item].tea_id,
+          });
+        });
+        console.log(data);
+        const res = await this.$axios.post(`${this.HOST}/course/saveToStuCo`, {
+          data,
+          stu_id: this.uid,
+        });
+        const info = res.data;
+        if (info.code === 200) {
+          this.$message({
+            message: '提交成功',
+            type: 'success',
+            offset: 70,
+          });
+        } else {
+          this.$message({
+            message: '提交失败',
+            type: 'error',
+            offset: 70,
+          });
+        }
+        this.isSelect = -1;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    // 退课提交
+    async SubmitDelete() {
+      try {
+        const index = this.deleteList[0];
+        const res = await this.$axios.post(`${this.HOST}/course/deleteCourse`, {
+          co_id: this.coursePass[index].co_id,
+          tea_id: this.coursePass[index].tea_id,
+          stu_id: this.uid,
+        });
+        const info = res.data;
+        if (info.code === 200) {
+          this.$message({
+            message: '提交成功',
+            type: 'success',
+            offset: 70,
+          });
+        } else {
+          this.$message({
+            message: '提交失败',
+            type: 'error',
+            offset: 70,
+          });
+        }
+        this.isSelect = -1;
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async UnderSelect() {
+      this.status = 'kexuan';
+      this.courseOn = [];
+      this.addList = [];
+      this.deleteList = [];
       if (this.isSelect !== 0) {
         this.isSelect = 0;
       } else {
         this.isSelect = -1;
       }
-      // try {
-      //   const res = await this.$axios.post(`${this.HOST}/`, {
-      //     uid: this.uid,
-      //     option: this.isSelect,
-      //   });
-      //   console.log(res);
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      try {
+        const res = await this.$axios.post(`${this.HOST}/course/getByStu`, {
+          stu_id: this.uid,
+          option: 0,
+        });
+        const info = res.data.data;
+        info.forEach((item) => {
+          this.courseOn.push({
+            courseName: item.co_name,
+            courseTeacher: item.tea_name,
+            courseTimeon: item.begin_time,
+            courseTimeend: item.end_time,
+            co_id: item.co_id,
+            tea_id: item.tea_id,
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
     async Selected() {
+      this.coursePass = [];
+      this.addList = [];
+      this.deleteList = [];
+      this.status = 'yixuan';
       if (this.isSelect !== 1) {
         this.isSelect = 1;
       } else {
         this.isSelect = -1;
       }
-      // try {
-      //   const res = await this.$axios.post(`${this.HOST}/`, {
-      //     uid: this.uid,
-      //     option: this.isSelect,
-      //   });
-      //   console.log(res);
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      try {
+        const res = await this.$axios.post(`${this.HOST}/course/getByStu`, {
+          stu_id: this.uid,
+          option: 1,
+        });
+        const info = res.data.data;
+        info.forEach((item) => {
+          this.coursePass.push({
+            courseName: item.co_name,
+            courseTeacher: item.tea_name,
+            courseTimeon: item.begin_time,
+            courseTimeend: item.end_time,
+            co_id: item.co_id,
+            tea_id: item.tea_id,
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
@@ -88,7 +224,7 @@ export default {
   display: flex;
   width: 90%;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 100px;
   .left{
     display: flex;
     flex-direction: column;
@@ -114,7 +250,13 @@ export default {
     }
   }
   .right{
+    display: flex;
+    flex-direction: column;
     width: 60%;
+    .tip{
+      text-align: left;
+      margin: 10px 5px;
+    }
     .Course{
       display: flex;
       flex-direction: column;
@@ -139,6 +281,14 @@ export default {
         display: flex;
         padding: 5px;
       }
+    }
+    .button_row{
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+    .submit{
+      width: 100px;
     }
   }
 }
