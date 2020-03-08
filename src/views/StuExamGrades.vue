@@ -4,6 +4,7 @@
       <div class="name">{{ exam.name }}</div>
       <div class="row">
         <div>考生：{{ exam.stu_name }}</div>
+        <div>课程：{{exam.co_name}}</div>
         <div>任课老师：{{ exam.tea_name }}</div>
         <div>考试时间：{{ exam.begin_time }}</div>
         <div class="detail" v-for="(bigQues,index_1) in exam.Ques" :key="index_1">
@@ -15,7 +16,7 @@
               :key="index_2"
               :class="{ wrong: !each.status, part_right:each.status==2,
               chosen: index_2 == index_02 && index_1==index_01}"
-              @click.stop="getQuesDetail( num,each.question_id,index_1,index_2 )"
+              @click.stop="getQuesDetail( each.num,each.question_id,index_1,index_2 )"
             >{{ each.num }}</div>
           </div>
           <div class="ques_card" v-if="index_1 == index_01">
@@ -54,12 +55,16 @@
                 >⊙×.</div>
               </div>
             </div>
-            <!-- <div id="discussion" v-if="question.type == 'Discussion'"></div> -->
-            <div id="program" v-if="question.type.search('Program')!=-1" style="margin:5px;"></div>
-            <div class="put" style="margin:5px;fontSize:16px;fontWeight:bold;color:grey">
-              输入：{{question.input}}
-              <br />
-              输出：{{question.output}}
+            <div
+              id="program"
+              v-if="question.type=='Normal_Program'||question.type=='Special_Program'"
+              style="margin:5px;"
+            >
+              <div class="put" style="margin:5px;fontSize:16px;fontWeight:bold;color:grey">
+                输入：{{question.input}}
+                <br />
+                输出：{{question.output}}
+              </div>
             </div>
             <div class="info">
               <div
@@ -73,7 +78,8 @@
               </div>
               <div
                 style="margin:5px 0px;lineHeight:30px;"
-                v-if="question.type.search('Program') || question.type == 'Discussion'"
+                v-if="question.type=='Normal_Program'||question.type=='Special_Program'
+                || question.type == 'Discussion'"
               >
                 你的答案是：
                 <br />
@@ -96,7 +102,8 @@
                   v-model="question.answer"
                 ></textarea>
               </div>
-              <div :class="{green:question.getScore == question.score,
+              <div
+                :class="{green:question.getScore == question.score,
                 yellow:question.getScore != question.score,red:question.getScore==0}"
               >该小题得分 {{question.getScore}} 分 / 本小题总分 {{ question.score }} 分</div>
             </div>
@@ -137,18 +144,13 @@ export default {
     },
     async getStuExamInfo() {
       try {
-        const res = await this.$axios.post(
-          `${this.HOST}/exam/getStuScoreInfo`,
-          {
-            exam_id: this.examId,
-            stu_id: this.uid,
-            // exam_id: 1,
-            // stu_id: 2018110257,
-          }
-        );
+        const res = await this.$axios.post(`${this.HOST}/exam/getStuExamInfo`, {
+          exam_id: this.examId,
+          stu_id: this.uid,
+        });
         const info = res.data;
         if (info.code === 200) {
-          console.log('data', info.data);
+          // console.log('data', info.data);
           this.exam = info.data;
           this.timestampToDate();
           this.toChinese();
@@ -168,13 +170,10 @@ export default {
           exam_id: this.examId,
           stu_id: this.uid,
           question_id: question_id,
-          // exam_id: 1,
-          // stu_id: 2018110257,
-          // question_id: 51,
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log('question:', info.data);
+          // console.log('question:', info.data);
           this.question = info.data;
           this.splitOptions();
           this.changeJudge();
@@ -203,7 +202,10 @@ export default {
           item.type = '判断题';
         } else if (item.type == 'Discussion') {
           item.type = '讨论题';
-        } else if (item.type.search('Program') != -1) {
+        } else if (
+          item.type == 'Normal_Program' ||
+          item.type == 'Special_Program'
+        ) {
           item.type = '编程题';
         }
       });
@@ -221,14 +223,12 @@ export default {
       }
       if (this.question.answer == 'true') {
         this.question.answer = '√';
-        // } else if (this.question.answer == 'false'){
       } else {
         this.question.answer = '×';
       }
-      console.log('answer', this.question.answer);
+      // console.log('answer', this.question.answer);
       if (this.question.stu_answer == 'true') {
         this.question.stu_answer = '√';
-        // } else if (this.question.stu_answer == 'false') {
       } else {
         this.question.stu_answer = '×';
       }

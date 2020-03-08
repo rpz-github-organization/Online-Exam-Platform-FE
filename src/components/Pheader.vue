@@ -15,7 +15,7 @@
           <el-link type="info">课程管理</el-link>
         </li>
         <li>
-          <el-link type="info" href="/stuExamGrades">课程成绩中心</el-link>
+          <el-link type="info" href="/GradesCenter_Stu">课程成绩中心</el-link>
         </li>
         <li v-if="authLevel===0">
           <el-link type="info">错题本</el-link>

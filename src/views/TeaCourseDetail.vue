@@ -40,6 +40,9 @@
           </div>
         </div>
       </div>
+      <div class="goAddExam">
+        <button @click="goAddExam">添加考试</button>
+      </div>
     </div>
   </div>
 </template>
@@ -68,9 +71,7 @@ export default {
       try {
         const res = await this.$axios.post(`${this.HOST}/course/getByTea`, {
           co_id: this.coId,
-          // co_id: 1,
           tea_id: this.uid,
-          // tea_id: 2019000001,
         });
         const info = res.data;
         if (info.code === 200) {
@@ -93,6 +94,9 @@ export default {
         // eslint-disable-next-line no-param-reassign
         item.begin_time = newDate.toLocaleString();
       });
+    },
+    goAddExam() {
+      window.location.href = '/AddExam';
     },
   },
   mounted() {
@@ -211,6 +215,26 @@ export default {
             }
           }
         }
+      }
+    }
+    .goAddExam {
+      button {
+        color: white;
+        font-weight: bold;
+        border: none;
+        padding: 5px 30px;
+        border-radius: 20px;
+        margin-top: 20px;
+        width: auto;
+        height: 40px;
+        font-size: 18px;
+        background-color: #5379a5c4;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+      button:hover {
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.17);
       }
     }
   }

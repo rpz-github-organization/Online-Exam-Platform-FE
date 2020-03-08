@@ -10,10 +10,11 @@
       </div>
     </div>
     <div class="goExam">
-      <button class="goToExam" @click="goToExam" v-if="exams.status">参加考试</button>
-      <button class="goToExam" :class="{ grey: !exams.status}" v-if="!exams.status">考试还未开始</button>
-      <button class="goToExam" :class="{ grey: 'this.status == -1'}"
-      v-if="exams.status == -1">错误</button>
+      <button class="goToExam" @click="goToExam" v-if="exams.status==1">参加考试</button>
+      <button class="goToExam" :class="{ grey: !exams.status}" @click="goBack"
+       v-if="exams.status==0">考试还未开始（点击返回）</button>
+      <button class="goToExam" :class="{ grey: 'this.status == -1'}" @click="goBack"
+      v-if="exams.status == -1">考试已结束（点击返回）</button>
     </div>
   </div>
 </template>
@@ -35,6 +36,9 @@ export default {
   methods: {
     goToExam() {
       window.location.href = '/StuQuestion';
+    },
+    goBack(){
+      window.location.href = '/IndexStu';
     },
     async getStuExamInfo() {
       try {
@@ -127,7 +131,6 @@ export default {
     background-color: grey;
   }
   .grey:hover {
-    cursor: default;
     box-shadow: 0px 0px 0px;
   }
 }
