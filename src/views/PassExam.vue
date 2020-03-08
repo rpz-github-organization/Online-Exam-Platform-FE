@@ -1,7 +1,8 @@
 <template>
   <div>
     <ul v-for="(exam,index) in exams" :key="index" class="middle">
-      <li id="exam">
+      <!-- <li id="exam" @click.stop="toDetail(exam.exam_id)">       -->
+      <li id="exam" @click.stop="toDetail(exam.exam_id)">
         <div class="one">
           <div class="name" :class="{ yescolor: exam.yes }">
             <img src="../assets/exam.png" alt="exam" />
@@ -11,7 +12,16 @@
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
-        <div class="two">考试时长：{{ exam.last_time }}小时</div>
+        <div class="two">
+          <div>考试时长：{{exam.last_time}}分钟</div>
+          <div class="green" v-if="exam._judge && exam.yes"
+           @click="toCheckGrades" style="cursor:pointer">
+            <img src="../assets/exam_status/green.png" /> 已完成评分（点击查看）
+          </div>
+          <div class="orange" v-if="!exam._judge && exam.yes">
+            <img src="../assets/exam_status/orange.png" /> 未完成评分
+          </div>
+        </div>
       </li>
     </ul>
     <div class="buttons" v-if="pagerSeen">
@@ -78,22 +88,22 @@ export default {
         console.log(err);
       }
     },
-    async addYesExamToNoExam() {
+    async addNoExamToYesExam() {
       const noexam = await this.getStuNoExamInfo();
       const yesexam = await this.getStuYesExamInfo();
+      // add stuts code
       noexam.forEach(item => {
         item.yes = false;
       });
       yesexam.forEach(item => {
         item.yes = true;
       });
-      let examInfo = noexam.concat(yesexam);
+      let examInfo = yesexam.concat(noexam);
       examInfo.forEach((item, arr) => {
         let timestamp = item.begin_time;
         let newDate = new Date();
         newDate.setTime(timestamp);
-        item.begin_time = newDate.toLocaleDateString();
-        // console.log()
+        item.begin_time = newDate.toLocaleString();
       });
       this.passExamInfo_All = examInfo;
       this.pager();
@@ -126,10 +136,18 @@ export default {
       this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
       scrollTo(0, 0);
     },
+    // toDetail(examId) {
+    //   this.$store.dispatch('set_examId', examId);
+    //   window.location.href = '/StuExamDetail';
+    // },
+        toCheckGrades(examId){
+      this.$store.dispatch('set_examId', examId);
+      window.location.href = '/StuExamGrades';
+    }
   },
 
   beforeMount() {
-    this.addYesExamToNoExam();
+    this.addNoExamToYesExam();
   },
 };
 </script>
@@ -171,6 +189,7 @@ export default {
       }
       .name:hover {
         font-size: 18px;
+        // cursor: pointer;
         transition: all 0.8s ease;
       }
       .yescolor {
@@ -189,6 +208,21 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      img {
+        width: 15px;
+      }
+      .green {
+        color: green;
+        margin-right: 15px;
+      }
+      .orange {
+        color: orange;
+        margin-right: 15px;
+      }
     }
   }
   .buttons {

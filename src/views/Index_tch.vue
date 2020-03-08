@@ -7,7 +7,7 @@
       <div class="middle">
         <ul v-for="(course, index) in courses" :key="index" class="course">
           <li class="cour">
-            <div class="name">
+            <div class="name" @click.stop="toDetail(course.co_id)">
               <img src="../assets/course.png" />
               {{ course.name }}
             </div>
@@ -16,11 +16,6 @@
               <br />
               学时：{{ course.school_hour }}
               <br />
-              考试分数：{{ course.exam_score }}
-              <br />
-              平均分：{{ course.common_score }}
-              <br />
-              卷面分占比：{{ course.exam_proportion }}
             </div>
           </li>
         </ul>
@@ -45,8 +40,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'indexStu',
+
+  computed: {
+    ...mapState(['uid']),
+  },
 
   data() {
     return {
@@ -79,8 +80,8 @@ export default {
     async getCourseInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/homePage/tea/id`, {
-          // tea_id: this.uid,
-          tea_id: '2018110257',
+          tea_id: this.uid,
+          // tea_id: '2018110257',
         });
         const info = res.data;
         console.log(info);
@@ -95,6 +96,10 @@ export default {
         console.log(err);
       }
     },
+    toDetail(coId) {
+      this.$store.dispatch('set_coId', coId);
+      window.location.href = '/TeaCourseDetail';
+    },
   },
 
   created() {
@@ -104,20 +109,13 @@ export default {
       this.greeting = '下午好！';
     } else this.greeting = '晚上好！';
   },
+
+  mounted() {
+    this.getTchNameAndSex();
+    this.getCourseInfo();
+  },
 };
 </script>
-
-<style lang="less">
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%
-}
-.header {
-  margin-bottom: 0px;
-}
-</style>
 
 <style scopd lang="less">
 .tch {
@@ -202,6 +200,7 @@ body {
             justify-content: flex-start;
             flex-wrap: nowrap;
             font-size: 20px;
+            cursor: pointer;
             font-weight: bold;
             margin-left: 5px;
 

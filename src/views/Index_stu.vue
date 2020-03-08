@@ -48,7 +48,6 @@ export default {
 
   data() {
     return {
-      timestamp: '',
       name: '川师',
       greeting: '你好！',
       Seen: true,
@@ -66,10 +65,6 @@ export default {
     ChangeToPass() {
       this.Seen = false;
       this.isActive = false;
-    },
-    getTime() {
-      const timestamp = new Date().getTime();
-      this.timestamp = timestamp;
     },
     async getStuNameAndSex() {
       try {
@@ -105,18 +100,6 @@ export default {
 };
 </script>
 
-<style lang="less">
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
-.header {
-  margin-bottom: 0px;
-}
-</style>
 
 <style scoped lang="less">
 .stu {
