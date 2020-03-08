@@ -13,13 +13,14 @@
               class="each"
               v-for="(each,index_2) in bigQues.detail"
               :key="index_2"
-              :class="{ correct: each.status, chosen: index_2 == index_02 && index_1==index_01}"
-              @click.stop="getQuesDetail( each.num,index_1,index_2 )"
+              :class="{ wrong: !each.status, part_right:each.status==2,
+              chosen: index_2 == index_02 && index_1==index_01}"
+              @click.stop="getQuesDetail( num,each.question_id,index_1,index_2 )"
             >{{ each.num }}</div>
           </div>
           <div class="ques_card" v-if="index_1 == index_01">
             <div class="quesTitle">第{{ num }}题. {{ question.question}}</div>
-            <div id="judge" v-if="question.type == 'Single'" style="margin:0px;">
+            <div id="single" v-if="question.type == 'Single'" style="margin:0px;">
               <div class="options">
                 <div
                   class="opt"
@@ -39,31 +40,64 @@
                 >D. {{question.options[3]}}</div>
               </div>
             </div>
-            <div id="judge" v-if="question.type == 'Judge'"></div>
+            <div id="judge" v-if="question.type == 'Judge'" style="margin:0px;">
+              <div class="options judge">
+                <div
+                  class="opt"
+                  style="fontSize:20px;"
+                  :class="{answer:question.answer=='√',wrong:question.stu_answer=='√'}"
+                >⊙√</div>
+                <div
+                  class="opt"
+                  style="fontSize:20px;"
+                  :class="{answer:question.answer=='×',wrong:question.stu_answer=='x'}"
+                >⊙×.</div>
+              </div>
+            </div>
             <!-- <div id="discussion" v-if="question.type == 'Discussion'"></div> -->
-            <!-- <div id="program" v-if="question.type == 'Program'"></div> -->
+            <div id="program" v-if="question.type.search('Program')!=-1" style="margin:5px;"></div>
+            <div class="put" style="margin:5px;fontSize:16px;fontWeight:bold;color:grey">
+              输入：{{question.input}}
+              <br />
+              输出：{{question.output}}
+            </div>
             <div class="info">
               <div
                 :class="{green:question.getScore == question.score,
-                red:question.getScore != question.score}"
+                yellow:question.getScore != question.score,red:question.getScore==0}"
                 style="marginBottom:5px;"
                 v-if="question.type == 'Single'||question.type == 'Judge'"
               >
-                你的答案是“{{ question.stu_answer }}”,
+                你选择的答案是“{{ question.stu_answer }}”,
                 本题参考答案是“{{ question.answer}}”。
               </div>
               <div
                 style="margin:5px 0px;lineHeight:30px;"
-                :class="{green:question.getScore == question.score,
-                yellow:question.getScore != question.score,red:question.getScore==0}"
-                v-if="question.type == 'Discussion'||question.type == 'Program'"
+                v-if="question.type.search('Program') || question.type == 'Discussion'"
               >
-                你的答案是“{{ question.stu_answer }}”,
+                你的答案是：
                 <br />
-                本题参考答案是“{{ question.answer}}”。
+                <textarea
+                  class="pre.text"
+                  cols="70"
+                  rows="10"
+                  wrap="hard"
+                  readonly
+                  v-model="question.stu_answer"
+                ></textarea>
+                <br />本题参考答案是:
+                <br />
+                <textarea
+                  class="pre.text"
+                  cols="70"
+                  rows="10"
+                  wrap="soft"
+                  readonly
+                  v-model="question.answer"
+                ></textarea>
               </div>
-              <div
-                style="marginBottom:5px;"
+              <div :class="{green:question.getScore == question.score,
+                yellow:question.getScore != question.score,red:question.getScore==0}"
               >该小题得分 {{question.getScore}} 分 / 本小题总分 {{ question.score }} 分</div>
             </div>
           </div>
@@ -93,125 +127,8 @@ export default {
       index_01: -1,
       index_02: -1,
       num: -1,
-      exam: {
-        name: 'First C examination',
-        stu_name: 'Xiao Ming',
-        tea_name: 'Mr.Lee',
-        begin_time: '1234567890000',
-        Ques: [
-          {
-            // num: '一',
-            type: 'Single',
-            detail: [
-              {
-                num: 1,
-                status: 1,
-              },
-              {
-                num: 2,
-                status: 0,
-              },
-              {
-                num: 3,
-                status: 1,
-              },
-              {
-                num: 4,
-                status: 1,
-              },
-              {
-                num: 5,
-                status: 1,
-              },
-              {
-                num: 6,
-                status: 1,
-              },
-              {
-                num: 7,
-                status: 0,
-              },
-              {
-                num: 8,
-                status: 1,
-              },
-              {
-                num: 9,
-                status: 0,
-              },
-              {
-                num: 10,
-                status: 1,
-              },
-              {
-                num: 11,
-                status: 1,
-              },
-              {
-                num: 12,
-                status: 0,
-              },
-              {
-                num: 13,
-                status: 1,
-              },
-              {
-                num: 14,
-                status: 0,
-              },
-              {
-                num: 15,
-                status: 1,
-              },
-              {
-                num: 16,
-                status: 1,
-              },
-              {
-                num: 17,
-                status: 0,
-              },
-              {
-                num: 18,
-                status: 1,
-              },
-              {
-                num: 19,
-                status: 1,
-              },
-            ],
-            get: 27,
-            total: 30,
-          },
-          {
-            type: 'Judge',
-            detail: [
-              {
-                num: 1,
-                status: 1,
-              },
-              {
-                num: 2,
-                status: 0,
-              },
-            ],
-          },
-        ],
-        grade: 82,
-      },
-      question: {
-        type: 'Single',
-        // type: 'Discussion',
-        // question:
-        //   'What should u do?dsads fddf  dsfe dsf ewfds fdsfefds  e ef sdfs?',
-        options: '1323;243232;3432;44324',
-        answer: 'A',
-        // answer: 'This is the correct answer',
-        stu_answer: 'D',
-        // stu_answer: 'this is the student`s answer',
-        score: '10',
-        getScore: '0',
-      },
+      exam: '',
+      question: '',
     };
   },
   methods: {
@@ -220,16 +137,47 @@ export default {
     },
     async getStuExamInfo() {
       try {
-        const res = await this.$axios.post(`${this.HOST}/exam/---`, {
-          exam_id: this.examId,
-          stu_id: this.uid,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/exam/getStuScoreInfo`,
+          {
+            exam_id: this.examId,
+            stu_id: this.uid,
+            // exam_id: 1,
+            // stu_id: 2018110257,
+          }
+        );
         const info = res.data;
         if (info.code === 200) {
           console.log('data', info.data);
           this.exam = info.data;
           this.timestampToDate();
           this.toChinese();
+        } else {
+          console.log('请求失败');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getQuesDetail(num, question_id, index_1, index_2) {
+      this.index_01 = index_1;
+      this.index_02 = index_2;
+      this.num = num;
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/getQuestionTea`, {
+          exam_id: this.examId,
+          stu_id: this.uid,
+          question_id: question_id,
+          // exam_id: 1,
+          // stu_id: 2018110257,
+          // question_id: 51,
+        });
+        const info = res.data;
+        if (info.code === 200) {
+          console.log('question:', info.data);
+          this.question = info.data;
+          this.splitOptions();
+          this.changeJudge();
         } else {
           console.log('请求失败');
         }
@@ -247,7 +195,7 @@ export default {
     // 转换 Single 为中文
     toChinese() {
       let Ques = this.exam.Ques;
-      console.log('Ques:', Ques);
+      // console.log('Ques:', Ques);
       Ques.forEach(item => {
         if (item.type == 'Single') {
           item.type = '选择题';
@@ -255,45 +203,39 @@ export default {
           item.type = '判断题';
         } else if (item.type == 'Discussion') {
           item.type = '讨论题';
-        } else if (item.type == 'Program') {
+        } else if (item.type.search('Program') != -1) {
           item.type = '编程题';
         }
       });
     },
-    async getQuesDetail(num, index_1, index_2) {
-      this.index_01 = index_1;
-      this.index_02 = index_2;
-      this.num = num;
-      try {
-        const res = await this.$axios.post(`${this.HOST}/-----`, {
-          exam_id: this.examId,
-          stu_id: this.uid,
-          question_id: num,
-        });
-        const info = res.data;
-        if (info.code === 200) {
-          console.log('question:', info.data);
-          this.question = info.data;
-          this.splitOptions();
-        } else {
-          console.log('请求失败');
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    },
     splitOptions() {
-      if (this.question.option) {
-        this.question.options = this.question.options.split(';');
-        // console.log('question:', this.question);
+      if (this.question.type != 'Single') {
+        return;
+      }
+      this.question.options = this.question.options.split(';');
+      // console.log('question:', this.question);
+    },
+    changeJudge() {
+      if (this.question.type != 'Judge') {
+        return;
+      }
+      if (this.question.answer == 'true') {
+        this.question.answer = '√';
+        // } else if (this.question.answer == 'false'){
+      } else {
+        this.question.answer = '×';
+      }
+      console.log('answer', this.question.answer);
+      if (this.question.stu_answer == 'true') {
+        this.question.stu_answer = '√';
+        // } else if (this.question.stu_answer == 'false') {
+      } else {
+        this.question.stu_answer = '×';
       }
     },
   },
   mounted() {
-    // this.getStuExamInfo();
-    this.timestampToDate();
-    this.splitOptions();
-    this.toChinese();
+    this.getStuExamInfo();
   },
 };
 </script>
@@ -360,8 +302,12 @@ export default {
             box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
             cursor: pointer;
           }
-          .correct {
-            background-color: rgba(113, 209, 113, 0.671);
+          .wrong {
+            background-color: rgba(241, 107, 107, 0.932);
+            font-weight: bold;
+          }
+          .part_right {
+            background-color: orange;
             font-weight: bold;
           }
           .chosen {
@@ -396,7 +342,7 @@ export default {
             }
             .wrong {
               color: rgb(226, 83, 83);
-              font-weight: bold;
+              // font-weight: bold;
               font-size: 20px;
             }
             .answer {
@@ -405,18 +351,35 @@ export default {
               font-size: 20px;
             }
           }
+          .judge {
+            display: flex;
+            flex-direction: row;
+          }
           .info {
             font-size: 16px;
             margin-bottom: 5px;
 
             .green {
-              color: rgba(113, 209, 113, 0.671);
+              color: rgb(78, 201, 78);
             }
             .yellow {
               color: rgb(233, 148, 36);
             }
             .red {
               color: rgb(226, 83, 83);
+            }
+            textarea {
+              outline: 0 none;
+              width: auto;
+              height: auto;
+              border-radius: 3px;
+              border: 1px solid rgba(0, 0, 0, 0.2);
+              box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
+            }
+            .pre-text {
+              white-space: pre-wrap;
+              word-wrap: break-word;
+              word-break: break-all;
             }
           }
         }
