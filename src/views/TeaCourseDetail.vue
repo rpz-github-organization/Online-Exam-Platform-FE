@@ -13,6 +13,9 @@
             <div>学时：{{ course.school_hour }} 学时</div>
           </div>
         </div>
+        <div>
+          <el-button @click="AddExam()" class="button_sub">+ 添加考试</el-button>
+        </div>
         <div class="exams">
           <div class="exam" v-for="(exam,index) in exams" :key="index">
             <div class="one">
@@ -64,10 +67,13 @@ export default {
       this.$store.dispatch('set_examId', examId);
       window.location.href = '/ExamInfo'; // 考试管理
     },
+    AddExam() {
+      window.location.href = '/AddExam';
+    },
     async getTeaExamInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/course/getByTea`, {
-          co_id: this.coId,
+          co_id: 201801,
           // co_id: 1,
           tea_id: this.uid,
           // tea_id: 2019000001,
@@ -145,6 +151,10 @@ export default {
           margin-bottom: 15px;
           margin-left: 10px;
         }
+      }
+      .button_sub{
+        width: 150px;
+        margin-bottom: 30px;
       }
       .exams {
         display: flex;

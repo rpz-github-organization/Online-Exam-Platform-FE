@@ -8,6 +8,7 @@ export default new Vuex.Store({
     authLevel: 0,
     uid: '',
     examId: '2',
+    coId: 0,
   },
   getters: {
   },

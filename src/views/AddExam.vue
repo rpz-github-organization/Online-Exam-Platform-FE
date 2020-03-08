@@ -43,9 +43,13 @@ export default {
       exam_id: '',
     };
   },
+  created() {
+    console.log(this.coId);
+  },
   computed: {
     ...mapState(['uid']),
     ...mapState(['examId']),
+    ...mapState(['coId']),
   },
   methods: {
     async submitExam() {
