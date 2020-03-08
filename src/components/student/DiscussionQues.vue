@@ -3,7 +3,7 @@
         <el-card class="single_card">
             <div class="single_row">
                 <label class="index">{{ index + 1 }}.</label>
-                <label>{{ timu }}</label>
+                <label class="timu">{{ timu }}</label>
             </div>
             <div class="single_row op">
                 <el-input
@@ -38,6 +38,17 @@ export default {
   created() {
     this.Question();
   },
+  watch: {
+    answer(val) {
+      this.info = {
+        question_id: this.DiscussionQ.question_id,
+        answer: val,
+        score: 0,
+        type: 'Discussion',
+      };
+      this.$emit('func', this.info);
+    },
+  },
   methods: {
     Question() {
       this.timu = this.DiscussionQ.question;
@@ -61,6 +72,12 @@ export default {
       justify-content: flex-start;
       margin-bottom: 10px;
 
+    .timu{
+      word-wrap:break-word;
+      width: 800px;
+      text-align: left;
+      margin-left: 5px;
+    }
     .index{
       margin-top: 3px;
     }

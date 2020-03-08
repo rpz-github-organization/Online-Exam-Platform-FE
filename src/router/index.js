@@ -51,9 +51,14 @@ const routes = [
 
   },
   {
-    path: '/personal_center',
-    name: 'personal_center',
-    component: () => import('../components/personal_center.vue'),
+    path: '/personalStu',
+    name: 'personalStu',
+    component: () => import('../components/personal_stu.vue'),
+  },
+  {
+    path: '/personalTch',
+    name: 'personalTch',
+    component: () => import('../components/personal_tch.vue'),
   },
   {
     path: '/SelectCourse',
@@ -74,6 +79,11 @@ const routes = [
     path: '/StuQuestion',
     name: 'StuStudent',
     component: () => import('../views/StuQuestion'),
+  },
+  {
+    path: '/ScoreCenter',
+    name: 'ScoreCenter',
+    component: () => import('../views/ScoreCenter'),
   },
 ];
 

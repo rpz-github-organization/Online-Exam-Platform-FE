@@ -146,66 +146,66 @@ export default {
 
 <style lang="less" scoped>
 #AddQuestion{
-    display: flex;
-    .left{
-      width: 12%;
-      height: 100%;
-      margin-left: 5%;
-      position: fixed;
+  display: flex;
+  .left{
+    width: 20%;
+    height: 100%;
+    margin-left: 5%;
+    position: fixed;
 
-      .selectType{
-        background-color: #5379a563;
-        padding: 5px 10px;
-        margin-bottom: 30%;
-        border-radius: 4px
-      }
-      .question_list{
-        margin: 10% 0 30% 0;
-        flex-wrap: wrap;
+    .selectType{
+      background-color: #5379a563;
+      padding: 5px 10px;
+      margin-bottom: 30%;
+      border-radius: 4px
+    }
+    .question_list{
+      margin: 10% 0 30% 0;
+      flex-wrap: wrap;
+      display: flex;
+    }
+
+    .question_item{
+      margin: 4px;
+      align-items: center;
+      justify-content: center;
+      height: 24px;
+      width: 24px;
+      min-width: 24px;
+      text-align: center;
+      line-height: 24px;
+      border-radius: 2px;
+      background: #f0f0f0;
+    }
+    .active_item{
+      box-shadow: 0 0 0 2px #695de0;
+    }
+  }
+  .right{
+    width: 60%;
+    height: 100%;
+    margin-left: 30%;
+
+    .ques_card{
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 5%;
+
+      .type_score{
         display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        width: 20%;
       }
-
-      .question_item{
-        margin: 4px;
-        align-items: center;
-        justify-content: center;
-        height: 24px;
-        width: 24px;
-        min-width: 24px;
-        text-align: center;
-        line-height: 24px;
-        border-radius: 2px;
-        background: #f0f0f0;
+      .type_title{
+        width: 80%;
+        text-align: left;
+        margin: 5% 5px;
       }
-      .active_item{
-        box-shadow: 0 0 0 2px #695de0;
+      label{
+        color: #8590a6;
       }
     }
-    .right{
-      width: 60%;
-      height: 100%;
-      margin-left: 25%;
-
-      .ques_card{
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 5%;
-
-        .type_score{
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-start;
-          width: 20%;
-        }
-        .type_title{
-          width: 80%;
-          text-align: left;
-          margin: 5% 5px;
-        }
-        label{
-          color: #8590a6;
-        }
-      }
-    }
+  }
 }
 </style>

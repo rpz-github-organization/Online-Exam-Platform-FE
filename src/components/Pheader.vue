@@ -29,7 +29,14 @@
       </ul>
       <li class="user_photo"  @click.stop="handlemenu">
         <el-dropdown @command="handleCommand">
-          <el-avatar :size="40" :src="avatarUrl" class="el-dropdown-link"></el-avatar>
+          <img
+          src='../assets/head_stu.jpg'
+          class="head"
+          v-if="authLevel === 0 "/>
+          <img
+          src='../assets/head_tch.jpg'
+          class="head"
+          v-if="authLevel>0"/>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="modify">个人中心</el-dropdown-item>
             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -47,7 +54,7 @@ export default {
   name: 'pheader',
   data() {
     return {
-      avatarUrl: 'https://tse2-mm.cn.bing.net/th/id/OIP.uC8OzPvFdPvVpsxjF7F8sQAAAA?w=206&h=170&c=7&o=5&dpr=1.25&pid=1.7',
+      avatarUrl: '../assets/head_stu.jpg',
     };
   },
   computed: {
@@ -57,7 +64,11 @@ export default {
   methods: {
     handleCommand(command) {
       if (command === 'modify') {
-        window.location.href = '/personal_center';
+        if (this.authLevel === 0) {
+          window.location.href = '/personalStu';
+        } else if (this.authLevel > 0 && this.authLevel < 99) {
+          window.location.href = '/personalTch';
+        }
       } else if (command === 'logout') {
         console.log(this.uid);
         this.$axios.post(`${this.HOST}/login/logout`, {
@@ -111,5 +122,9 @@ export default {
 }
 .user_photo{
   float: right;
+  .head{
+    width: 40px;
+    height: 40px;
+  }
 }
 </style>

@@ -44,28 +44,44 @@
               :key="index"
               v-bind:id="('counterS'+(index+1))">
                 <label>选择题-{{ index+1 }}</label>
-                <singleQues :index="index"
-                :SingleQ="singleList[index]"></singleQues>
+                <singleQues
+                :index="index"
+                :SingleQ="singleList[index]"
+                @func="getList"></singleQues>
               </div>
             </el-card>
             <el-card class="ques_card" v-if="this.isShowJ">
               <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
                 <label>判断题-{{ index+1 }}</label>
-                <judgeQues ref="judge" :index="index" :JudgeQ="judgeList[index]"/>
+                <judgeQues
+                  ref="judge"
+                  :index="index"
+                  :JudgeQ="judgeList[index]"
+                  @func="getList"/>
               </div>
             </el-card>
             <el-card class="ques_card" v-if="this.isShowD">
               <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
                 <label>讨论题-{{ index+1 }}</label>
-                <discussionQues :index="index" :DiscussionQ="discussionList[index]"/>
+                <discussionQues
+                :index="index"
+                :DiscussionQ="discussionList[index]"
+                @func="getList"/>
               </div>
             </el-card>
             <el-card class="ques_card" v-if="this.isShowP">
               <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
                 <label>编程题-{{ index+1 }}</label>
-                <programQues :index="index" :ProgramQ="programList[index]"/>
+                <programQues
+                :index="index"
+                :ProgramQ="programList[index]"
+                :examId="exam_id"
+                @func="getList"/>
               </div>
             </el-card>
+            <div class="button_card">
+              <button @click="SubmitExam()">交卷</button>
+            </div>
           </div>
       </div>
     </div>
@@ -103,6 +119,8 @@ export default {
       isShowJ: false,
       isShowD: false,
       isShowP: false,
+      exam_id: 65,
+      answerList: [],
     };
   },
   created() {
@@ -121,13 +139,13 @@ export default {
       // console.log('a');
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getStuExam`, {
-          exam_id: 65,
+          exam_id: this.exam_id,
           stu_id: this.uid,
         });
         const info = res.data;
         if (info.code === 200) {
           const infodata = info.data;
-          // console.log(info);
+          console.log(info);
           infodata.forEach((item) => {
             if (item.type === 'Single') {
               this.counterS.push(item);
@@ -136,7 +154,7 @@ export default {
               this.counterJ.push(item);
             } else if (item.type === 'Discussion') {
               this.counterD.push(item);
-            } else if (item.type === 'Program') {
+            } else if (item.type.search('Program') !== -1) {
               // console.log(item);
               this.counterP.push(item);
             }
@@ -216,6 +234,70 @@ export default {
         console.log(err);
       }
     },
+
+    getList(data) {
+      let isAdd = true;
+      this.answerList.forEach((item) => {
+        if (item.question_id === data.question_id) {
+          this.$set(item, 'answer', data.answer);
+          isAdd = false;
+        }
+      });
+      if (isAdd) {
+        this.answerList.push(data);
+      }
+      console.log(this.answerList);
+    },
+    async SubmitExam() {
+      const len = this.counterS.length
+      + this.counterJ.length
+      + this.counterD.length
+      + this.counterP.length;
+      if (this.answerList.length !== len) {
+        this.$confirm('您还有题目未作答, 是否继续提交?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(async () => {
+          await this.SubmitInfo();
+        }).catch(() => {
+          this.$message({
+            type: 'warning',
+            message: '已取消提交',
+            offset: 70,
+          });
+        });
+      } else {
+        try {
+          const res = await this.$axios.post(`${this.HOST}/exam/handInExam`, {
+            data: this.answerList,
+            exam_id: this.examId,
+          });
+          console.log(res);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
+    async SubmitInfo() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/handInExam`, {
+          data: this.answerList,
+          exam_id: this.exam_id,
+        });
+        const info = res.data;
+        console.log(info);
+        if (info.code === 200) {
+          this.$message({
+            type: 'success',
+            message: '提交成功',
+            offset: 70,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 </script>
@@ -282,6 +364,24 @@ export default {
       flex-direction: column;
       margin-bottom: 5%;
     }
+    .button_card{
+      margin-bottom: 20px;
+    }
+  }
+  button{
+    color: white;
+    margin: 10px 0;
+    border: none;
+    border-radius: 2px;
+    padding: 5px 10px;
+    width: 100px;
+    font-size: 15px;
+    background-color: #DA6148;
+    cursor: pointer;
+    outline: none;
+  }
+  button:hover{
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
   }
 }
 </style>

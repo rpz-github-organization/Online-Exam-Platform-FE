@@ -72,7 +72,11 @@ export default {
             }
             console.log('登录成功');
           } else {
-            console.log('登录失败');
+            this.$message({
+              message: '登录失败',
+              type: 'error',
+              offset: 70,
+            });
           }
         } catch (err) {
           console.log(err);

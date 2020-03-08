@@ -173,7 +173,7 @@ export default {
       }
     },
     async SubmitDiscussion() {
-      console.log(this.questionid);
+      console.log(this.answer);
       if (!this.isSubmit()) {
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',

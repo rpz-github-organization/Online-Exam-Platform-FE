@@ -3,15 +3,15 @@
         <el-card class="single_card">
             <div class="single_row">
                 <label class="index">{{ index + 1 }}.</label>
-                <label>{{ timu }}</label>
+                <label class="timu">{{ timu }}</label>
             </div>
             <div class="single_row op">
-                <el-radio v-model="answer" label="A">
+                <el-radio v-model="answer" label="true">
                     <label class="Al">true</label>
                 </el-radio>
             </div>
             <div class="single_row op">
-                <el-radio v-model="answer" label="B">
+                <el-radio v-model="answer" label="false">
                     <label class="Al">false</label>
                 </el-radio>
             </div>
@@ -40,6 +40,17 @@ export default {
   created() {
     this.Question();
   },
+  watch: {
+    answer(val) {
+      this.info = {
+        question_id: this.JudgeQ.question_id,
+        answer: val,
+        score: 0,
+        type: 'Judge',
+      };
+      this.$emit('func', this.info);
+    },
+  },
   methods: {
     Question() {
       this.timu = this.JudgeQ.question;
@@ -63,6 +74,12 @@ export default {
     justify-content: flex-start;
     margin-bottom: 10px;
 
+    .timu{
+      word-wrap:break-word;
+      width: 800px;
+      text-align: left;
+      margin-left: 5px;
+    }
     .index{
       margin-top: 3px;
     }
