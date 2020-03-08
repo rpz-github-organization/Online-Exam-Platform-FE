@@ -57,7 +57,7 @@
 import { mapState } from 'vuex';
 
 export default {
-    computed: {
+  computed: {
     ...mapState(['uid']),
   },
 
@@ -98,7 +98,8 @@ export default {
     },
     async getStuDoneExamInfo() {
       try {
-        const res = await this.$axios.post(`${this.HOST}/exam/getStuScoreInfo`,
+        const res = await this.$axios.post(
+          `${this.HOST}/exam/getStuScoreInfo`,
           {
             stu_id: this.uid,
           }
@@ -108,8 +109,9 @@ export default {
           console.log('exams:', info.data);
           this.ExamInfo_All = info.data;
           this.timeStamp();
+        } else {
+          console.log('请求失败');
         }
-        console.log('请求失败');
       } catch (err) {
         console.log(err);
       }
