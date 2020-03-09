@@ -81,7 +81,6 @@ export default {
       try {
         const res = await this.$axios.post(`${this.HOST}/homePage/tea/id`, {
           tea_id: this.uid,
-          // tea_id: '2018110257',
         });
         const info = res.data;
         console.log(info);

@@ -14,29 +14,23 @@
         <li v-else-if="authLevel>0 && authLevel<=99">
           <el-link type="info">课程管理</el-link>
         </li>
-        <li>
-          <el-link type="info" href="/stuExamGrades">课程成绩中心</el-link>
+        <li v-if="authLevel===0">
+          <el-link type="info" href="/GradesCenter_Stu">成绩中心</el-link>
+        </li>
+        <li v-if="authLevel>0 && authLevel<=99">
+          <el-link type="info" href="/GradesCenter_tch">课程成绩中心</el-link>
         </li>
         <li v-if="authLevel===0">
           <el-link type="info">错题本</el-link>
-        </li>
-        <li v-else-if="authLevel>0 && authLevel<=99">
-          <el-link type="info">评卷场</el-link>
         </li>
         <li v-if="authLevel===99">
           <el-link type="info">权限管理</el-link>
         </li>
       </ul>
-      <li class="user_photo"  @click.stop="handlemenu">
+      <li class="user_photo" @click.stop="handlemenu">
         <el-dropdown @command="handleCommand">
-          <img
-          src='../assets/head_stu.jpg'
-          class="head"
-          v-if="this.authLevel === 0 "/>
-          <img
-          src='../assets/head_tch.jpg'
-          class="head"
-          v-else/>
+          <img src="../assets/head_stu.jpg" class="head" v-if="this.authLevel === 0 " />
+          <img src="../assets/head_tch.jpg" class="head" v-else />
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="modify">个人中心</el-dropdown-item>
             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -74,17 +68,19 @@ export default {
         }
       } else if (command === 'logout') {
         // console.log(this.uid);
-        this.$axios.post(`${this.HOST}/login/logout`, {
-          keyword: this.uid,
-        }).then((res) => {
-          const info = res.data;
-          if (info.code === 200) {
-            this.$store.dispatch('set_authLevel', 0);
-            window.location.href = '/';
-          } else {
-            console.log('操作失败');
-          }
-        });
+        this.$axios
+          .post(`${this.HOST}/login/logout`, {
+            keyword: this.uid,
+          })
+          .then((res) => {
+            const info = res.data;
+            if (info.code === 200) {
+              this.$store.dispatch('set_authLevel', 0);
+              window.location.href = '/';
+            } else {
+              console.log('操作失败');
+            }
+          });
       }
     },
   },
@@ -92,7 +88,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#pheader{
+#pheader {
   width: 100%;
   height: 60px;
   top: 0;
@@ -100,32 +96,32 @@ export default {
   position: fixed;
   z-index: 9000;
   background-color: whitesmoke;
-  .header_list{
+  .header_list {
     display: flex;
     justify-content: flex-end;
   }
-  .func{
+  .func {
     display: flex;
     text-align: right;
     line-height: 40px;
   }
-  li{
+  li {
     display: inline-block;
     margin-right: 20px;
   }
 }
 
-.header_list{
+.header_list {
   align-items: center;
 }
-.header_title{
+.header_title {
   float: left;
   font-size: 30px;
   color: #909399;
 }
-.user_photo{
+.user_photo {
   float: right;
-  .head{
+  .head {
     width: 40px;
     height: 40px;
   }

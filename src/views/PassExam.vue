@@ -1,9 +1,9 @@
 <template>
   <div>
+    <h1 v-if="NoExams">最近没有已完成的考试哦！</h1>
     <ul v-for="(exam,index) in exams" :key="index" class="middle">
-      <!-- <li id="exam" @click.stop="toDetail(exam.exam_id)">       -->
-      <li id="exam" @click.stop="toDetail(exam.exam_id)">
-        <div class="one">
+      <li id="exam">
+        <div class="one" @click.stop="toDetail(exam.exam_id)">
           <div class="name" :class="{ yescolor: exam.yes }">
             <img src="../assets/exam.png" alt="exam" />
             {{ exam.name }}
@@ -14,8 +14,12 @@
         </div>
         <div class="two">
           <div>考试时长：{{exam.last_time}}分钟</div>
-          <div class="green" v-if="exam._judge && exam.yes"
-           @click="toCheckGrades" style="cursor:pointer">
+          <div
+            class="green"
+            v-if="exam._judge && exam.yes"
+            @click.stop="toCheckGrades(exam.exam_id)"
+            style="cursor:pointer"
+          >
             <img src="../assets/exam_status/green.png" /> 已完成评分（点击查看）
           </div>
           <div class="orange" v-if="!exam._judge && exam.yes">
@@ -51,6 +55,7 @@ export default {
       nowpage: 1,
       totalpage: '',
       pagerSeen: false,
+      NoExams: false,
     };
   },
   methods: {
@@ -108,6 +113,7 @@ export default {
       this.passExamInfo_All = examInfo;
       this.pager();
       this.showPage();
+      this.check();
     },
     upPage() {
       if (this.start !== 0) {
@@ -136,14 +142,19 @@ export default {
       this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
       scrollTo(0, 0);
     },
-    // toDetail(examId) {
-    //   this.$store.dispatch('set_examId', examId);
-    //   window.location.href = '/StuExamDetail';
-    // },
-        toCheckGrades(examId){
+    toDetail(examId) {
+      this.$store.dispatch('set_examId', examId);
+      window.location.href = '/StuExamDetail';
+    },
+    toCheckGrades(examId) {
       this.$store.dispatch('set_examId', examId);
       window.location.href = '/StuExamGrades';
-    }
+    },
+    check() {
+      if (this.exams == '') {
+        this.NoExams = true;
+      }
+    },
   },
 
   beforeMount() {
@@ -177,6 +188,7 @@ export default {
       align-items: baseline;
       height: auto;
       padding-top: 10px;
+      cursor: pointer;
 
       img {
         width: 15px;
@@ -189,7 +201,6 @@ export default {
       }
       .name:hover {
         font-size: 18px;
-        // cursor: pointer;
         transition: all 0.8s ease;
       }
       .yescolor {

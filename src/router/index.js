@@ -40,6 +40,21 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/StuExamGrades.vue'),
   },
   {
+    path: '/GradesCenter_tch',
+    name: 'GradesCenter_tch',
+    component: () => import(/* webpackChunkName: "about" */ '../views/GradesCenter_tch.vue'),
+  },
+  {
+    path: '/GradesCenter_Stu',
+    name: 'GradesCenter_Stu',
+    component: () => import(/* webpackChunkName: "about" */ '../views/GradesCenter_Stu.vue'),
+  },
+  {
+    path: '/StuGradesCenter',
+    name: 'StuGradesCenter',
+    component: () => import(/* webpackChunkName: "about" */ '../views/StuGradesCenter.vue'),
+  },
+  {
     path: '/teaCourseDetail',
     name: 'teaCourseDetail',
     component: () => import('../views/TeaCourseDetail.vue'),

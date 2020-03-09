@@ -1,9 +1,10 @@
 <template>
   <div>
+    <h1 v-if="NoExams">最近没有正在进行中的考试哦！</h1>
     <ul v-for="(exam,index) in exams" :key="index" class="middle">
       <li id="exam">
-        <div class="one">
-          <div class="name" :class="{ yescolor: exam.yes }" @click.stop="toDetail(exam.exam_id)">
+        <div class="one" @click.stop="toDetail(exam.exam_id)">
+          <div class="name" :class="{ yescolor: exam.yes }">
             <img src="../assets/exam.png" alt="exam" />
             {{ exam.name }}
             <img v-if="!exam.yes" src="../assets/exam_no.png" />
@@ -13,13 +14,16 @@
         </div>
         <div class="two">
           <div>考试时长：{{exam.last_time}}分钟</div>
-          <div class="green" v-if="exam._judge && exam.yes"
-          @click="toCheckGrades" style="cursor:pointer">
-            <img src="../assets/exam_status/green.png" > 已完成评分(点击查看)
+          <div
+            class="green"
+            v-if="exam._judge && exam.yes"
+            @click.stop="toCheckGrades(exam.exam_id)"
+            style="cursor:pointer"
+          >
+            <img src="../assets/exam_status/green.png" /> 评分已完成(点击查看)
           </div>
-          <div class="orange" v-if="!exam._judge && exam.yes"
-           style="cursor:pointer" >
-            <img src="../assets/exam_status/orange.png" > 未完成评分
+          <div class="orange" v-if="!exam._judge && exam.yes" style="cursor:pointer">
+            <img src="../assets/exam_status/orange.png" /> 未完成评分
           </div>
         </div>
       </li>
@@ -48,11 +52,11 @@ export default {
       exams: '',
       exam_num: '',
       start: 0,
-      ready: false,
       nowpage: 1,
       totalpage: '',
       pagerSeen: false,
       onExamInfo_All: '',
+      NoExams: false,
     };
   },
 
@@ -111,6 +115,7 @@ export default {
       this.onExamInfo_All = examInfo;
       this.pager();
       this.showPage();
+      this.check();
     },
     upPage() {
       if (this.start !== 0) {
@@ -145,11 +150,16 @@ export default {
       this.$store.dispatch('set_examId', examId);
       window.location.href = '/StuExamDetail';
     },
-    toCheckGrades(examId){
+    toCheckGrades(examId) {
       this.$store.dispatch('set_examId', examId);
       // console.log(examId);
       window.location.href = '/StuExamGrades';
-    }
+    },
+    check() {
+      if (this.exams == '') {
+        this.NoExams = true;
+      }
+    },
   },
 
   beforeMount() {
@@ -211,18 +221,18 @@ export default {
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 0px;
-      display:flex;
+      display: flex;
       flex-direction: row;
       justify-content: space-between;
 
-      img{
+      img {
         width: 15px;
       }
-      .green{
+      .green {
         color: green;
         margin-right: 15px;
       }
-      .orange{
+      .orange {
         color: orange;
         margin-right: 15px;
       }

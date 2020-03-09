@@ -412,7 +412,8 @@ export default {
 
 <style lang="less" scoped>
 .hello{
-  padding-bottom: 200px;
+  width: 100%;
+  height: 100%;
   background: url(../assets/personal_background_stu.gif);
 
   h1{
