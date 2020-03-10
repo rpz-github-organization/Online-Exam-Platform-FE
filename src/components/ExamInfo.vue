@@ -19,15 +19,15 @@
                     <div class="exam_row" v-if="status !== 1">
                         <label class="iden">实际考生：{{ this.stuNum }}</label>
                     </div>
-                    <div class="exam_row" v-if="isHand === 0">
+                    <div class="exam_row">
                         <label>题目编辑：</label>
                         <el-button size="mini" @click="EditExam()">编辑题目</el-button>
                     </div>
-                    <div class="exam_row" v-if="isHand === 1">
+                    <div class="exam_row" v-if="status !== 1">
                         <label>题目查看：</label>
                         <el-button size="mini" @click="QuesView()">查看题目</el-button>
                     </div>
-                    <div class="exam_row" v-if="isHand === 0">
+                    <div class="exam_row" v-if="!isHand">
                         <label>发布考试：</label>
                         <el-button size="mini" @click="HandOut()">点击发布</el-button>
                     </div>
@@ -62,7 +62,7 @@ export default {
       examTime: '120min',
       startTime: '2020-02-02',
       status: 0,
-      isHand: 0,
+      isHand: false,
     };
   },
   created() {
@@ -82,6 +82,7 @@ export default {
         });
         const info = res.data.data;
         console.log(info);
+        this.isHand = info.is_distribute;
         this.examName = info.exam_name;
         this.stuNum = info.stu_number;
         this.StuN = info.actual_number;
@@ -122,6 +123,9 @@ export default {
             type: 'success',
             offset: 70,
           });
+          const NewPage = `${'_empty?time='}${new Date().getTime() / 500}`;
+          this.$router.push(NewPage);
+          this.$router.go(-1);
         }
       } catch (err) {
         console.log(err);
@@ -130,7 +134,7 @@ export default {
     // 查看成绩
     GetScore() {
       this.$store.dispatch('set_examId', this.examId);
-      window.location.href = '/StuGradesCenter';
+      this.$router.push('/AddQuestion');
     },
     // 查看题目
     QuesView() {
@@ -157,37 +161,39 @@ export default {
 
 <style lang="less" scoped>
 #examManagement{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: url(../assets/index_background_tch.gif);
+  .title{
+    text-align: left;
+    margin-left: 50px;
+    h2{
+      margin-bottom: 0;
+    }
+  }
+  .list{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    .title{
-        text-align: left;
-        margin-left: 50px;
-        h2{
-            margin-bottom: 0;
-        }
+    width: 80%;
+    .list_row{
+      text-align: left;
+      margin-left: 20%;
+      margin-top: 10px;
     }
-    .list{
-        display: flex;
-        flex-direction: column;
-        width: 80%;
-        .list_row{
-            text-align: left;
-            margin-left: 20%;
-            margin-top: 10px;
-        }
-        .exam_row{
-            display: flex;
-            flex-direction: row;
-            margin: 10px 5px;
-            font-weight: bold;
-            label{
-                width: 100px;
-            }
-            .iden{
-                width: 500px;
-            }
-        }
+    .exam_row{
+      display: flex;
+      flex-direction: row;
+      margin: 10px 5px;
+      font-weight: bold;
+      label{
+        width: 100px;
+      }
+      .iden{
+        width: 500px;
+      }
     }
+  }
 }
 </style>

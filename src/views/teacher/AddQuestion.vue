@@ -116,6 +116,12 @@ export default {
       console.log(vm);
     });
   },
+  route: {
+    canActivate(transition) {
+      console.log(transition, '======上一个页面的url信息=======');
+      transition.next();
+    },
+  },
   data() {
     return {
       options: [{
