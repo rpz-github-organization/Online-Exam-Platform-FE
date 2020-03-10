@@ -222,9 +222,11 @@ export default {
 <style lang="less" scoped>
 .row{
   display: flex;
-  width: 90%;
+  width: 100%;
+  height: 100%;
   justify-content: center;
   margin-top: 100px;
+  background: url(../../assets/index_background_stu.gif);
   .left{
     display: flex;
     flex-direction: column;

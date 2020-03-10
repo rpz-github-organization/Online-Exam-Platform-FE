@@ -80,7 +80,7 @@ export default {
 #GradesCenter{
   height: 100%;
   width: 100%;
-  background: url(../assets/index_background_tch.gif);
+  background: url(../../assets/index_background_tch.gif);
   display: flex;
   justify-content: center;
 

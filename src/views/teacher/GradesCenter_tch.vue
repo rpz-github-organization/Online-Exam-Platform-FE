@@ -1,7 +1,7 @@
 <template>
   <div class="stu">
     <div class="title">
-      <img src="../assets/title_stu.png" class="word" />
+      <img src="../../assets/title_tch.png" class="word" />
     </div>
     <div class="main">
       <div class="middle">
@@ -10,18 +10,14 @@
             <li id="exam">
               <div class="one">
                 <div class="name" @click.stop="toCheckGrades(exam.exam_id)">
-                  <img src="../assets/exam.png" alt="exam" />
+                  <img src="../../assets/exam.png" alt="exam" />
                   {{ exam.name }}
                 </div>
                 <div class="time">{{ exam.begin_time }}</div>
               </div>
-              <div class="two">考试课程：{{exam.co_name}} 任课教师：{{exam.tea_name}}</div>
+              <div class="two">考试课程：{{exam.co_name}}</div>
               <div class="two">
                 <div>考试时长：{{exam.last_time}}分钟</div>
-                <div class="green" style="cursor:pointer" @click.stop="toCheckGrades(exam.exam_id)">
-                  <img src="../assets/exam_status/green.png" />
-                  成绩：{{exam.score}}分
-                </div>
               </div>
             </li>
           </ul>
@@ -30,22 +26,6 @@
             <div class="text">当前第 {{ nowpage }} 页 ，共 {{ totalpage }} 页</div>
             <button @click="downPage" class="changepage">下一页</button>
           </div>
-        </div>
-      </div>
-      <div class="right">
-        <img v-if="male" src="../assets/head_stu_male.png" />
-        <img v-if="!male" src="../assets/head_stu_female.png" />
-        <div class="hello">
-          {{ name }}同学
-          <br />
-          <br />现在是
-          <br />
-          {{ new Date().toLocaleString("chinese", { hour12: false })
-          .substring(0,new Date().toLocaleString("chinese", { hour12: false }).length-3) }}
-          <br />
-          <br />
-          {{ greeting }}
-          <br />
         </div>
       </div>
     </div>
@@ -63,9 +43,7 @@ export default {
 
   data() {
     return {
-      name: '川师',
-      greeting: '你好！',
-      exams: '',
+      exams: [],
       ExamInfo_All: '',
       start: 0,
       nowpage: 1,
@@ -76,57 +54,30 @@ export default {
     };
   },
 
+  created() {
+    this.getInfo();
+  },
+
   methods: {
-    async getStuNameAndSex() {
-      try {
-        const res = await this.$axios.get(
-          `${this.HOST}/PersonalData/getStudent`,
-          {}
-        );
-        const info = res.data;
-        console.log(info);
-        if (info.code === 200) {
-          const stuInfo = info.data;
-          this.name = stuInfo.name;
-          if (stuInfo.sex === 'female') this.male = false;
-        } else {
-          console.log('请求失败');
+    //获取所有已打分的exam
+    async getInfo() {
+        try{
+            const res = await this.$axios.post(`${this.HOST}/course/getDoneExam`,{
+                tea_id: this.uid,
+            });
+            const info = res.data.data;
+            info.forEach(element => {
+                this.exams.push({
+                    name: element.exam_name,
+                    begin_time: element.begin_time,
+                    last_time: element.last_time,
+                    co_name: element.co_name,
+                    exam_id: element.exam_id,
+                });
+            });
+        } catch (err) {
+            console.log(err);
         }
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async getStuDoneExamInfo() {
-      try {
-        const res = await this.$axios.post(
-          `${this.HOST}/exam/getStuScoreInfo`,
-          {
-            stu_id: this.uid,
-          }
-        );
-        const info = res.data;
-        if (info.code === 200) {
-          console.log('exams:', info.data);
-          this.ExamInfo_All = info.data;
-          this.timeStamp();
-        } else {
-          console.log('请求失败');
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    timeStamp() {
-      let examInfo = this.ExamInfo_All;
-      examInfo.forEach(item => {
-        let timestamp = item.begin_time;
-        let newDate = new Date();
-        newDate.setTime(timestamp);
-        item.begin_time = newDate.toLocaleString();
-      });
-      this.onExamInfo_All = examInfo;
-      this.pager();
-      this.showPage();
     },
     upPage() {
       if (this.start !== 0) {
@@ -159,22 +110,10 @@ export default {
     },
     toCheckGrades(examId) {
       this.$store.dispatch('set_examId', examId);
-      window.location.href = '/StuExamGrades';
+      window.location.href = '/StuGradesCenter';
     },
   },
 
-  beforeMount() {
-    this.getStuNameAndSex();
-    this.getStuDoneExamInfo();
-  },
-
-  created() {
-    const d = new Date();
-    if (d.getHours() < 12) this.greeting = '上午好！';
-    else if (d.getHours() >= 12 && d.getHours() < 18)
-      this.greeting = '下午好！';
-    else this.greeting = '晚上好！';
-  },
 };
 </script>
 
@@ -184,14 +123,14 @@ export default {
   height: 100%;
   width: 100%;
   margin-top: 47px;
-  background: url(../assets/index_background_stu.gif);
+  background: url(../../assets/index_background_tch.gif);
 
   .title {
     display: flex;
     flex-direction: row;
     height: 80px;
     margin: 0px auto;
-    background-color: #276e51;
+    background-color: #2850a7;
 
     .word {
       height: 60px;
@@ -206,33 +145,14 @@ export default {
     flex-wrap: nowrap;
     height: auto;
     width: 100%;
-    background: url(../assets/index_background_stu.gif);
-
-    .right {
-      margin-left: 25px;
-      border-radius: 10px;
-      border: 1px solid rgba(0, 0, 0, 0.2);
-      box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
-      font-size: 16px;
-      margin-top: 15px;
-      margin-right: 50px;
-      width: 170px;
-      height: 230px;
-      padding-top: 20px;
-      flex-shrink: 0;
-      background-color: rgba(255, 251, 251, 0.87);
-
-      img {
-        width: 60px;
-      }
-    }
+    background: url(../../assets/index_background_tch.gif);
 
     .middle {
       width: 85%;
       flex-shrink: 1;
       margin: 15px 1px;
       flex-direction: column;
-      margin-left: 50px;
+      margin-left: 70px;
 
       #exam {
         display: flex;

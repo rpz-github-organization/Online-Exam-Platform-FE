@@ -414,7 +414,7 @@ export default {
 .hello{
   width: 100%;
   height: 100%;
-  background: url(../assets/personal_background_stu.gif);
+  background: url(../../assets/personal_background_stu.gif);
 
   h1{
   font-size: 20px;

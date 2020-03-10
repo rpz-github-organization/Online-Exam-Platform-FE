@@ -28,23 +28,20 @@
             </div>
             <div class="two" @click="goToExam(exam.exam_id)">
               <div class="orange" v-if="exam.status == 0">
-                <img src="../assets/exam_status/orange.png" />考试未开始
+                <img src="../../assets/exam_status/orange.png" />考试未开始
               </div>
               <div class="green" v-if="exam.status == 1">
-                <img src="../assets/exam_status/green.png" />考试进行中
+                <img src="../../assets/exam_status/green.png" />考试进行中
               </div>
               <div class="blue" v-if="exam.status == 2 && exam.is_judge">
-                <img src="../assets/exam_status/blue.png" />考试已完成（已评分）
+                <img src="../../assets/exam_status/blue.png" />考试已完成（已评分）
               </div>
               <div class="red" v-if="exam.status == 2 && !exam.is_judge">
-                <img src="../assets/exam_status/red.png" /> 考试已结束(未评分)
+                <img src="../../assets/exam_status/red.png" /> 考试已结束(未评分)
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="goAddExam">
-        <button @click="goAddExam">添加考试</button>
       </div>
     </div>
   </div>
@@ -77,7 +74,7 @@ export default {
     async getTeaExamInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/course/getByTea`, {
-          co_id: 201801,
+          co_id: this.coId,
           // co_id: 1,
           tea_id: this.uid,
         });
@@ -117,10 +114,10 @@ export default {
 .body {
   height: 100%;
   padding-top: 20px;
-  background: url('../assets/index_background_stu.gif');
+  background: url('../../assets/index_background_stu.gif');
   .bodyimg {
     padding-bottom: 10px;
-    background: url('../assets/index_background_stu.gif');
+    background: url('../../assets/index_background_stu.gif');
 
     .main {
       background-color: #fff;
@@ -227,26 +224,6 @@ export default {
             }
           }
         }
-      }
-    }
-    .goAddExam {
-      button {
-        color: white;
-        font-weight: bold;
-        border: none;
-        padding: 5px 30px;
-        border-radius: 20px;
-        margin-top: 20px;
-        width: auto;
-        height: 40px;
-        font-size: 18px;
-        background-color: #5379a5c4;
-        cursor: pointer;
-        outline: none;
-        transition: all 0.3s ease;
-      }
-      button:hover {
-        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.17);
       }
     }
   }

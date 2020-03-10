@@ -1,7 +1,7 @@
 <template>
   <div class="stu">
     <div class="title">
-      <img src="../assets/title_stu.png" class="word" />
+      <img src="../../assets/title_stu.png" class="word" />
     </div>
     <div class="main">
       <div class="left">
@@ -15,8 +15,8 @@
         <PassExam v-if="!Seen" />
       </div>
       <div class="right">
-        <img v-if="male" src="../assets/head_stu_male.png" />
-        <img v-if="!male" src="../assets/head_stu_female.png" />
+        <img v-if="male" src="../../assets/head_stu_male.png" />
+        <img v-if="!male" src="../../assets/head_stu_female.png" />
         <div class="hello">
           {{ name }}同学
           <br />
@@ -106,7 +106,7 @@ export default {
   height: 100%;
   width: 100%;
   margin-top: 47px;
-  background: url(../assets/index_background_stu.gif);
+  background: url(../../assets/index_background_stu.gif);
 
   .title {
     display: flex;
@@ -128,7 +128,7 @@ export default {
     flex-wrap: nowrap;
     height: auto;
     width: 100%;
-    background: url(../assets/index_background_stu.gif);
+    background: url(../../assets/index_background_stu.gif);
 
     .right {
       margin-left: 25px;

@@ -84,16 +84,19 @@
       <div class="button_row">
         <el-button @click="goToInfo()">点击分发试卷</el-button>
       </div>
+      <div class="warn_tip">
+        <span>(注意：只有分发了试卷，学生才可以参加考试)</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import single from '../components/teacher/Single.vue';
-import judge from '../components/teacher/Judge.vue';
-import discussion from '../components/teacher/Discussion.vue';
-import program from '../components/teacher/Program.vue';
+import single from '../../components/teacher/Single.vue';
+import judge from '../../components/teacher/Judge.vue';
+import discussion from '../../components/teacher/Discussion.vue';
+import program from '../../components/teacher/Program.vue';
 
 export default {
   name: 'AddQuestion',
@@ -159,7 +162,7 @@ export default {
 
 <style lang="less" scoped>
 #AddQuestion{
-  background: url(../assets/index_background_tch.gif);
+  background: url(../../assets/index_background_tch.gif);
   display: flex;
   .left{
     width: 20%;
@@ -221,7 +224,11 @@ export default {
       }
     }
     .button_row{
+      margin-bottom: 10px;
+    }
+    .warn_tip{
       margin-bottom: 30px;
+      color: red;
     }
   }
 }

@@ -317,7 +317,7 @@ export default {
   display: flex;
   flex-direction: column;
   margin: auto 0px;
-  background: url(../assets/index_background_stu.gif);
+  background: url(../../assets/index_background_stu.gif);
 
   .res_time{
     display: flex;

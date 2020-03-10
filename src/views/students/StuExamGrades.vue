@@ -244,7 +244,7 @@ export default {
 .body {
   // height: 100%;
   padding-top: 20px;
-  background: url('../assets/index_background_stu.gif');
+  background: url('../../assets/index_background_stu.gif');
 
   .main {
     background-color: #fff;

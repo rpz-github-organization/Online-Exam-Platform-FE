@@ -395,7 +395,7 @@ export default {
 .hello{
   width: 100%;
   height: 100%;
-  background: url(../assets/personal_background_tch.gif);
+  background: url(../../assets/personal_background_tch.gif);
 
   h1{
   font-size: 20px;

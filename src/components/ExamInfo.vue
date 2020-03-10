@@ -16,7 +16,7 @@
                     <div class="exam_row">
                         <label class="iden">考生人数：{{ this.stuN }}</label>
                     </div>
-                    <div class="exam_row">
+                    <div class="exam_row" v-if="status !== 1">
                         <label class="iden">实际考生：{{ this.stuNum }}</label>
                     </div>
                     <div class="exam_row" v-if="isHand === 0">
@@ -111,7 +111,6 @@ export default {
     // 分发
     async HandOut() {
       try {
-        this.isHand = 1;
         const res = await this.$axios.post(`${this.HOST}/exam/distributeExamToStudent`, {
           co_id: this.coId,
           exam_id: this.examId,

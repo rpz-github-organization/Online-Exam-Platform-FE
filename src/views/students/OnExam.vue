@@ -5,10 +5,10 @@
       <li id="exam">
         <div class="one" @click.stop="toDetail(exam.exam_id)">
           <div class="name" :class="{ yescolor: exam.yes }">
-            <img src="../assets/exam.png" alt="exam" />
+            <img src="../../assets/exam.png" alt="exam" />
             {{ exam.name }}
-            <img v-if="!exam.yes" src="../assets/exam_no.png" />
-            <img v-if="exam.yes" src="../assets/exam_yes.png" />
+            <img v-if="!exam.yes" src="../../assets/exam_no.png" />
+            <img v-if="exam.yes" src="../../assets/exam_yes.png" />
           </div>
           <div class="time">{{ exam.begin_time }}</div>
         </div>
@@ -20,10 +20,10 @@
             @click.stop="toCheckGrades(exam.exam_id)"
             style="cursor:pointer"
           >
-            <img src="../assets/exam_status/green.png" /> 评分已完成(点击查看)
+            <img src="../../assets/exam_status/green.png" /> 评分已完成(点击查看)
           </div>
           <div class="orange" v-if="!exam._judge && exam.yes" style="cursor:pointer">
-            <img src="../assets/exam_status/orange.png" /> 未完成评分
+            <img src="../../assets/exam_status/orange.png" /> 未完成评分
           </div>
         </div>
       </li>

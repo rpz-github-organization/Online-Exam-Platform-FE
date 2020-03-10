@@ -1,14 +1,14 @@
 <template>
   <div class="tch">
     <div class="title">
-      <img src="../assets/title_tch.png" class="word" />
+      <img src="../../assets/title_tch.png" class="word" />
     </div>
     <div class="main">
       <div class="middle">
         <ul v-for="(course, index) in courses" :key="index" class="course">
           <li class="cour">
             <div class="name" @click.stop="toDetail(course.co_id)">
-              <img src="../assets/course.png" />
+              <img src="../../assets/course.png" />
               {{ course.name }}
             </div>
             <div class="details">
@@ -21,8 +21,8 @@
         </ul>
       </div>
       <div class="right">
-        <img v-if="male" src="../assets/head_tch_male.png" />
-        <img v-if="!male" src="../assets/head_tch_female.png" />
+        <img v-if="male" src="../../assets/head_tch_male.png" />
+        <img v-if="!male" src="../../assets/head_tch_female.png" />
         <div class="hello">
           {{ name }}老师
           <br />
@@ -121,7 +121,7 @@ export default {
   height: 100%;
   width: 100%;
   margin-top: 47px;
-  background: url(../assets/index_background_tch.gif);
+  background: url(../../assets/index_background_tch.gif);
 
   .title {
     display: flex;
@@ -143,7 +143,7 @@ export default {
     flex-wrap: nowrap;
     height: auto;
     width: 100%;
-    background: url(../assets/index_background_tch.gif);
+    background: url(../../assets/index_background_tch.gif);
 
     .right {
       // margin-left: 25px;

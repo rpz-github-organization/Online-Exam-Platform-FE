@@ -173,7 +173,7 @@ export default {
   padding-top: 20px;
   width: 100%;
   height: 100%;
-  background: url(../assets/index_background_tch.gif);
+  background: url(../../assets/index_background_tch.gif);
   .center{
   display: flex;
   flex-direction: row;
