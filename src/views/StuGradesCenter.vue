@@ -26,6 +26,7 @@
                     </el-table>
                 </div>
             </el-card>
+            <el-button class="return" @click="GoBack()">返回</el-button>
         </div>
     </div>
 </template>
@@ -55,7 +56,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        // console.log(info);
+        console.log(info);
         this.ExamName = info.exam_name;
         info.data.forEach((element) => {
           this.grades.push({
@@ -67,6 +68,9 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    GoBack() {
+      this.$router.go(-1);
     },
   },
 };
@@ -93,6 +97,9 @@ export default {
   }
   .table{
       margin: 10px 40px;
+  }
+  .return{
+    margin-top: 20px;
   }
 }
 </style>

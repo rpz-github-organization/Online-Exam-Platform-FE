@@ -19,21 +19,29 @@
                     <div class="exam_row">
                         <label class="iden">实际考生：{{ this.stuNum }}</label>
                     </div>
-                    <div class="exam_row">
-                        <label>题目查看：</label>
-                        <el-button size="mini">查看题目</el-button>
+                    <div class="exam_row" v-if="isHand === 0">
+                        <label>题目编辑：</label>
+                        <el-button size="mini" @click="EditExam()">编辑题目</el-button>
                     </div>
-                    <div class="exam_row">
+                    <div class="exam_row" v-if="isHand === 1">
+                        <label>题目查看：</label>
+                        <el-button size="mini" @click="QuesView()">查看题目</el-button>
+                    </div>
+                    <div class="exam_row" v-if="isHand === 0">
+                        <label>发布考试：</label>
+                        <el-button size="mini" @click="HandOut()">点击发布</el-button>
+                    </div>
+                    <div class="exam_row" v-if="status === 2">
                         <label>终止考试</label>
                         <el-button size="mini">终止考试</el-button>
                     </div>
-                    <div class="exam_row">
+                    <div class="exam_row" v-if="status === 3">
                         <label>评卷：</label>
                         <el-button size="mini" @click="JumpToScore()">点击评卷</el-button>
                     </div>
-                    <div class="exam_row">
-                        <label>成绩中心：</label>
-                        <el-button size="mini">成绩中心</el-button>
+                    <div class="exam_row" v-if="status === 4">
+                        <label>考生成绩：</label>
+                        <el-button size="mini" @click="GetScore()">查看成绩</el-button>
                     </div>
                 </el-card>
             </div>
@@ -42,6 +50,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'examManagement',
   data() {
@@ -51,16 +61,23 @@ export default {
       stuN: 79,
       examTime: '120min',
       startTime: '2020-02-02',
+      status: 0,
+      isHand: 0,
     };
   },
   created() {
     this.GetList();
   },
+  computed: {
+    ...mapState(['examId']),
+    ...mapState(['uid']),
+  },
   methods: {
+    // 获取考试详情
     async GetList() {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getExamInfo`, {
-          exam_id: 66,
+          exam_id: this.examId,
         });
         const info = res.data.data;
         console.log(info);
@@ -69,11 +86,57 @@ export default {
         this.StuN = info.actual_number;
         this.examTime = info.last_time;
         const time = this.timestampToTime(info.begin_time);
+        if (info.status === '考试未开始') {
+          this.status = 1;
+        }
+        if (info.status === '考试中') {
+          this.status = 2;
+        }
+        if (info.status === '考试结束未评分') {
+          this.status = 3;
+        }
+        if (info.status === '考试结束已评分') {
+          this.status = 4;
+        }
         this.startTime = time;
       } catch (err) {
         console.log(err);
       }
     },
+    // 编辑试卷
+    EditExam() {
+      window.location.href = '/AddQuestion';
+    },
+    // 分发
+    async HandOut() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/distributeExamToStudent`, {
+          tea_id: this.uid,
+          exam_id: this.examId,
+        });
+        console.log(res);
+        if (res.data.code === 200) {
+          this.$message({
+            message: '分发成功',
+            type: 'success',
+            offset: 70,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    // 查看成绩
+    GetScore() {
+      this.$store.dispatch('set_examId', this.examId);
+      window.location.href = '/StuGradesCenter';
+    },
+    // 查看题目
+    QuesView() {
+      this.$router.go(-1);
+    },
+
+    // 评卷
     JumpToScore() {
       window.location.href = '/ScoreCenter';
     },

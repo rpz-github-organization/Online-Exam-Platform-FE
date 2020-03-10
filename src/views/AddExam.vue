@@ -48,7 +48,6 @@ export default {
   },
   computed: {
     ...mapState(['uid']),
-    ...mapState(['examId']),
     ...mapState(['coId']),
   },
   methods: {
@@ -61,7 +60,7 @@ export default {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
           name: this.examTitle,
-          co_id: '1',
+          co_id: this.coId,
           tea_id: this.uid,
           begin_time: date.valueOf(),
           last_time: lastTime,

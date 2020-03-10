@@ -81,6 +81,9 @@
           <program :index="index"/>
         </div>
       </el-card>
+      <div class="button_row">
+        <el-button @click="goToInfo()">点击分发试卷</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -140,12 +143,16 @@ export default {
         behavior: 'smooth',
       });
     },
+    goToInfo() {
+      window.location.href = '/ExamInfo';
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
 #AddQuestion{
+  background: url(../assets/index_background_tch.gif);
   display: flex;
   .left{
     width: 20%;
@@ -205,6 +212,9 @@ export default {
       label{
         color: #8590a6;
       }
+    }
+    .button_row{
+      margin-bottom: 30px;
     }
   }
 }

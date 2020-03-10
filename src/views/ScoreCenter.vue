@@ -65,10 +65,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'scoreCenter',
   created() {
     this.getQues();
+  },
+  computed: {
+    ...mapState(['examId']),
   },
   data() {
     return {
@@ -77,7 +82,6 @@ export default {
       List: [],
       score: [],
       id: '',
-      exam_id: 66,
       quesList: [],
     };
   },
@@ -85,7 +89,7 @@ export default {
     async getQues() {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getDiscussion`, {
-          exam_id: this.exam_id,
+          exam_id: this.examId,
         });
         const info = res.data.data;
         this.stuAnswer = info.stuInfo;
@@ -167,6 +171,8 @@ export default {
   display: flex;
   flex-direction: column;
   padding-top: 20px;
+  width: 100%;
+  height: 100%;
   background: url(../assets/index_background_tch.gif);
   .center{
   display: flex;

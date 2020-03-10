@@ -26,7 +26,7 @@
                 考试时长：{{exam.last_time}} 分钟
               </div>
             </div>
-            <div class="two" @click="goToExam">
+            <div class="two" @click="goToExam(exam.exam_id)">
               <div class="orange" v-if="exam.status == 0">
                 <img src="../assets/exam_status/orange.png" />考试未开始
               </div>
@@ -67,6 +67,7 @@ export default {
   },
   methods: {
     goToExam(examId) {
+      console.log(examId);
       this.$store.dispatch('set_examId', examId);
       window.location.href = '/ExamInfo'; // 考试管理
     },

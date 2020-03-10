@@ -11,9 +11,9 @@
         <li v-if="authLevel===0">
           <el-link type="info" href="/SelectCourse">选课中心</el-link>
         </li>
-        <li v-else-if="authLevel>0 && authLevel<=99">
+        <!-- <li v-else-if="authLevel>0 && authLevel<=99">
           <el-link type="info">课程管理</el-link>
-        </li>
+        </li> -->
         <li v-if="authLevel===0">
           <el-link type="info" href="/GradesCenter_Stu">成绩中心</el-link>
         </li>

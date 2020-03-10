@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     authLevel: 0,
     uid: '',
-    examId: '2',
+    examId: 0,
     coId: 0,
   },
   getters: {

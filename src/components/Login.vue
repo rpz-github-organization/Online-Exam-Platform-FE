@@ -38,7 +38,22 @@ export default {
       tipMessage: '',
     };
   },
+  created() {
+    window.addEventListener('keydown', this.handleKeyDown, true);
+  },
   methods: {
+    // 监听按键
+    handleKeyDown(e) {
+      let key = null;
+      if (window.event === undefined) {
+        key = e.keyCode;
+      } else {
+        key = window.event.keyCode;
+      }
+      if (key === 13) {
+        this.submitLogin();
+      }
+    },
     validate() {
       let res = true;
       if (this.uid.length === 0) {
