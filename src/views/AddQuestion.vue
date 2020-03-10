@@ -106,6 +106,13 @@ export default {
   computed: {
     ...mapState(['uid']),
   },
+  beforeRouteEnter(to, from, next) {
+    console.log(to);
+    console.log(from);
+    next((vm) => {
+      console.log(vm);
+    });
+  },
   data() {
     return {
       options: [{

@@ -71,6 +71,7 @@ export default {
   computed: {
     ...mapState(['examId']),
     ...mapState(['uid']),
+    ...mapState(['coId']),
   },
   methods: {
     // 获取考试详情
@@ -110,8 +111,9 @@ export default {
     // 分发
     async HandOut() {
       try {
+        this.isHand = 1;
         const res = await this.$axios.post(`${this.HOST}/exam/distributeExamToStudent`, {
-          tea_id: this.uid,
+          co_id: this.coId,
           exam_id: this.examId,
         });
         console.log(res);
