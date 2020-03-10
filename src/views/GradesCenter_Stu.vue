@@ -18,7 +18,7 @@
               <div class="two">考试课程：{{exam.co_name}} 任课教师：{{exam.tea_name}}</div>
               <div class="two">
                 <div>考试时长：{{exam.last_time}}分钟</div>
-                <div class="green" style="cursor:pointer">
+                <div class="green" style="cursor:pointer" @click.stop="toCheckGrades(exam.exam_id)">
                   <img src="../assets/exam_status/green.png" />
                   成绩：{{exam.score}}分
                 </div>
