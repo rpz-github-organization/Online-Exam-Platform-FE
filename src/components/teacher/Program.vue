@@ -84,6 +84,9 @@ export default {
       type: Number,
       required: true,
     },
+    ques: {
+      required: false,
+    },
   },
   watch: {
     score(val, oldval) {
@@ -91,6 +94,22 @@ export default {
         this.isChange = true;
       }
     },
+  },
+  created() {
+    if (this.ques) {
+      console.log(this.ques);
+      this.question = this.ques.question;
+      const input = [];
+      const output = [];
+      this.ques.test_case.forEach((element) => {
+        input.push(element.input);
+        output.push(element.output);
+      });
+      this.answer_input = input;
+      this.answer_output = output;
+      this.tag = this.ques.tag;
+      this.questionid = this.ques.question_id;
+    }
   },
   data() {
     return {

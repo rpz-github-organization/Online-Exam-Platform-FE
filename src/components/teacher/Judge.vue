@@ -50,10 +50,22 @@ export default {
       type: String,
       required: false,
     },
+    ques: {
+      required: false,
+    },
   },
   computed: {
     ...mapState(['uid']),
     ...mapState(['examId']),
+  },
+  created() {
+    if (this.ques) {
+      // console.log(this.ques);
+      this.question = this.ques.question;
+      this.answer = this.ques.answer;
+      this.tag = this.ques.tag;
+      this.questionid = this.ques.question_id;
+    }
   },
   data() {
     return {

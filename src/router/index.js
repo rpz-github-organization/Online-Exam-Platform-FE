@@ -63,7 +63,6 @@ const routes = [
     path: '/indexTch',
     name: 'indexTch',
     component: () => import(/* webpackChunkName: "about" */'../views/teacher/Index_tch.vue'),
-
   },
   {
     path: '/personalStu',
@@ -104,6 +103,11 @@ const routes = [
     path: '/ExamInfo',
     name: 'ExamInfo',
     component: () => import('../components/ExamInfo'),
+  },
+  {
+    path: '/ExamDetail',
+    name: 'ExamDetail',
+    component: () => import('../views/teacher/ExamDetail.vue'),
   },
 ];
 

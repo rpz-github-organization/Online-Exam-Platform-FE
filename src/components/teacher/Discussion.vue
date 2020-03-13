@@ -57,6 +57,18 @@ export default {
       type: Number,
       required: true,
     },
+    ques: {
+      required: false,
+    },
+  },
+  created() {
+    if (this.ques) {
+      // console.log(this.ques);
+      this.question = this.ques.question;
+      this.answer = this.ques.answer;
+      this.tag = this.ques.tag;
+      this.questionid = this.ques.question_id;
+    }
   },
   watch: {
     score(val, oldval) {

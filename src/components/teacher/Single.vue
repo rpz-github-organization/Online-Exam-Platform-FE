@@ -14,7 +14,7 @@
         <label>选项A:</label>
         <el-input
         placeholder="请输入选项"
-        v-model="optionA"
+        v-model="option[0]"
         clearable>
         </el-input>
       </div>
@@ -22,7 +22,7 @@
         <label>选项B:</label>
         <el-input
         placeholder="请输入选项"
-        v-model="optionB"
+        v-model="option[1]"
         clearable>
         </el-input>
       </div>
@@ -30,7 +30,7 @@
         <label>选项C:</label>
         <el-input
         placeholder="请输入选项"
-        v-model="optionC"
+        v-model="option[2]"
         clearable>
         </el-input>
       </div>
@@ -38,7 +38,7 @@
         <label>选项D:</label>
         <el-input
         placeholder="请输入选项"
-        v-model="optionD"
+        v-model="option[3]"
         clearable>
         </el-input>
       </div>
@@ -82,6 +82,19 @@ export default {
       type: String,
       required: false,
     },
+    ques: {
+      required: false,
+    },
+  },
+  created() {
+    if (this.ques) {
+      // console.log(this.ques);
+      this.question = this.ques.question;
+      this.option = this.ques.option.split(';');
+      this.answer = this.ques.answer;
+      this.tag = this.ques.tag;
+      this.questionid = this.ques.question_id;
+    }
   },
   data() {
     return {
@@ -97,10 +110,7 @@ export default {
       questionid: null,
 
       question: '',
-      optionA: '',
-      optionB: '',
-      optionC: '',
-      optionD: '',
+      option: ['', '', '', ''],
       answer: '',
       isChange: false,
       tag: '',
@@ -145,7 +155,7 @@ export default {
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
             type: 'Single',
             question: this.question,
-            options: `${this.optionA};${this.optionB};${this.optionC};${this.optionD}`,
+            options: this.option.join(';'),
             answer: this.answer,
             tag: this.tag,
             tea_id: this.uid,

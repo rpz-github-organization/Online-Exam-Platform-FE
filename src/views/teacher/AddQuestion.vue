@@ -48,39 +48,47 @@
         </div>
       </el-card>
     </div>
-    <div class="right">
-      <el-card class="ques_card">
-        <div class="type_score">
-          <label class="type_title">小题分值</label>
-          <el-input v-model="scoreS" clearable></el-input>
-        </div>
-        <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
-          <label>选择题-{{ index+1 }}</label>
-          <single :index="index"  :score="scoreS"></single>
-        </div>
-      </el-card>
-      <el-card class="ques_card">
-        <div class="type_score">
-          <label class="type_title">小题分值</label>
-          <el-input v-model="scoreJ" clearable></el-input>
-        </div>
-        <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
-          <label>判断题-{{ index+1 }}</label>
-          <judge ref="judge" :index="index" :score="scoreJ"/>
-        </div>
-      </el-card>
-      <el-card class="ques_card">
-        <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
-          <label>讨论题-{{ index+1 }}</label>
-          <discussion :index="index"/>
-        </div>
-      </el-card>
-      <el-card class="ques_card">
-        <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
-          <label>编程题-{{ index+1 }}</label>
-          <program :index="index"/>
-        </div>
-      </el-card>
+    <div class="right" v-if="this.isShow">
+      <div v-if="counterS.length>0">
+        <el-card class="ques_card">
+          <div class="type_score">
+            <label class="type_title">小题分值</label>
+            <el-input v-model="scoreS" clearable></el-input>
+          </div>
+          <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
+            <label>选择题-{{ index+1 }}</label>
+            <single :index="index"  :score="scoreS" :ques="Single[index]"></single>
+          </div>
+        </el-card>
+      </div>
+      <div v-if="counterJ.length>0">
+        <el-card class="ques_card">
+          <div class="type_score">
+            <label class="type_title">小题分值</label>
+            <el-input v-model="scoreJ" clearable></el-input>
+          </div>
+          <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
+            <label>判断题-{{ index+1 }}</label>
+            <judge ref="judge" :index="index" :score="scoreJ" :ques="Judge[index]"/>
+          </div>
+        </el-card>
+      </div>
+      <div v-if="counterD.length>0">
+        <el-card class="ques_card">
+          <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
+            <label>讨论题-{{ index+1 }}</label>
+            <discussion :index="index" :ques="Discussion[index]"/>
+          </div>
+        </el-card>
+      </div>
+      <div v-if="counterP.length>0">
+        <el-card class="ques_card">
+          <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
+            <label>编程题-{{ index+1 }}</label>
+            <program :index="index" :ques="Program[index]"/>
+          </div>
+        </el-card>
+      </div>
       <div class="button_row">
         <el-button @click="goToInfo()">点击分发试卷</el-button>
       </div>
@@ -108,19 +116,17 @@ export default {
   },
   computed: {
     ...mapState(['uid']),
+    ...mapState(['examId']),
   },
-  beforeRouteEnter(to, from, next) {
-    console.log(to);
-    console.log(from);
-    next((vm) => {
-      console.log(vm);
-    });
-  },
-  route: {
-    canActivate(transition) {
-      console.log(transition, '======上一个页面的url信息=======');
-      transition.next();
-    },
+  beforeMount() {
+    const url = document.referrer;
+    console.log(url);
+    if (url.search('/ExamInfo') !== -1) {
+      this.isEdit = true;
+      this.GetWhole();
+    } else {
+      this.isShow = true;
+    }
   },
   data() {
     return {
@@ -138,12 +144,18 @@ export default {
         label: '编程题',
       }],
       type: '',
-      counterS: [''],
-      counterJ: [''],
-      counterD: [''],
-      counterP: [''],
+      counterS: [],
+      counterJ: [],
+      counterD: [],
+      counterP: [],
       scoreS: '',
       scoreJ: '',
+      Single: [],
+      Judge: [],
+      Program: [],
+      Discussion: [],
+      isEdit: false,
+      isShow: false,
     };
   },
 
@@ -162,12 +174,41 @@ export default {
     goToInfo() {
       window.location.href = '/ExamInfo';
     },
+    async GetWhole() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/getWholeExam`, {
+          exam_id: this.examId,
+        });
+        const info = res.data.data;
+        console.log(info);
+        this.Single = info.single;
+        this.Judge = info.judge;
+        this.Discussion = info.discussion;
+        this.Program = info.program;
+        this.scoreS = `${info.singleScore}`;
+        this.scoreJ = `${info.judgeScore}`;
+        this.Count();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    Count() {
+      this.counterS.length = this.Single.length;
+      this.counterJ.length = this.Judge.length;
+      // this.counterD.length = this.Discussion.length;
+      this.counterP.length = this.Program.length;
+      if (this.counterP.length === this.Program.length) {
+        this.isShow = true;
+      }
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
 #AddQuestion{
+  width: 100%;
+  height: 100%;
   background: url(../../assets/index_background_tch.gif);
   display: flex;
   .left{
