@@ -7,6 +7,7 @@
         <div>课程：{{exam.co_name}}</div>
         <div>任课老师：{{ exam.tea_name }}</div>
         <div>考试时间：{{ exam.begin_time }}</div>
+        <div style="fontWeight:bold">考试总成绩：{{ exam.grade }} 分</div>
         <div class="detail" v-for="(bigQues,index_1) in exam.Ques" :key="index_1">
           <div class="title">{{ bigQues.type}}</div>
           <div class="eachs">
@@ -91,16 +92,6 @@
                   readonly
                   v-model="question.stu_answer"
                 ></textarea>
-                <br />本题参考答案是:
-                <br />
-                <textarea
-                  class="pre.text"
-                  cols="70"
-                  rows="10"
-                  wrap="soft"
-                  readonly
-                  v-model="question.answer"
-                ></textarea>
               </div>
               <div
                 :class="{green:question.getScore == question.score,
@@ -110,7 +101,6 @@
           </div>
           <div class="total">该题得分：{{ bigQues.get }}分 / 该题总分 {{ bigQues.total }}分</div>
         </div>
-        <div style="fontWeight:bold">考试总成绩：{{ exam.grade }} 分</div>
       </div>
     </div>
     <div>
