@@ -122,7 +122,7 @@ export default {
           co_id: this.coId,
           exam_id: this.examId,
         });
-        console.log(res);
+        // console.log(res);
         if (res.data.code === 200) {
           this.$message({
             message: '分发成功',
@@ -151,8 +151,9 @@ export default {
     // 结束考试
     async ExamEnd() {
       try {
-        const res = await this.$axios.post(`${this.HOST}`, {
+        const res = await this.$axios.post(`${this.HOST}/exam/changeExamStatus`, {
           exam_id: this.examId,
+          extend_time: 0,
         });
         const info = res.data;
         if (info.code === 200) {
@@ -166,7 +167,6 @@ export default {
       } catch (err) {
         console.log(err);
       }
-      console.log('end');
     },
     // 延长考试
     ExtendExam() {
@@ -186,7 +186,7 @@ export default {
     },
     async SubExtend() {
       try {
-        const res = await this.$axios.post(`${this.HOST}`, {
+        const res = await this.$axios.post(`${this.HOST}/exam/changeExamStatus`, {
           exam_id: this.examId,
           extend_time: this.extendTime,
         });
