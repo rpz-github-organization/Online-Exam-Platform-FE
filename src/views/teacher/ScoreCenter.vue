@@ -157,6 +157,7 @@ export default {
             message: '提交成功',
             offset: 70,
           });
+          this.$router.push('/ExamInfo');
         }
       } catch (err) {
         console.log(err);
