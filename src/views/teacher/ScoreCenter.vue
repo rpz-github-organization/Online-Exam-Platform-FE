@@ -71,6 +71,7 @@ export default {
   name: 'scoreCenter',
   created() {
     this.getQues();
+    console.log(this.examId);
   },
   computed: {
     ...mapState(['examId']),
@@ -86,31 +87,57 @@ export default {
     };
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     async getQues() {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getDiscussion`, {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        this.stuAnswer = info.stuInfo;
-        const ques = info.question;
-        ques.forEach((item) => {
-          this.List.push({
-            ques: item.question,
-            answer: item.answer,
-            score: item.score,
-            stuanswer: '',
+        // console.log(info);
+        if (res.data.code === 200) {
+          this.stuAnswer = info.stuInfo;
+          const ques = info.question;
+          ques.forEach((item) => {
+            this.List.push({
+              ques: item.question,
+              answer: item.answer,
+              score: item.score,
+              stuanswer: '',
+            });
+            this.quesList.push(item.question_id);
           });
-          this.quesList.push(item.question_id);
-        });
-        this.stuAnswer.forEach((item) => {
-          this.stuList.push({
-            id: item.id,
-            name: item.name,
+          this.stuAnswer.forEach((item) => {
+            this.stuList.push({
+              id: item.id,
+              name: item.name,
+            });
           });
-        });
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     showStuQues(index) {
@@ -158,9 +185,23 @@ export default {
             offset: 70,
           });
           this.$router.push('/ExamInfo');
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
   },

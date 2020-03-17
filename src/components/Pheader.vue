@@ -76,6 +76,8 @@ export default {
             const info = res.data;
             if (info.code === 200) {
               this.$store.dispatch('set_authLevel', 0);
+              localStorage.setItem('Login', 'false');
+              this.$store.dispatch('set_Login', 'false');
               window.location.href = '/';
             } else {
               console.log('操作失败');

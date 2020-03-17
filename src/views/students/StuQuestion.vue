@@ -1,6 +1,6 @@
 <template>
     <div id="stuQuestion">
-      <label class="res_time">{{ new Date().toLocaleString() }}</label>
+      <label class="res_time">剩余时间： {{ day }}天{{ hour }}时{{ min }}:{{ second }}</label>
       <div class="paper">
           <div class="menu">
             <el-card>
@@ -75,7 +75,7 @@
                 <programQues
                 :index="index"
                 :ProgramQ="programList[index]"
-                :examId="exam_id"
+                :examId="examId"
                 @func="getList"/>
               </div>
             </el-card>
@@ -104,6 +104,7 @@ export default {
   },
   computed: {
     ...mapState(['uid']),
+    // ...mapState(['examId']),
   },
   data() {
     return {
@@ -119,21 +120,46 @@ export default {
       isShowJ: false,
       isShowD: false,
       isShowP: false,
-      exam_id: 65,
       answerList: [],
+      res_time: 0,
+      examId: 63,
+      curStartTime: '2020-03-17 20:30:00',
+      day: '0',
+      hour: '00',
+      min: '00',
+      second: '00',
     };
   },
   created() {
     this.Begin();
     this.WindowJudge();
+    this.JudgeStatus();
+    // this.countDown();
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     WindowJudge() {
       let co = 0;
-      window.onblur = function () {
+      window.onblur = () => {
         co += 1;
         if (co > 3) {
-          console.log('考试结束');
+          this.$confirm('您已切换了三次标签页，无法继续作答', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }).then(() => {
+            window.location.href = '/IndexStu';
+          }).catch(() => {
+            window.location.href = '/IndexStu';
+          });
         }
       };
     },
@@ -149,13 +175,13 @@ export default {
       // console.log('a');
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getStuExam`, {
-          exam_id: this.exam_id,
+          exam_id: this.examId,
           stu_id: this.uid,
         });
         const info = res.data;
         if (info.code === 200) {
           const infodata = info.data;
-          console.log(info);
+          // console.log(info);
           infodata.forEach((item) => {
             if (item.type === 'Single') {
               this.counterS.push(item);
@@ -170,9 +196,23 @@ export default {
             }
           });
           this.GetQuestion();
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 
@@ -241,7 +281,15 @@ export default {
           }
         });
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 
@@ -256,7 +304,6 @@ export default {
       if (isAdd) {
         this.answerList.push(data);
       }
-      console.log(this.answerList);
     },
     async SubmitExam() {
       const len = this.counterS.length
@@ -278,22 +325,14 @@ export default {
           });
         });
       } else {
-        try {
-          const res = await this.$axios.post(`${this.HOST}/exam/handInExam`, {
-            data: this.answerList,
-            exam_id: this.examId,
-          });
-          console.log(res);
-        } catch (err) {
-          console.log(err);
-        }
+        this.SubmitInfo();
       }
     },
     async SubmitInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/handInExam`, {
           data: this.answerList,
-          exam_id: this.exam_id,
+          exam_id: this.examId,
         });
         const info = res.data;
         console.log(info);
@@ -303,9 +342,136 @@ export default {
             message: '提交成功',
             offset: 70,
           });
+          this.SubmitInfo();
+          // window.location.href = '/IndexStu';
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
+      }
+    },
+    async JudgeStatus() {
+      try {
+        const interval = setInterval(async () => {
+          const res = await this.$axios.post(`${this.HOST}/exam/getTimeAndStatus`, {
+            exam_id: this.examId,
+          });
+          const info = res.data.data;
+          if (res.data.code === 200) {
+            this.curStartTime = this.changeTime(info.begin_time, info.last_time);
+            this.countTime();
+            if (info.status === 'end') {
+              this.$confirm('考试时间到，无法继续作答', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+              }).then(() => {
+                window.location.href = '/IndexStu';
+                clearInterval(interval);
+              }).catch(() => {
+                window.location.href = '/IndexStu';
+                clearInterval(interval);
+              });
+            }
+            if (this.day === 0
+            && this.hour === '00'
+            && this.min === '00'
+            && this.second === '00') {
+              this.$confirm('考试时间到，无法继续作答', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+              }).then(() => {
+                // window.location.href = '/IndexStu';
+                clearInterval(interval);
+              }).catch(() => {
+                // window.location.href = '/IndexStu';
+                clearInterval(interval);
+              });
+            }
+          } else {
+            this.$message({
+              message: info.message,
+              type: 'error',
+              offset: 70,
+            });
+            clearInterval(interval);
+          }
+        }, 1000);
+      } catch (err) {
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
+      }
+    },
+    changeTime(beginTime, lastTime) {
+      const date = new Date(beginTime); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      const lastHour = lastTime / 60;
+      const lastMin = lastTime % 60;
+      const Y = `${date.getFullYear()}/`;
+      const M = `${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}/`;
+      const D = `${date.getDate()} `;
+      const h = `${date.getHours() + lastHour}:`;
+      const m = `${date.getMinutes() + lastMin}:`;
+      const s = `${date.getSeconds()}`;
+      return Y + M + D + h + m + s;
+    },
+    countTime() {
+      // 获取当前时间
+      const date = new Date();
+      const now = date.getTime();
+      // 设置截止时间
+      const endDate = new Date(this.curStartTime); // this.curStartTime需要倒计时的日期
+      const end = endDate.getTime();
+      // 时间差
+      const leftTime = end - now;
+      // 定义变量 d,h,m,s保存倒计时的时间
+      if (leftTime >= 0) {
+        // 天
+        this.day = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+        // 时
+        const h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
+        this.hour = h < 10 ? `0${h}` : h;
+        // 分
+        const m = Math.floor((leftTime / 1000 / 60) % 60);
+        this.min = m < 10 ? `0${m}` : m;
+        // 秒
+        const s = Math.floor((leftTime / 1000) % 60);
+        this.second = s < 10 ? `0${s}` : s;
+      } else {
+        this.day = 0;
+        this.hour = '00';
+        this.min = '00';
+        this.second = '00';
+      }
+      // 等于0的时候不调用
+      if (Number(this.hour) === 0
+      && Number(this.day) === 0
+      && Number(this.min) === 0
+      && Number(this.second) === 0) {
+        console.log('a');
+      } else {
+      // 递归每秒调用countTime方法，显示动态时间效果,
+        setTimeout(this.countTime, 1000);
       }
     },
   },

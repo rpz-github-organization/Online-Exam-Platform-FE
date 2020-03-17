@@ -1,5 +1,5 @@
 <template>
-    <div id="SelectCourse">
+    <div id="selectCourse">
         <div class="row">
           <div class="left">
             <button @click="UnderSelect()" :class="{ button_active: isSelect==0 }">可选课程</button>
@@ -92,6 +92,15 @@ export default {
     };
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     // 提交选课
     async SubmitAdd() {
       console.log(this.addList);
@@ -103,7 +112,7 @@ export default {
             tea_id: this.courseOn[item].tea_id,
           });
         });
-        console.log(data);
+        // console.log(data);
         const res = await this.$axios.post(`${this.HOST}/course/saveToStuCo`, {
           data,
           stu_id: this.uid,
@@ -117,14 +126,22 @@ export default {
           });
         } else {
           this.$message({
-            message: '提交失败',
+            message: info.message,
             type: 'error',
             offset: 70,
           });
         }
         this.isSelect = -1;
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     // 退课提交
@@ -145,14 +162,22 @@ export default {
           });
         } else {
           this.$message({
-            message: '提交失败',
+            message: info.message,
             type: 'error',
             offset: 70,
           });
         }
         this.isSelect = -1;
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     async UnderSelect() {
@@ -171,18 +196,36 @@ export default {
           option: 0,
         });
         const info = res.data.data;
-        info.forEach((item) => {
-          this.courseOn.push({
-            courseName: item.co_name,
-            courseTeacher: item.tea_name,
-            courseTimeon: item.begin_time,
-            courseTimeend: item.end_time,
-            co_id: item.co_id,
-            tea_id: item.tea_id,
+        // console.log(info);
+        if (res.data.code === 200) {
+          info.forEach((item) => {
+            this.courseOn.push({
+              courseName: item.co_name,
+              courseTeacher: item.tea_name,
+              courseTimeon: item.begin_time,
+              courseTimeend: item.end_time,
+              co_id: item.co_id,
+              tea_id: item.tea_id,
+            });
           });
-        });
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
+        // console.log(this.courseOn);
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     async Selected() {
@@ -201,18 +244,34 @@ export default {
           option: 1,
         });
         const info = res.data.data;
-        info.forEach((item) => {
-          this.coursePass.push({
-            courseName: item.co_name,
-            courseTeacher: item.tea_name,
-            courseTimeon: item.begin_time,
-            courseTimeend: item.end_time,
-            co_id: item.co_id,
-            tea_id: item.tea_id,
+        if (res.data.code === 200) {
+          info.forEach((item) => {
+            this.coursePass.push({
+              courseName: item.co_name,
+              courseTeacher: item.tea_name,
+              courseTimeon: item.begin_time,
+              courseTimeend: item.end_time,
+              co_id: item.co_id,
+              tea_id: item.tea_id,
+            });
           });
-        });
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
   },
@@ -220,18 +279,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.row{
+#selectCourse{
   display: flex;
   width: 100%;
-  height: 100%;
+  height: auto;
   justify-content: center;
-  margin-top: 100px;
-  background: url(../../assets/index_background_stu.gif);
-  .left{
+  .row{
+    width: 80%;
+    margin-top: 50px;
     display: flex;
-    flex-direction: column;
-    margin-right: 5%;
-    button{
+    flex-direction: row;
+    .left{
+      display: flex;
+      flex-direction: column;
+      margin-right: 5%;
+      button{
         color: white;
         margin-bottom: 20px;
         font-weight: bold;
@@ -244,53 +306,55 @@ export default {
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
         cursor: pointer;
         outline: none;
+      }
+      .button_active{
+        background-color: #5379a563;
+        box-shadow: none;
+        font-weight: normal;
+      }
     }
-    .button_active{
-      background-color: #5379a563;
-      box-shadow: none;
-      font-weight: normal;
-    }
-  }
-  .right{
-    display: flex;
-    flex-direction: column;
-    width: 60%;
-    .tip{
-      text-align: left;
-      margin: 10px 5px;
-    }
-    .Course{
+    .right{
       display: flex;
       flex-direction: column;
-      margin-bottom: 10px;
-      .Cardrow{
-        margin: 0 auto;
-        width: 100%;
+      width: 60%;
+      padding: 10px;
+      .tip{
+        text-align: left;
+        margin: 10px 5px;
+      }
+      .Course{
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 5px;
+        flex-direction: column;
+        margin-bottom: 10px;
+        .Cardrow{
+          margin: 0 auto;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 5px;
 
-        .title{
-          font-size: 19px;
+          .title{
+            font-size: 19px;
+          }
+          .time{
+            font-size: 15px;
+          }
         }
-        .time{
+        .teacher{
           font-size: 15px;
+          display: flex;
+          padding: 5px;
         }
       }
-      .teacher{
-        font-size: 15px;
+      .button_row{
+        margin: 20px 0;
         display: flex;
-        padding: 5px;
+        justify-content: center;
       }
-    }
-    .button_row{
-      margin: 20px 0;
-      display: flex;
-      justify-content: center;
-    }
-    .submit{
-      width: 100px;
+      .submit{
+        width: 100px;
+      }
     }
   }
 }

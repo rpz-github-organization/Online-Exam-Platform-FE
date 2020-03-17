@@ -19,7 +19,7 @@
           <button @click="submitLogin" class="submit">登录</button>
         </div>
         <div class="row" style="justify-content: flex-end;">
-          <a href="/AddExam">忘记密码</a>
+          <a href="/setPassword">忘记密码</a>
           <a href="/register">立即注册</a>
         </div>
         <br />
@@ -76,24 +76,34 @@ export default {
           const info = res.data;
           console.log(info);
           if (info.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success',
+              offset: 70,
+            });
             this.$store.dispatch('set_uid', this.uid);
-            const infodata = info.data;
-            const authlevel = infodata.authority;
+            const authlevel = info.data.authority;
             this.$store.dispatch('set_authLevel', authlevel);
+            this.$store.dispatch('set_Login', true);
+            localStorage.setItem('Login', 'true');
             if (authlevel === 0) {
               window.location.href = '/IndexStu';
             } else if (authlevel > 0 && authlevel < 99) {
               window.location.href = '/IndexTch';
             }
-            console.log('登录成功');
           } else {
             this.$message({
-              message: '登录失败',
+              message: info.message,
               type: 'error',
               offset: 70,
             });
           }
         } catch (err) {
+          this.$message({
+            message: '登录失败',
+            type: 'error',
+            offset: 70,
+          });
           console.log(err);
         }
       }

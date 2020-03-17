@@ -59,25 +59,50 @@ export default {
   },
 
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     //获取所有已打分的exam
     async getInfo() {
-        try{
-            const res = await this.$axios.post(`${this.HOST}/course/getDoneExam`,{
-                tea_id: this.uid,
+      try{
+        const res = await this.$axios.post(`${this.HOST}/course/getDoneExam`,{
+          tea_id: this.uid,
+        });
+        const info = res.data.data;
+        if (res.data.code === 200) {
+          info.forEach(element => {
+            this.exams.push({
+              name: element.exam_name,
+              begin_time: element.begin_time,
+              last_time: element.last_time,
+              co_name: element.co_name,
+              exam_id: element.exam_id,
             });
-            const info = res.data.data;
-            info.forEach(element => {
-                this.exams.push({
-                    name: element.exam_name,
-                    begin_time: element.begin_time,
-                    last_time: element.last_time,
-                    co_name: element.co_name,
-                    exam_id: element.exam_id,
-                });
-            });
-        } catch (err) {
-            console.log(err);
+          });
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
+      } catch (err) {
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
+      }
     },
     upPage() {
       if (this.start !== 0) {

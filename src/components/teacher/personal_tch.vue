@@ -174,13 +174,26 @@ export default {
     this.submitupdata();
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     async submitupdata() { // 获取登录教师的个人信息
       try {
         const res = await this.$axios.get(`${this.HOST}/PersonalData/getTeacher`, {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log('操作成功');
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            offset: 70,
+          });
           const infodata = info.data;
           this.uid = infodata.tea_uid;
           this.institute = infodata.institute_id;
@@ -196,10 +209,22 @@ export default {
             this.sex = '男';
           }
         } else {
-          console.log('操作失败');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 
@@ -220,7 +245,11 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log('操作成功');
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            offset: 70,
+          });
           const infodata = info.data;
           this.name = infodata.name;
           this.qq = infodata.qq;
@@ -233,10 +262,22 @@ export default {
           }
           this.Seen = true;
         } else {
-          console.log('操作失败');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 
@@ -249,14 +290,26 @@ export default {
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
-          console.log('操作成功');
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            offset: 70,
+          });
           this.isShowpwd = false;
           this.tipMessage = '';
         } else {
           this.tipMessage = '邮箱验证失败';
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 
@@ -268,14 +321,26 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log('操作成功');
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            offset: 70,
+          });
           this.isShowmail = false;
           this.tipMessage = '';
         } else {
           this.tipMessage = '邮箱验证失败';
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 
@@ -287,7 +352,11 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log('操作成功');
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            offset: 70,
+          });
           this.email = this.newEmail;
           this.dialogFormmail = false;
           this.isShowmail = true;
@@ -296,7 +365,15 @@ export default {
           this.tipMessage = '操作失败';
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 
@@ -307,7 +384,11 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log('操作成功');
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            offset: 70,
+          });
           this.dialogFormVisible = false;
           this.isShowpwd = true;
           this.tipMessage = '';
@@ -315,7 +396,15 @@ export default {
           this.tipMessage = '操作失败';
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 
@@ -347,14 +436,29 @@ export default {
         const res = await this.$axios.post(`${this.HOST}/PersonalData/checkTeacherEmail `, {
           email: this.email,
         });
+        if (res.code === 401) {
+          this.sessionJudge();
+        }
         const info = res.data;
         if (info.code === 200) {
-          console.log('发送成功');
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            offset: 70,
+          });
         } else {
-          console.log('出现错误，发送失败！');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        this.$message({
+          message: '系统异常',
+          type: 'error',
+          offset: 70,
+        });
       }
     },
     async submitNewcheck() { // 发送新邮箱验证码
@@ -363,9 +467,16 @@ export default {
           const res = await this.$axios.post(`${this.HOST}/PersonalData/checkTeacherEmail`, {
             email: this.newEmail,
           });
+          if (res.code === 401) {
+            this.sessionJudge();
+          }
           const info = res.data;
           if (info.code === 200) {
-            console.log('发送成功');
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              offset: 70,
+            });
             const timer = setInterval(() => {
               this.sec = this.sec - 1;
               this.code = `${this.sec}S`;
@@ -383,7 +494,11 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err);
+        this.$message({
+          message: '系统异常',
+          type: 'error',
+          offset: 70,
+        });
       }
     },
   },

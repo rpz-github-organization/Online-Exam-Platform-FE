@@ -119,7 +119,6 @@ export default {
         this.tipMessage = '两次密码输入不一致！';
         res = false;
       }
-      console.log(this.tipMessage);
       return res;
     },
     async submitcheck() {
@@ -131,7 +130,11 @@ export default {
             });
             const info = res.data;
             if (info.code === 200) {
-              console.log('发送成功');
+              this.$message({
+                message: '发送成功',
+                type: 'success',
+                offset: 70,
+              });
               const timer = setInterval(() => {
                 this.sec = this.sec - 1;
                 this.code = `${this.sec}S`;
@@ -144,6 +147,11 @@ export default {
                 }
               }, 1000);
             } else {
+              this.$message({
+                message: info.message,
+                type: 'error',
+                offset: 70,
+              });
               console.log('出现错误，发送失败！');
             }
           } else { // 老师注册
@@ -152,12 +160,32 @@ export default {
             });
             const info = res.data;
             if (info.code === 200) {
-              console.log('发送成功');
+              const timer = setInterval(() => {
+                this.sec = this.sec - 1;
+                this.code = `${this.sec}S`;
+                this.showbtn = false;
+                if (this.sec === 0) {
+                  clearInterval(timer);
+                  this.sec = 60;
+                  this.code = `${this.sec}S`;
+                  this.showbtn = true;
+                }
+              }, 1000);
             } else {
+              this.$message({
+                message: '发送失败',
+                type: 'error',
+                offset: 70,
+              });
               console.log('出现错误，发送失败！');
             }
           }
         } catch (err) {
+          this.$message({
+            message: '发送失败',
+            type: 'error',
+            offset: 70,
+          });
           console.log(err);
         }
       }
@@ -176,9 +204,18 @@ export default {
             });
             const info = res.data;
             if (info.code === 200) {
-              console.log('注册成功');
+              this.$message({
+                message: '注册成功',
+                type: 'success',
+                offset: 70,
+              });
               window.location.href = '/';
             } else {
+              this.$message({
+                message: '注册成功',
+                type: 'error',
+                offset: 70,
+              });
               console.log('出现错误，注册失败！');
             }
           } else { // 老师注册
@@ -192,10 +229,18 @@ export default {
             });
             const info = res.data;
             if (info.code === 200) {
-              console.log('注册成功');
+              this.$message({
+                message: '注册成功',
+                type: 'success',
+                offset: 70,
+              });
               window.location.href = '/';
             } else {
-              console.log('出现错误，注册失败！');
+              this.$message({
+                message: '注册失败',
+                type: 'error',
+                offset: 70,
+              });
             }
           }
         } catch (err) {

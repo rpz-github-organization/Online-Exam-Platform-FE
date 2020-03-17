@@ -174,22 +174,47 @@ export default {
     goToInfo() {
       window.location.href = '/ExamInfo';
     },
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     async GetWhole() {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getWholeExam`, {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        console.log(info);
-        this.Single = info.single;
-        this.Judge = info.judge;
-        this.Discussion = info.discussion;
-        this.Program = info.program;
-        this.scoreS = `${info.singleScore}`;
-        this.scoreJ = `${info.judgeScore}`;
-        this.Count();
+        // console.log(info);
+        if (res.data.code === 200) {
+          this.Single = info.single;
+          this.Judge = info.judge;
+          this.Discussion = info.discussion;
+          this.Program = info.program;
+          this.scoreS = `${info.singleScore}`;
+          this.scoreJ = `${info.judgeScore}`;
+          this.Count();
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     Count() {

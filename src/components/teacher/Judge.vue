@@ -91,6 +91,15 @@ export default {
     },
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     isSubmit() {
       let res = true;
       if (!this.question) {
@@ -136,12 +145,28 @@ export default {
                   offset: 70,
                 });
               }
-            } catch (error) {
-              console.log(error);
+            } catch (err) {
+              if (err.response.status === 401) {
+                this.sessionJudge();
+              } else {
+                this.$message({
+                  message: '系统异常',
+                  type: 'error',
+                  offset: 70,
+                });
+              }
             }
           }
         } catch (err) {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.sessionJudge();
+          } else {
+            this.$message({
+              message: '系统异常',
+              type: 'error',
+              offset: 70,
+            });
+          }
         }
       } else if (this.isChange) {
         const quesid = parseInt(this.questionid, 10);
@@ -163,8 +188,16 @@ export default {
               offset: 70,
             });
           }
-        } catch (error) {
-          console.log(error);
+        } catch (err) {
+          if (err.response.status === 401) {
+            this.sessionJudge();
+          } else {
+            this.$message({
+              message: '系统异常',
+              type: 'error',
+              offset: 70,
+            });
+          }
         }
       } else {
         try {
@@ -186,7 +219,15 @@ export default {
             });
           }
         } catch (err) {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.sessionJudge();
+          } else {
+            this.$message({
+              message: '系统异常',
+              type: 'error',
+              offset: 70,
+            });
+          }
         }
       }
     },

@@ -129,6 +129,15 @@ export default {
     };
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     back() {
       window.location.href = '/IndexStu';
     },
@@ -145,10 +154,22 @@ export default {
           this.timestampToDate();
           this.toChinese();
         } else {
-          console.log('请求失败');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     async getQuesDetail(num, question_id, index_1, index_2) {
@@ -168,10 +189,22 @@ export default {
           this.splitOptions();
           this.changeJudge();
         } else {
-          console.log('请求失败');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     // 转换时间戳

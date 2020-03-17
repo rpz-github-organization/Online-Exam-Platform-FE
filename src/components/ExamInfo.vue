@@ -79,6 +79,15 @@ export default {
     ...mapState(['coId']),
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     // 获取考试详情
     async GetList() {
       try {
@@ -86,7 +95,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        console.log(info);
+        // console.log(info);
         this.isHand = info.is_distribute;
         this.examName = info.exam_name;
         this.stuNum = info.stu_number;
@@ -107,7 +116,15 @@ export default {
         }
         this.startTime = time;
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     // 编辑试卷
@@ -132,7 +149,15 @@ export default {
           this.Refresh();
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     // 查看成绩
@@ -165,7 +190,15 @@ export default {
           this.Refresh();
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     // 延长考试
@@ -200,7 +233,15 @@ export default {
           this.Refresh();
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
 

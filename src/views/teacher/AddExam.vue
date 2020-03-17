@@ -51,10 +51,16 @@ export default {
     ...mapState(['coId']),
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     async submitExam() {
-      // this.$store.dispatch('set_examId', 2);
-      // console.log(this.examId);
-      // window.location.href = './AddQuestion';
       const date = new Date(this.date.replace(/-/g, '/'));
       const lastTime = parseInt(this.examTime, 10);
       try {
@@ -66,15 +72,29 @@ export default {
           last_time: lastTime,
         });
         const info = res.data;
-        console.log(info.data);
+        // console.log(info.data);
         if (info.code === 200) {
           // console.log(info.data);
           this.$store.dispatch('set_examId', info.data);
-          console.log(this.examId);
+          // console.log(this.examId);
           window.location.href = './AddQuestion';
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
   },

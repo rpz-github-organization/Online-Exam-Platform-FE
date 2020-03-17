@@ -9,6 +9,7 @@ export default new Vuex.Store({
     uid: '',
     examId: 0,
     coId: 0,
+    isLogin: 'false',
   },
   getters: {
   },
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     setCoId(state, coId) {
       state.coId = coId;
     },
+    setLogin(state, isLogin) {
+      state.isLogin = isLogin;
+    },
   },
   actions: {
     set_uid(set, uid) {
@@ -39,6 +43,9 @@ export default new Vuex.Store({
     },
     set_coId(set, coId) {
       set.commit('setCoId', coId);
+    },
+    set_Login(set, isLogin) {
+      set.commit('setLogin', isLogin);
     },
   },
   modules: {

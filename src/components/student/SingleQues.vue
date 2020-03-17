@@ -73,15 +73,17 @@ export default {
   methods: {
     Question() {
       this.timu = this.SingleQ.question;
-      const oplist = this.SingleQ.options.split(';');
-      const a = oplist[0];
-      const b = oplist[1];
-      const c = oplist[2];
-      const d = oplist[3];
-      this.optionA = a;
-      this.optionB = b;
-      this.optionC = c;
-      this.optionD = d;
+      if (this.SingleQ.options) {
+        const oplist = this.SingleQ.options.split(';');
+        const a = oplist[0];
+        const b = oplist[1];
+        const c = oplist[2];
+        const d = oplist[3];
+        this.optionA = a;
+        this.optionB = b;
+        this.optionC = c;
+        this.optionD = d;
+      }
     },
   },
 };

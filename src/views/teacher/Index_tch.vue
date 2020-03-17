@@ -59,22 +59,43 @@ export default {
   },
 
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     async getTchNameAndSex() {
       try {
         const res = await this.$axios.get(
           `${this.HOST}/PersonalData/getTeacher`,
         );
         const info = res.data;
-        console.log(info);
+        // console.log(info);
         if (info.code === 200) {
           const teaInfo = info.data;
           this.name = teaInfo.name;
           if (teaInfo.sex === 'female') this.male = false;
         } else {
-          console.log('请求失败');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     async getCourseInfo() {
@@ -83,16 +104,28 @@ export default {
           tea_id: this.uid,
         });
         const info = res.data;
-        console.log(info);
+        // console.log(info);
         if (info.code === 200) {
           const courseInfo = info.data;
-          console.log(courseInfo);
+          // console.log(courseInfo);
           this.courses = courseInfo;
         } else {
-          console.log('请求失败');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     toDetail(coId) {

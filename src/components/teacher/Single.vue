@@ -128,6 +128,15 @@ export default {
     },
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     // 验证表单完整性
     isSubmit() {
       let res = true;
@@ -186,11 +195,23 @@ export default {
                 });
               }
             } catch (error) {
-              console.log(error);
+              this.$message({
+                message: '系统异常',
+                type: 'error',
+                offset: 70,
+              });
             }
           }
         } catch (err) {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.sessionJudge();
+          } else {
+            this.$message({
+              message: '系统异常',
+              type: 'error',
+              offset: 70,
+            });
+          }
         }
       } else if (this.isChange) {
         try {
@@ -212,8 +233,16 @@ export default {
               offset: 70,
             });
           }
-        } catch (error) {
-          console.log(error);
+        } catch (err) {
+          if (err.response.status === 401) {
+            this.sessionJudge();
+          } else {
+            this.$message({
+              message: '系统异常',
+              type: 'error',
+              offset: 70,
+            });
+          }
         }
       } else { // 只是修改题目，请求一个接口
         try {
@@ -236,7 +265,15 @@ export default {
             });
           }
         } catch (err) {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.sessionJudge();
+          } else {
+            this.$message({
+              message: '系统异常',
+              type: 'error',
+              offset: 70,
+            });
+          }
         }
       }
     },

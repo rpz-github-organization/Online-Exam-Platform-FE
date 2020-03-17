@@ -31,7 +31,7 @@
           </el-select>
       </div>
       <div class="single_row">
-        <el-input type="textarea" v-model="code" autosize></el-input>
+        <el-input type="textarea" v-model="code" :rows="6"></el-input>
       </div>
       <div class="button_row">
         <button @click="submit()">
@@ -71,7 +71,7 @@
           type="textarea"
           v-model="code"
           :disabled="true"
-          autosize>
+          :rows="6">
           </el-input>
       </div>
     </el-dialog>
@@ -123,7 +123,6 @@ export default {
   },
   created() {
     this.Question();
-    console.log(this.ProgramQ);
   },
   watch: {
     dialogVisible(val) {
@@ -143,6 +142,15 @@ export default {
     },
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     Question() {
       this.timu = this.ProgramQ.question;
       if (this.ProgramQ.input === null) {
@@ -170,28 +178,44 @@ export default {
           question_id: this.ProgramQ.question_id,
           exam_id: this.ProgramQ.exam_id,
         });
-        const info = res.data.data;
-        this.score = info.score;
-        this.statusList.push({
-          date: this.getTime(),
-          status: info.status,
-          score: this.score,
-          language: info.language,
-          username: info.username,
-          num: info.num,
-        });
-        const testCase = info.test_case_res;
-        testCase.forEach((item) => {
-          this.testList.push({
-            number: item.case_num,
-            result: item.result,
-            runtime: item.run_time,
-            memory: item.memory,
+        const info = res.data;
+        if (info.code === 200) {
+          this.score = info.score;
+          this.statusList.push({
+            date: this.getTime(),
+            status: info.status,
+            score: this.score,
+            language: info.language,
+            username: info.username,
+            num: info.num,
           });
-        });
-        this.dialogVisible = true;
+          const testCase = info.test_case_res;
+          testCase.forEach((item) => {
+            this.testList.push({
+              number: item.case_num,
+              result: item.result,
+              runtime: item.run_time,
+              memory: item.memory,
+            });
+          });
+          this.dialogVisible = true;
+        } else {
+          this.$message({
+            type: 'error',
+            message: info.message,
+            offset: 70,
+          });
+        }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
   },

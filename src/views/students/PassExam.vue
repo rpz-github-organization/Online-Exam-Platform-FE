@@ -61,6 +61,15 @@ export default {
     };
   },
   methods: {
+    sessionJudge() {
+      localStorage.setItem('Login', 'false');
+      this.$message({
+        message: '登录过期，请重新登录',
+        type: 'error',
+        offset: 70,
+      });
+      window.location.href('/');
+    },
     async getStuNoExamInfo() {
       try {
         const res = await this.$axios.post(`${this.HOST}/homePage/stu/id`, {
@@ -69,13 +78,25 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log(info.data);
+          // console.log(info.data);
           return info.data;
         } else {
-          console.log('请求失败');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     async getStuYesExamInfo() {
@@ -86,13 +107,25 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log(info.data);
+          // console.log(info.data);
           return info.data;
         } else {
-          console.log('请求失败');
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
       }
     },
     async addNoExamToYesExam() {
