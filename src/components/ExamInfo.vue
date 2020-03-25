@@ -61,8 +61,8 @@ export default {
   data() {
     return {
       examName: '体育',
-      stuNum: 79,
-      stuN: 79,
+      stuNum: 0,
+      stuN: 0,
       examTime: '120min',
       startTime: '2020-02-02',
       status: 0,
@@ -95,7 +95,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        // console.log(info);
+        console.log(info);
         this.isHand = info.is_distribute;
         this.examName = info.exam_name;
         this.stuNum = info.stu_number;
@@ -116,15 +116,16 @@ export default {
         }
         this.startTime = time;
       } catch (err) {
-        if (err.response.status === 401) {
-          this.sessionJudge();
-        } else {
-          this.$message({
-            message: '系统异常',
-            type: 'error',
-            offset: 70,
-          });
-        }
+        console.log(err);
+        // if (err.response.status === 401) {
+        //   this.sessionJudge();
+        // } else {
+        //   this.$message({
+        //     message: '系统异常',
+        //     type: 'error',
+        //     offset: 70,
+        //   });
+        // }
       }
     },
     // 编辑试卷

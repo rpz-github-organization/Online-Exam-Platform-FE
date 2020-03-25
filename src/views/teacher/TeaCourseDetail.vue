@@ -87,9 +87,10 @@ export default {
           // co_id: 1,
           tea_id: this.uid,
         });
+        // console.log(this.coId);
         const info = res.data;
         if (info.code === 200) {
-          // console.log(info.data);
+          console.log(info.data);
           this.course = info.data;
           this.exams = this.course.exams;
           this.timestamp();

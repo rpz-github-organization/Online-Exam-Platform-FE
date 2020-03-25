@@ -48,8 +48,8 @@
         </div>
       </el-card>
     </div>
-    <div class="right" v-if="this.isShow">
-      <div v-if="counterS.length>0">
+    <div class="right">
+      <div v-if="counterS.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div class="type_score">
             <label class="type_title">小题分值</label>
@@ -61,7 +61,7 @@
           </div>
         </el-card>
       </div>
-      <div v-if="counterJ.length>0">
+      <div v-if="counterJ.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div class="type_score">
             <label class="type_title">小题分值</label>
@@ -73,7 +73,7 @@
           </div>
         </el-card>
       </div>
-      <div v-if="counterD.length>0">
+      <div v-if="counterD.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
             <label>讨论题-{{ index+1 }}</label>
@@ -81,7 +81,7 @@
           </div>
         </el-card>
       </div>
-      <div v-if="counterP.length>0">
+      <div v-if="counterP.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
             <label>编程题-{{ index+1 }}</label>
@@ -122,7 +122,6 @@ export default {
     const url = document.referrer;
     console.log(url);
     if (url.search('/ExamInfo') !== -1) {
-      this.isEdit = true;
       this.GetWhole();
     } else {
       this.isShow = true;
@@ -206,6 +205,7 @@ export default {
           });
         }
       } catch (err) {
+        // console.log(err);
         if (err.response.status === 401) {
           this.sessionJudge();
         } else {
@@ -218,12 +218,26 @@ export default {
       }
     },
     Count() {
-      this.counterS.length = this.Single.length;
-      this.counterJ.length = this.Judge.length;
-      // this.counterD.length = this.Discussion.length;
-      this.counterP.length = this.Program.length;
-      if (this.counterP.length === this.Program.length) {
+      if (this.Single) {
+        for (let i = 0; i < this.Single.length; i += 1) {
+          this.AddCount(this.counterS);
+        }
         this.isShow = true;
+      }
+      if (this.Judge) {
+        for (let i = 0; i < this.Judge.length; i += 1) {
+          this.AddCount(this.counterJ);
+        }
+      }
+      if (this.Discussion) {
+        for (let i = 0; i < this.Discussion.length; i += 1) {
+          this.AddCount(this.counterD);
+        }
+      }
+      if (this.Program) {
+        for (let i = 0; i < this.Program.length; i += 1) {
+          this.AddCount(this.counterP);
+        }
       }
     },
   },
@@ -232,8 +246,6 @@ export default {
 
 <style lang="less" scoped>
 #AddQuestion{
-  width: 100%;
-  height: 100%;
   background: url(../../assets/index_background_tch.gif);
   display: flex;
   .left{

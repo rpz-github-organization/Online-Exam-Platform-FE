@@ -22,7 +22,7 @@
           >
             <img src="../../assets/exam_status/green.png" /> 已完成评分（点击查看）
           </div>
-          <div class="orange" v-if="!exam._judge && exam.yes">
+          <div class="orange" v-else>
             <img src="../../assets/exam_status/orange.png" /> 未完成评分
           </div>
         </div>
@@ -50,8 +50,8 @@ export default {
 
   data() {
     return {
-      exams: '',
-      PassExamInfo_All: '',
+      exams: [],
+      passExamInfo_All: [],
       exam_num: '',
       start: 0,
       nowpage: 1,
@@ -132,20 +132,20 @@ export default {
       const noexam = await this.getStuNoExamInfo();
       const yesexam = await this.getStuYesExamInfo();
       // add stuts code
-      noexam.forEach(item => {
-        item.yes = false;
-      });
-      yesexam.forEach(item => {
-        item.yes = true;
-      });
-      let examInfo = yesexam.concat(noexam);
-      examInfo.forEach((item, arr) => {
-        let timestamp = item.begin_time;
-        let newDate = new Date();
-        newDate.setTime(timestamp);
-        item.begin_time = newDate.toLocaleString();
-      });
-      this.passExamInfo_All = examInfo;
+      if (noexam !== null) {
+        noexam.forEach(item => {
+          item.begin_time = this.changeTime(item.begin_time);
+          item.yes = false;
+          this.passExamInfo_All.push(item);
+        });
+      }
+      if (yesexam !== null) {
+        yesexam.forEach(item => {
+          item.begin_time = this.changeTime(item.begin_time);
+          item.yes = true;
+          this.passExamInfo_All.push(item);
+        });
+      }
       this.pager();
       this.showPage();
       this.check();
@@ -175,16 +175,19 @@ export default {
       this.showPage();
     },
     pager() {
-      let exam_num = this.passExamInfo_All.length;
-      if (exam_num <= 5) {
-      } else {
-        if (exam_num % 5 == 0)exam_num -=1; // 避免页数为5的倍数时影响下一步
-        this.totalpage = parseInt(exam_num / 5) + 1; // 判断页数
-        this.pagerSeen = true;
+      if (this.passExamInfo_All) {
+        let exam_num = this.passExamInfo_All.length;
+        if (exam_num <= 5) {
+        } else {
+          if (exam_num % 5 == 0)exam_num -=1; // 避免页数为5的倍数时影响下一步
+          this.totalpage = parseInt(exam_num / 5) + 1; // 判断页数
+          this.pagerSeen = true;
+        }
       }
     },
     showPage() {
       this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
+      // console.log(this.passExamInfo_All);
       scrollTo(0, 0);
     },
     toDetail(examId) {
@@ -199,6 +202,16 @@ export default {
       if (this.exams == '') {
         this.NoExams = true;
       }
+    },
+    changeTime(sj) {
+      const date = new Date(sj); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      const Y = `${date.getFullYear()}/`;
+      const M = `${date.getMonth()}/`;
+      const D = `${date.getDate()} `;
+      const h = `${date.getHours()}:`;
+      const m = `${date.getMinutes()}:`;
+      const s = `${date.getSeconds()}`;
+      return Y + M + D + h + m + s;
     },
   },
 

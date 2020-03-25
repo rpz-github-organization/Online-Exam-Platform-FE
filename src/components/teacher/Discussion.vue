@@ -67,6 +67,7 @@ export default {
       this.question = this.ques.question;
       this.answer = this.ques.answer;
       this.tag = this.ques.tag;
+      this.score = this.ques.score;
       this.questionid = this.ques.question_id;
     }
   },

@@ -58,6 +58,7 @@ export default {
   },
   created() {
     this.Question();
+    console.log(this.SingleQ);
   },
   watch: {
     answer(val) {
@@ -112,6 +113,7 @@ export default {
       width: 800px;
       text-align: left;
       margin-left: 5px;
+      margin-top: 2px;
     }
     .answer{
       margin-left: 20px;

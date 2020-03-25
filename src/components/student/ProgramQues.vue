@@ -31,7 +31,12 @@
           </el-select>
       </div>
       <div class="single_row">
-        <el-input type="textarea" v-model="code" :rows="6"></el-input>
+        <!-- <el-input type="textarea" v-model="code" :rows="6"> -->
+        <codemirror
+        v-model="code"
+        :options="Options"
+        class="code"></codemirror>
+        <!-- </el-input> -->
       </div>
       <div class="button_row">
         <button @click="submit()">
@@ -79,6 +84,18 @@
 </template>
 
 <script>
+import { codemirror } from 'vue-codemirror';
+
+require('codemirror/addon/edit/matchbrackets.js');
+require('codemirror/mode/python/python.js');
+require('codemirror/addon/fold/foldcode.js');
+require('codemirror/addon/fold/foldgutter.js');
+require('codemirror/addon/fold/brace-fold.js');
+require('codemirror/addon/fold/xml-fold.js');
+require('codemirror/addon/fold/indent-fold.js');
+require('codemirror/addon/fold/markdown-fold.js');
+require('codemirror/addon/fold/comment-fold.js');
+
 export default {
   name: 'progarmQues',
   props: {
@@ -93,9 +110,13 @@ export default {
       type: Number,
     },
   },
+  components: {
+    codemirror,
+  },
   data() {
     return {
       answer: '',
+      status: '',
       timu: '',
       stdinput: '',
       stdoutput: '',
@@ -119,6 +140,15 @@ export default {
       dialogVisible: false,
       statusList: [],
       testList: [],
+      Options: {
+        tabSize: 4,
+        mode: 'python',
+        lineWrapping: true,
+        lineNumbers: true,
+        extraKeys: { Ctrl: 'autocomplete' },
+        matchBrackets: true,
+        line: true,
+      },
     };
   },
   created() {
@@ -171,38 +201,50 @@ export default {
       return `${year}/${month}/${day}/  ${hours}:${minutes}:${seconds}`;
     },
     async submit() {
+      // console.log(this.code);
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/judgeProgram`, {
           code: this.code,
           language: this.language,
           question_id: this.ProgramQ.question_id,
-          exam_id: this.ProgramQ.exam_id,
+          exam_id: this.examId,
         });
-        const info = res.data;
-        if (info.code === 200) {
-          this.score = info.score;
-          this.statusList.push({
-            date: this.getTime(),
-            status: info.status,
-            score: this.score,
-            language: info.language,
-            username: info.username,
-            num: info.num,
-          });
-          const testCase = info.test_case_res;
-          testCase.forEach((item) => {
-            this.testList.push({
-              number: item.case_num,
-              result: item.result,
-              runtime: item.run_time,
-              memory: item.memory,
+        // console.log(res);
+        if (res.data.code === 200) {
+          const info = res.data.data;
+          // console.log(info.compile_error);
+          if (info.compile_error === true) {
+            this.$message({
+              type: 'error',
+              message: '编译错误',
+              offset: 70,
             });
-          });
-          this.dialogVisible = true;
+          } else {
+            this.score = info.score;
+            console.log(info);
+            this.statusList.push({
+              date: this.getTime(),
+              status: info.status,
+              score: this.score,
+              language: info.language,
+              username: info.username,
+              num: info.num,
+            });
+            const testCase = info.test_case_res;
+            testCase.forEach((item) => {
+              this.testList.push({
+                number: item.case_num,
+                result: item.result,
+                runtime: item.run_time,
+                memory: item.memory,
+              });
+            });
+            this.dialogVisible = true;
+          }
         } else {
           this.$message({
             type: 'error',
-            message: info.message,
+            message: res.data.message,
             offset: 70,
           });
         }
@@ -242,6 +284,7 @@ export default {
       width: 800px;
       text-align: left;
       margin-left: 5px;
+      margin-top: 2px;
     }
     .index{
       margin-top: 3px;
@@ -269,6 +312,11 @@ export default {
         padding-left: 10px;
       }
     }
+  }
+  .code{
+    width: 100%;
+    text-align: left;
+    font-weight: bold;
   }
   .op{
     display: flex;

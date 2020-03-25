@@ -97,7 +97,7 @@ export default {
   },
   created() {
     if (this.ques) {
-      console.log(this.ques);
+      // console.log(this.ques);
       this.question = this.ques.question;
       const input = [];
       const output = [];

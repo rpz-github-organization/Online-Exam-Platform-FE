@@ -13,7 +13,7 @@
           <el-date-picker
             v-model="date"
             type="datetime"
-            value-format="yyyy-MM-dd hh:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="请选择日期时间">
           </el-date-picker>
           <div class="con">
@@ -40,7 +40,6 @@ export default {
       examTitle: '',
       date: '',
       examTime: '',
-      exam_id: '',
     };
   },
   created() {
@@ -60,40 +59,70 @@ export default {
       });
       window.location.href('/');
     },
+    isAll() {
+      if (!this.examTitle) {
+        this.$message({
+          message: '考试名称不能为空',
+          type: 'error',
+          offset: 70,
+        });
+        return false;
+      }
+      if (!this.date) {
+        this.$message({
+          message: '考试时间不能为空',
+          type: 'error',
+          offset: 70,
+        });
+        return false;
+      }
+      if (!this.examTime) {
+        this.$message({
+          message: '考试时长不能为空',
+          type: 'error',
+          offset: 70,
+        });
+        return false;
+      }
+      return true;
+    },
     async submitExam() {
+      console.log(this.date);
       const date = new Date(this.date.replace(/-/g, '/'));
       const lastTime = parseInt(this.examTime, 10);
-      try {
-        const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
-          name: this.examTitle,
-          co_id: this.coId,
-          tea_id: this.uid,
-          begin_time: date.valueOf(),
-          last_time: lastTime,
-        });
-        const info = res.data;
-        // console.log(info.data);
-        if (info.code === 200) {
+      if (this.isAll()) {
+        try {
+          const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
+            name: this.examTitle,
+            co_id: this.coId,
+            tea_id: this.uid,
+            begin_time: date.valueOf(),
+            last_time: lastTime,
+          });
+          const info = res.data;
           // console.log(info.data);
-          this.$store.dispatch('set_examId', info.data);
-          // console.log(this.examId);
-          window.location.href = './AddQuestion';
-        } else {
-          this.$message({
-            message: info.message,
-            type: 'error',
-            offset: 70,
-          });
-        }
-      } catch (err) {
-        if (err.response.status === 401) {
-          this.sessionJudge();
-        } else {
-          this.$message({
-            message: '系统异常',
-            type: 'error',
-            offset: 70,
-          });
+          if (info.code === 200) {
+            // console.log(info.data);
+            this.$store.dispatch('set_examId', info.data);
+            // console.log(this.examId);
+            window.location.href = './AddQuestion';
+          } else {
+            this.$message({
+              message: info.message,
+              type: 'error',
+              offset: 70,
+            });
+          }
+        } catch (err) {
+          if (err.response.status === 401) {
+            this.sessionJudge();
+          } else {
+            this.$message({
+              message: '系统异常',
+              type: 'error',
+              offset: 70,
+            });
+          }
         }
       }
     },

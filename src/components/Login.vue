@@ -79,7 +79,7 @@ export default {
             this.$message({
               message: '发送成功',
               type: 'success',
-              offset: 70,
+              offset: 90,
             });
             this.$store.dispatch('set_uid', this.uid);
             const authlevel = info.data.authority;

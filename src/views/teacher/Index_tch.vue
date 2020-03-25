@@ -19,6 +19,19 @@
             </div>
           </li>
         </ul>
+        <ul class="course">
+          <li class="cour">
+            <div class="name" @click.stop="changeVisible()">
+                + 点击添加课程
+            </div>
+            <div class="details">
+              学分：？
+              <br />
+              学时：？
+              <br />
+            </div>
+          </li>
+        </ul>
       </div>
       <div class="right">
         <img v-if="male" src="../../assets/head_tch_male.png" />
@@ -36,6 +49,43 @@
         </div>
       </div>
     </div>
+    <el-dialog title="添加课程" :visible.sync="dialogFormVisible">
+      <div class="form_row">
+        <span>请选择添加课程：</span>
+        <el-select v-model="newCoures">
+          <el-option
+            v-for="item in courseList"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name">
+          </el-option>
+        </el-select>
+      </div>
+      <div v-if="newCoures.length>0">
+        <div class="form_row">
+          该课程信息:
+        </div>
+        <div class="form_row">
+          名称：{{ this.coName }}
+        </div>
+        <div class="form_row">
+          课程id：{{ this.coId }}
+        </div>
+        <div class="form_row">
+          专业：{{ this.coMayjor }}
+        </div>
+        <div class="form_row">
+          学分：{{ this.coCredit }}
+        </div>
+        <div class="form_row">
+          学时：{{ this.coHour }}
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addCoures()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -55,7 +105,30 @@ export default {
       male: true,
       greeting: '',
       courses: '',
+      dialogFormVisible: false,
+      courseList: [],
+      newCoures: '',
+      coName: '',
+      coId: '',
+      coMayjor: [],
+      coHour: '',
+      coCredit: '',
     };
+  },
+  watch: {
+    newCoures(val) {
+      if (val.length > 0) {
+        this.courseList.forEach((element) => {
+          if (element.name === val) {
+            this.coName = element.name;
+            this.coId = element.coId;
+            this.coMayjor = element.mayjor;
+            this.coHour = element.hour;
+            this.coCredit = element.credit;
+          }
+        });
+      }
+    },
   },
 
   methods: {
@@ -67,6 +140,75 @@ export default {
         offset: 70,
       });
       window.location.href('/');
+    },
+    async changeVisible() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/course/getCourseNotTea`, {
+          tea_id: this.uid,
+        });
+        const info = res.data;
+        // console.log(info);
+        if (info.code === 200) {
+          this.dialogFormVisible = true;
+          if (info.data.length > 0) {
+            info.data.forEach((element) => {
+              this.courseList.push({
+                name: element.name,
+                coId: element.co_id,
+                mayjor: element.mayjor,
+                credit: element.credit,
+                hour: element.school_hour,
+              });
+            });
+          }
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
+      } catch (err) {
+        if (err === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
+      }
+    },
+    async addCoures() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/course/add`, {
+          tea_id: this.uid,
+          co_id: this.coId,
+        });
+        const info = res.data;
+        // console.log(info);
+        if (info.code === 200) {
+          this.dialogFormVisible = false;
+          this.Refresh();
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
+      } catch (err) {
+        if (err === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
+      }
     },
     async getTchNameAndSex() {
       try {
@@ -132,6 +274,11 @@ export default {
       this.$store.dispatch('set_coId', coId);
       window.location.href = '/TeaCourseDetail';
     },
+    Refresh() {
+      const NewPage = `${'_empty?time='}${new Date().getTime() / 500}`;
+      this.$router.push(NewPage);
+      this.$router.go(-1);
+    },
   },
 
   created() {
@@ -167,6 +314,12 @@ export default {
       height: 60px;
       margin-top: 10px;
     }
+  }
+  .form_row {
+    text-align: left;
+    font-weight: bold;
+    margin-left: 50px;
+    margin-bottom: 20px;
   }
 
   .main {

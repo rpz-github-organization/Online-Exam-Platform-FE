@@ -1,18 +1,24 @@
 <template>
   <div id="app">
-    <Pheader />
+    <div v-if="this.isLogin === true">
+      <Pheader />
+    </div>
     <div class="header"></div>
     <router-view/>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Pheader from '@/components/Pheader.vue';
 
 export default {
   name: 'app',
   components: {
     Pheader,
+  },
+  computed: {
+    ...mapState(['isLogin']),
   },
   created() {
     // 在页面加载时读取sessionStorage里的状态信息

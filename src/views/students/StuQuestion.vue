@@ -104,7 +104,7 @@ export default {
   },
   computed: {
     ...mapState(['uid']),
-    // ...mapState(['examId']),
+    ...mapState(['examId']),
   },
   data() {
     return {
@@ -122,7 +122,6 @@ export default {
       isShowP: false,
       answerList: [],
       res_time: 0,
-      examId: 63,
       curStartTime: '2020-03-17 20:30:00',
       day: '0',
       hour: '00',
@@ -134,7 +133,6 @@ export default {
     this.Begin();
     this.WindowJudge();
     this.JudgeStatus();
-    // this.countDown();
   },
   methods: {
     sessionJudge() {
@@ -150,8 +148,9 @@ export default {
       let co = 0;
       window.onblur = () => {
         co += 1;
-        if (co > 3) {
-          this.$confirm('您已切换了三次标签页，无法继续作答', '提示', {
+        console.log(co);
+        if (co > 5) {
+          this.$confirm('您已切换了五次标签页，无法继续作答', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
@@ -335,15 +334,14 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data;
-        console.log(info);
+        // console.log(info);
         if (info.code === 200) {
           this.$message({
             type: 'success',
             message: '提交成功',
             offset: 70,
           });
-          this.SubmitInfo();
-          // window.location.href = '/IndexStu';
+          window.location.href = '/IndexStu';
         } else {
           this.$message({
             message: info.message,
@@ -395,10 +393,10 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning',
               }).then(() => {
-                // window.location.href = '/IndexStu';
+                window.location.href = '/IndexStu';
                 clearInterval(interval);
               }).catch(() => {
-                // window.location.href = '/IndexStu';
+                window.location.href = '/IndexStu';
                 clearInterval(interval);
               });
             }

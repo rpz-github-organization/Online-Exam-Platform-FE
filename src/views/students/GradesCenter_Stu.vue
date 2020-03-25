@@ -128,6 +128,7 @@ export default {
           }
         );
         const info = res.data;
+        // console.log(info);
         if (info.code === 200) {
           // console.log('exams:', info.data);
           this.ExamInfo_All = info.data;
@@ -152,16 +153,18 @@ export default {
       }
     },
     timeStamp() {
-      let examInfo = this.ExamInfo_All;
-      examInfo.forEach(item => {
-        let timestamp = item.begin_time;
-        let newDate = new Date();
-        newDate.setTime(timestamp);
-        item.begin_time = newDate.toLocaleString();
-      });
-      this.onExamInfo_All = examInfo;
-      this.pager();
-      this.showPage();
+      if (this.ExamInfo_All) {
+        let examInfo = this.ExamInfo_All;
+        examInfo.forEach(item => {
+          let timestamp = item.begin_time;
+          let newDate = new Date();
+          newDate.setTime(timestamp);
+          item.begin_time = newDate.toLocaleString();
+        });
+        this.onExamInfo_All = examInfo;
+        this.pager();
+        this.showPage();
+      }
     },
     upPage() {
       if (this.start !== 0) {

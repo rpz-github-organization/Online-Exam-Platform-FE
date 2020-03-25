@@ -4,21 +4,21 @@
         <div class="card">
           <div class="right_info">
             <div class="row">
-              <span>编号:</span>
+              <span class="ti">工号:</span>
               <span>{{this.uid}}</span>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <span>学院:</span>
               <span>{{this.institute}}</span>
-            </div>
+            </div> -->
             <div class="line"></div>
             <div class="row">
-              <label for="name">姓名:</label>
+              <label for="name" class="ti">姓名:</label>
               <label v-if="Seen">{{this.name}}</label>
               <input v-model="name" type="text" name="name" placeholder="请输入名字" v-if="!Seen"/>
             </div>
             <div class="row">
-              <label for="sex" >性别:</label>
+              <label for="sex" class="ti">性别:</label>
               <label v-if="Seen">{{this.sex}}</label>
               <select id="sex" name="sex" v-model="sex" v-if="!Seen">
                 <option >女</option>
@@ -26,23 +26,23 @@
               </select>
             </div>
             <div class="row">
-              <label for="qq">Q  Q:</label>
+              <label for="qq" class="ti">Q  Q:</label>
               <label v-if="Seen">{{this.qq}}</label>
               <input v-model="qq" type="text" name="qq" placeholder="请输入QQ号" v-if="!Seen"/>
             </div>
             <div class="row">
-              <label for="wx">微信:</label>
+              <label for="wx" class="ti">微信:</label>
               <label v-if="Seen">{{this.wx}}</label>
               <input v-model="wx" type="text" name="wx" placeholder="请输入微信" v-if="!Seen"/>
             </div>
             <div class="row">
-              <label for="phone">电话:</label>
+              <label for="phone" class="ti">电话:</label>
               <label v-if="Seen">{{this.phone}}</label>
               <input v-model="phone" type="text" name="phone" placeholder="请输入电话" v-if="!Seen"/>
             </div>
             <div class="line"></div>
             <div class="row">
-              <label for="email">邮箱:</label>
+              <label for="email" class="ti">邮箱:</label>
               <label>{{this.email}}</label>
               <el-button class="change"
                 type="text"
@@ -195,7 +195,8 @@ export default {
             offset: 70,
           });
           const infodata = info.data;
-          this.uid = infodata.tea_uid;
+          console.log(infodata);
+          this.uid = infodata.tea_id;
           this.institute = infodata.institute_id;
           this.name = infodata.name;
           this.pwd = infodata.password;
@@ -513,7 +514,7 @@ export default {
   background: url(../../assets/personal_background_tch.gif);
 
   h1{
-  font-size: 20px;
+  font-size: 26px;
   color: #3d3d3d;
   height: 90px;
   line-height: 150px;
@@ -568,8 +569,7 @@ export default {
         .line{
           height: 1px;
           background: #302c2c;
-          margin-bottom:5px;
-          margin-top: 5px;
+          margin: 10px 0;
         }
 
         .row{
@@ -577,9 +577,12 @@ export default {
           line-height: 20px;
           overflow:hidden;
           display: flex;
-          margin: 3px 5px;
+          margin: 10px 5px;
           justify-content: flex-start;
 
+          .ti{
+            font-weight: bold;
+          }
           span{
             font-size: 16px;
             color: #999;

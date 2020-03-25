@@ -20,9 +20,9 @@
         <li v-if="authLevel>0 && authLevel<=99">
           <el-link type="info" href="/GradesCenter_tch">课程成绩中心</el-link>
         </li>
-        <li v-if="authLevel===0">
+        <!-- <li v-if="authLevel===0">
           <el-link type="info">错题本</el-link>
-        </li>
+        </li> -->
         <li v-if="authLevel===99">
           <el-link type="info">权限管理</el-link>
         </li>

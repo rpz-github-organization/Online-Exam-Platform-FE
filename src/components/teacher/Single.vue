@@ -88,7 +88,6 @@ export default {
   },
   created() {
     if (this.ques) {
-      // console.log(this.ques);
       this.question = this.ques.question;
       this.option = this.ques.option.split(';');
       this.answer = this.ques.answer;
@@ -110,7 +109,7 @@ export default {
       questionid: null,
 
       question: '',
-      option: ['', '', '', ''],
+      option: [],
       answer: '',
       isChange: false,
       tag: '',
@@ -142,13 +141,7 @@ export default {
       let res = true;
       if (!this.question) {
         res = false;
-      } else if (!this.optionA) {
-        res = false;
-      } else if (!this.optionB) {
-        res = false;
-      } else if (!this.optionC) {
-        res = false;
-      } else if (!this.optionD) {
+      } else if (this.option.length < 4) {
         res = false;
       } else if (!this.tag) {
         res = false;

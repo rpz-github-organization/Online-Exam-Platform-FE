@@ -22,7 +22,7 @@
           >
             <img src="../../assets/exam_status/green.png" /> 评分已完成(点击查看)
           </div>
-          <div class="orange" v-if="!exam._judge && exam.yes" style="cursor:pointer">
+          <div class="orange" style="cursor:pointer" v-else>
             <img src="../../assets/exam_status/orange.png" /> 未完成评分
           </div>
         </div>
@@ -51,13 +51,13 @@ export default {
 
   data() {
     return {
-      exams: '',
+      exams: [],
       exam_num: '',
       start: 0,
       nowpage: 1,
       totalpage: '',
       pagerSeen: false,
-      onExamInfo_All: '',
+      onExamInfo_All: [],
       NoExams: false,
     };
   },
@@ -79,7 +79,9 @@ export default {
           status: 0,
         });
         const info = res.data;
+        // console.log(info);
         if (info.code === 200) {
+          // console.log(info.data);
           // console.log('no', info.data);
           return info.data;
         } else {
@@ -108,6 +110,7 @@ export default {
           status: 1,
         });
         const info = res.data;
+        // console.log(info);
         if (info.code === 200) {
           // console.log('yes', info.data);
           return info.data;
@@ -132,22 +135,23 @@ export default {
     },
     async addYesExamToNoExam() {
       const noexam = await this.getStunoExamInfo();
+      // console.log(noexam);
       const yesexam = await this.getStuyesExamInfo();
-      noexam.forEach(item => {
-        item.yes = false;
-      });
-      yesexam.forEach(item => {
-        item.yes = true;
-      });
-      //  转换时间戳
-      let examInfo = noexam.concat(yesexam);
-      examInfo.forEach(item => {
-        let timestamp = item.begin_time;
-        let newDate = new Date();
-        newDate.setTime(timestamp);
-        item.begin_time = newDate.toLocaleString();
-      });
-      this.onExamInfo_All = examInfo;
+      if (noexam !== null) {
+        noexam.forEach(item => {
+          item.begin_time = this.changeTime(item.begin_time);
+          item.yes = false;
+          this.onExamInfo_All.push(item);
+        });
+      }
+      if (yesexam !== null) {
+        yesexam.forEach(item => {
+          item.begin_time = this.changeTime(item.begin_time);
+          // console.log(item.time);
+          item.yes = true;
+          this.onExamInfo_All.push(item);
+        });
+      }
       this.pager();
       this.showPage();
       this.check();
@@ -177,17 +181,20 @@ export default {
       this.showPage();
     },
     pager() {
-      let exam_num = this.onExamInfo_All.length;
-      if (exam_num <= 5) {
-      } else {
-        if (exam_num % 5 == 0)exam_num -=1; // 避免页数为5的倍数时影响下一步
-        this.totalpage = parseInt(exam_num / 5) + 1; // 判断页数
-        this.pagerSeen = true;
+      if (this.onExamInfo_All) {
+        let exam_num = this.onExamInfo_All.length;
+        if (exam_num <= 5) {
+        } else {
+          if (exam_num % 5 == 0)exam_num -=1; // 避免页数为5的倍数时影响下一步
+          this.totalpage = parseInt(exam_num / 5) + 1; // 判断页数
+          this.pagerSeen = true;
+        }
       }
     },
     // 控制显示的exams
     showPage() {
       this.exams = this.onExamInfo_All.slice(this.start, this.start + 5);
+      // console.log(this.onExamInfo_All);
       scrollTo(0, 0);
     },
     toDetail(examId) {
@@ -203,6 +210,16 @@ export default {
       if (this.exams == '') {
         this.NoExams = true;
       }
+    },
+    changeTime(sj) {
+      const date = new Date(sj); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      const Y = `${date.getFullYear()}/`;
+      const M = `${date.getMonth()}/`;
+      const D = `${date.getDate()} `;
+      const h = `${date.getHours()}:`;
+      const m = `${date.getMinutes()}:`;
+      const s = `${date.getSeconds()}`;
+      return Y + M + D + h + m + s;
     },
   },
 

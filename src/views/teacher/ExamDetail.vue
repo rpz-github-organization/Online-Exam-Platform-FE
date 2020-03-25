@@ -2,7 +2,7 @@
     <div id="examDetail">
         <div class="center">
             <el-card>
-                <div v-if="Single">
+                <div v-if="this.Single">
                     <div class="label_row">
                         <span>选择题</span>
                     </div>
@@ -11,14 +11,16 @@
                     :key="item.question_id"
                     class="ques_row">
                         <span class="row">{{ index + 1 }}.{{ item.question }}</span>
-                        <span class="row option">A.{{ item.option[0] }}</span>
-                        <span class="row option">B.{{ item.option[1] }}</span>
-                        <span class="row option">C.{{ item.option[2] }}</span>
-                        <span class="row option">D.{{ item.option[3] }}</span>
+                        <div v-if="item.option">
+                          <span class="row option">A.{{ item.option[0] }}</span>
+                          <span class="row option">B.{{ item.option[1] }}</span>
+                          <span class="row option">C.{{ item.option[2] }}</span>
+                          <span class="row option">D.{{ item.option[3] }}</span>
+                        </div>
                         <span>答案：{{ item.answer }}</span>
                     </div>
                 </div>
-                <div v-if="Judge">
+                <div v-if="this.Judge">
                     <div class="label_row">
                         <span>判断题</span>
                     </div>
@@ -30,7 +32,7 @@
                         <span>答案：{{ item.answer }}</span>
                     </div>
                 </div>
-                <div v-if="Discussion">
+                <div v-if="this.Discussion">
                     <div class="label_row">
                         <span>问答题</span>
                     </div>
@@ -42,7 +44,7 @@
                         <span>参考答案：{{ item.answer }}</span>
                     </div>
                 </div>
-                <div v-if="Program">
+                <div v-if="this.Program">
                     <div class="label_row">
                         <span>编程题</span>
                     </div>
@@ -98,6 +100,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
+        // console.log(info);
         if (res.data.code === 200) {
           this.Single = info.single;
           this.Judge = info.judge;
@@ -114,6 +117,7 @@ export default {
           });
         }
       } catch (err) {
+        console.log(err);
         if (err.response.status === 401) {
           this.sessionJudge();
         } else {
@@ -126,8 +130,12 @@ export default {
       }
     },
     ChangeType() {
-      for (let i = 0; i < this.Single.length; i += 1) {
-        this.Single[i].option = this.Single[i].option.split(';');
+      if (this.Single) {
+        for (let i = 0; i < this.Single.length; i += 1) {
+          if (this.Single[i].option) {
+            this.Single[i].option = this.Single[i].option.split(';');
+          }
+        }
       }
     },
     GoBack() {
