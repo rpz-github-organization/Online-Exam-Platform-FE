@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    <h4>{{ new Date().toLocaleString() }} - 欢迎来到 "教你写登录注册" 教程</h4>
     <div class="card login-container">
       <div class="title">登录 · Login</div>
       <div class="form">
@@ -12,16 +11,18 @@
           <label for="password">密码</label>
           <input v-model="password" type="password" name="password" placeholder="请输入密码" />
         </div>
-        <br>
+        <br />
         <div v-show="tipMessage.length > 0" class="row">
           <p class="tip">{{ tipMessage }}</p>
         </div>
         <div class="row">
           <button @click="submitLogin" class="submit">登录</button>
-          <a href="/">忘记密码</a>
+        </div>
+        <div class="row" style="justify-content: flex-end;">
+          <a href="/setPassword">忘记密码</a>
           <a href="/register">立即注册</a>
         </div>
-        <br>
+        <br />
       </div>
     </div>
   </div>
@@ -34,11 +35,25 @@ export default {
     return {
       uid: '',
       password: '',
-
       tipMessage: '',
     };
   },
+  created() {
+    window.addEventListener('keydown', this.handleKeyDown, true);
+  },
   methods: {
+    // 监听按键
+    handleKeyDown(e) {
+      let key = null;
+      if (window.event === undefined) {
+        key = e.keyCode;
+      } else {
+        key = window.event.keyCode;
+      }
+      if (key === 13) {
+        this.submitLogin();
+      }
+    },
     validate() {
       let res = true;
       if (this.uid.length === 0) {
@@ -48,24 +63,50 @@ export default {
         this.tipMessage = '还没有填写 密码！';
         res = false;
       }
-      this.tipMessage = '';
       return res;
     },
-    // async submitLogin() {
-    //   if (this.validate()) {
-    //     try {
-    //       const res = await this.$axios.post('http://localhost:8080/login', {
-    //         uid: this.uid,
-    //         password: this.password,
-    //       });
-    //       console.log(res);
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   }
-    // },
-    submitLogin() {
-      window.location.href = '/index_stu';
+    async submitLogin() {
+      if (this.validate()) {
+        this.tipMessage = '';
+        try {
+          const res = await this.$axios.post(`${this.HOST}/login/id`, {
+            keyword: this.uid,
+            password: this.password,
+          });
+          const info = res.data;
+          console.log(info);
+          if (info.code === 200) {
+            this.$message({
+              message: '发送成功',
+              type: 'success',
+              offset: 90,
+            });
+            this.$store.dispatch('set_uid', this.uid);
+            const authlevel = info.data.authority;
+            this.$store.dispatch('set_authLevel', authlevel);
+            this.$store.dispatch('set_Login', true);
+            localStorage.setItem('Login', 'true');
+            if (authlevel === 0) {
+              window.location.href = '/IndexStu';
+            } else if (authlevel > 0 && authlevel < 99) {
+              window.location.href = '/IndexTch';
+            }
+          } else {
+            this.$message({
+              message: info.message,
+              type: 'error',
+              offset: 70,
+            });
+          }
+        } catch (err) {
+          this.$message({
+            message: '登录失败',
+            type: 'error',
+            offset: 70,
+          });
+          console.log(err);
+        }
+      }
     },
   },
 };
@@ -79,7 +120,7 @@ export default {
     margin: 5px auto;
     padding: 10px 0;
     border-radius: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.20);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
 
     .title {
@@ -108,10 +149,10 @@ export default {
           font-weight: bold;
         }
 
-        input[name='uid'],
-        input[name='password'],
-        input[name='uid']:focus,
-        input[name='password']:focus {
+        input[name="uid"],
+        input[name="password"],
+        input[name="uid"]:focus,
+        input[name="password"]:focus {
           border: none;
           outline: none;
           width: 55%;
@@ -121,10 +162,10 @@ export default {
           transition: all 0.5s ease;
         }
 
-        input[name='uid']:focus,
-        input[name='password']:focus,
-        input[name='uid']:hover,
-        input[name='password']:hover {
+        input[name="uid"]:focus,
+        input[name="password"]:focus,
+        input[name="uid"]:hover,
+        input[name="password"]:hover {
           font-size: 16px;
         }
 
@@ -133,10 +174,10 @@ export default {
           width: 80px;
         }
 
-        a, a:hover, a:focus, a:visited, a:link {
+        .phoneLogin, a, a:hover, a:focus, a:visited, a:link {
           text-decoration: none;
-          font-size: 14px;
-          margin: 0 15px;
+          font-size: 12px;
+          margin: 20px 20px 0 20px;
           color: dimgray;
         }
       }
@@ -158,6 +199,11 @@ export default {
       .submit:hover {
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
       }
+    }
+    .tip{
+      color: brown;
+      text-align: center;
+      margin-top: -2%;
     }
   }
 }

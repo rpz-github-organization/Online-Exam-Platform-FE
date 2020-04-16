@@ -1,5 +1,16 @@
 <template>
   <div class="about">
-    <h3>关于我们</h3>
+    <img class="logo" alt="Vue logo" src="../assets/logo.png">
   </div>
 </template>
+
+<script>
+
+export default {
+  name: 'about',
+};
+</script>
+
+<style lang="less" scoped>
+
+</style>
