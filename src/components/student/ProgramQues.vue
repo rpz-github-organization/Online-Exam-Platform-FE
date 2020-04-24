@@ -121,7 +121,7 @@ export default {
       stdinput: '',
       stdoutput: '',
       code: '',
-      tip: 'aa',
+      tip: '',
       score: 0,
 
       language: '',
@@ -140,6 +140,7 @@ export default {
       dialogVisible: false,
       statusList: [],
       testList: [],
+      type: '',
       Options: {
         tabSize: 4,
         mode: 'python',
@@ -153,6 +154,7 @@ export default {
   },
   created() {
     this.Question();
+    // console.log(this.ProgramQ);
   },
   watch: {
     dialogVisible(val) {
@@ -168,6 +170,7 @@ export default {
         score: this.score,
         type: this.type,
       };
+      // console.log(this.info);
       this.$emit('func', this.info);
     },
   },
@@ -183,6 +186,8 @@ export default {
     },
     Question() {
       this.timu = this.ProgramQ.question;
+      this.type = this.ProgramQ.type;
+      this.tip = this.ProgramQ.tip;
       if (this.ProgramQ.input === null) {
         this.stdinput = '无';
       } else {

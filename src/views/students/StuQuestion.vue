@@ -148,8 +148,13 @@ export default {
       let co = 0;
       window.onblur = () => {
         co += 1;
-        console.log(co);
+        this.$confirm(`已切换了${co}次标签页，超过五次则自动交卷`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        });
         if (co > 5) {
+          this.SubmitExam();
           this.$confirm('您已切换了五次标签页，无法继续作答', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -333,6 +338,7 @@ export default {
           data: this.answerList,
           exam_id: this.examId,
         });
+        console.log(this.answerList);
         const info = res.data;
         // console.log(info);
         if (info.code === 200) {
@@ -368,6 +374,7 @@ export default {
             exam_id: this.examId,
           });
           const info = res.data.data;
+          // console.log(info);
           if (res.data.code === 200) {
             this.curStartTime = this.changeTime(info.begin_time, info.last_time);
             this.countTime();
@@ -423,13 +430,23 @@ export default {
     },
     changeTime(beginTime, lastTime) {
       const date = new Date(beginTime); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
-      const lastHour = lastTime / 60;
+      const lastHour = parseInt((lastTime / 60), 10);
       const lastMin = lastTime % 60;
       const Y = `${date.getFullYear()}/`;
       const M = `${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}/`;
-      const D = `${date.getDate()} `;
-      const h = `${date.getHours() + lastHour}:`;
-      const m = `${date.getMinutes() + lastMin}:`;
+      let D = `${date.getDate()} `;
+      let h = `${date.getHours() + lastHour}`;
+      let m = `${date.getMinutes() + lastMin}`;
+      if (m >= 60) {
+        m = `${parseInt(m, 10) - 60}`;
+        h = `${parseInt(h, 10) + 1}`;
+      }
+      if (h >= 24) {
+        h = `${parseInt(h, 10) - 24}`;
+        D = `${parseInt(D, 10) + 1} `;
+      }
+      h = `${h}:`;
+      m = `${m}:`;
       const s = `${date.getSeconds()}`;
       return Y + M + D + h + m + s;
     },

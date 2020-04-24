@@ -74,7 +74,7 @@ export default {
             password: this.password,
           });
           const info = res.data;
-          console.log(info);
+          // console.log(info);
           if (info.code === 200) {
             this.$message({
               message: '发送成功',

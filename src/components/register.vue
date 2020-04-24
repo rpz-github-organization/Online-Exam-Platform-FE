@@ -88,7 +88,7 @@ export default {
         this.tipMessage = '还没有填写 学号/工号！';
         console.log(this.tipMessage);
         res = false;
-      } else if (this.uid.length !== 10) {
+      } else if (this.uid.length !== 10 && this.uid.length !== 8) {
         this.tipMessage = '学号/工号 格式错误！';
         res = false;
       } else if (this.name.length === 0) {
@@ -122,6 +122,7 @@ export default {
       return res;
     },
     async submitcheck() {
+      this.tipMessage = '';
       if (this.validate) {
         try {
           if (this.email.search('@sicnu.edu.cn') === -1) { // 学生注册
@@ -191,6 +192,7 @@ export default {
       }
     },
     async submitregister() {
+      this.tipMessage = '';
       if (this.validate()) {
         try {
           if (this.email.search('@sicnu.edu.cn') === -1) { // 学生注册
@@ -212,7 +214,7 @@ export default {
               window.location.href = '/';
             } else {
               this.$message({
-                message: '注册成功',
+                message: info.message,
                 type: 'error',
                 offset: 70,
               });

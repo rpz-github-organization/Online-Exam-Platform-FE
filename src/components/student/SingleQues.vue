@@ -6,27 +6,27 @@
                 <label class="timu">{{ timu }}</label>
             </div>
             <div class="single_row op">
-                <el-radio v-model="answer" label="A">
+                <el-radio v-model="answer" label="A" class="op_row">
                     <label class="Al">A</label>
-                    <label class="options">{{ this.optionA }}</label>
+                    <span class="options">{{ this.optionA }}</span>
                 </el-radio>
             </div>
             <div class="single_row op">
-                <el-radio v-model="answer" label="B">
+                <el-radio v-model="answer" label="B" class="op_row">
                     <label class="Al">B</label>
-                    <label class="options">{{ this.optionB }}</label>
+                    <span class="options">{{ this.optionB }}</span>
                 </el-radio>
             </div>
             <div class="single_row op">
-                <el-radio v-model="answer" label="C">
+                <el-radio v-model="answer" label="C" class="op_row">
                     <label class="Al">C</label>
-                    <label class="options">{{ this.optionC }}</label>
+                    <span class="options">{{ this.optionC }}</span>
                 </el-radio>
             </div>
             <div class="single_row op">
-                <el-radio v-model="answer" label="D">
+                <el-radio v-model="answer" label="D" class="op_row">
                     <label class="Al">D</label>
-                    <label class="options">{{ this.optionD }}</label>
+                    <span class="options">{{ this.optionD }}</span>
                 </el-radio>
             </div>
         </el-card>
@@ -102,7 +102,7 @@ export default {
   }
   .single_row{
     display: flex;
-    justify-content: flex-start;
+    text-align: left;
     margin-bottom: 10px;
 
     .index{
@@ -117,16 +117,26 @@ export default {
     }
     .answer{
       margin-left: 20px;
+      word-wrap:break-word;
     }
     .Al{
       margin-right: 20px;
     }
     .options{
+      margin-left: 20px;
+      margin-top: -17px;
+      line-height: 20px;
       text-align: left;
+      display: block;
+      word-wrap:break-word;
+      white-space:normal;
     }
   }
-  .op{
+  .op_row {
     display: flex;
+    flex-direction: row;
+  }
+  .op{
     width: 90%;
     margin-left: 5%;
   }

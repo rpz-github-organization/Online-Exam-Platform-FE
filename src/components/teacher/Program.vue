@@ -97,7 +97,7 @@ export default {
   },
   created() {
     if (this.ques) {
-      // console.log(this.ques);
+      console.log(this.ques);
       this.question = this.ques.question;
       const input = [];
       const output = [];
@@ -108,6 +108,8 @@ export default {
       this.answer_input = input;
       this.answer_output = output;
       this.tag = this.ques.tag;
+      this.tip = this.ques.tip;
+      this.score = this.ques.score;
       this.questionid = this.ques.question_id;
     }
   },
@@ -181,6 +183,7 @@ export default {
             type: this.type,
             question: this.question,
             tag: this.tag,
+            tip: this.tip,
             tea_id: this.uid,
             test_case: this.test_case,
           });
@@ -262,6 +265,7 @@ export default {
             question_id: quesid,
             question: this.question,
             tag: this.tag,
+            tip: this.tip,
             tea_id: this.uid,
             test_case: this.test_case,
           });

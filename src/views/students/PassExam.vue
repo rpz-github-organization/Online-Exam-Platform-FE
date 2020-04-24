@@ -3,21 +3,24 @@
     <h2 v-if="NoExams">最近没有已完成的考试哦！</h2>
     <ul v-for="(exam,index) in exams" :key="index" class="middle">
       <li id="exam">
-        <div class="one" @click.stop="toDetail(exam.exam_id)">
-          <div class="name" :class="{ yescolor: exam.yes }">
+        <div class="one" @click.stop="toDetail(exam.exam.exam_id)">
+          <div class="name" :class="{ yescolor: exam.exam.yes }">
             <img src="../../assets/exam.png" alt="exam" />
-            {{ exam.name }}
-            <img v-if="!exam.yes" src="../../assets/exam_no.png" />
-            <img v-if="exam.yes" src="../../assets/exam_yes.png" />
+            {{ exam.exam.name }}
+            <img v-if="!exam.exam.yes" src="../../assets/exam_no.png" />
+            <img v-if="exam.exam.yes" src="../../assets/exam_yes.png" />
           </div>
-          <div class="time">{{ exam.begin_time }}</div>
+          <div class="time">{{ exam.exam.begin_time }}</div>
         </div>
         <div class="two">
-          <div>考试时长：{{exam.last_time}}分钟</div>
+          <div>
+            <span>考试时长：{{exam.exam.last_time}}分钟</span>
+            <span>课程：{{exam.co_name}}</span>
+          </div>
           <div
             class="green"
-            v-if="exam._judge && exam.yes"
-            @click.stop="toCheckGrades(exam.exam_id)"
+            v-if="exam.exam._judge && exam.exam.yes"
+            @click.stop="toCheckGrades(exam.exam.exam_id)"
             style="cursor:pointer"
           >
             <img src="../../assets/exam_status/green.png" /> 已完成评分（点击查看）
@@ -132,17 +135,18 @@ export default {
       const noexam = await this.getStuNoExamInfo();
       const yesexam = await this.getStuYesExamInfo();
       // add stuts code
-      if (noexam !== null) {
-        noexam.forEach(item => {
-          item.begin_time = this.changeTime(item.begin_time);
-          item.yes = false;
+      if (yesexam !== null) {
+        yesexam.forEach(item => {
+          item.exam.begin_time = this.changeTime(item.exam.begin_time);
+          console.log(item.exam.begin_time);
+          item.exam.yes = true;
           this.passExamInfo_All.push(item);
         });
       }
-      if (yesexam !== null) {
-        yesexam.forEach(item => {
-          item.begin_time = this.changeTime(item.begin_time);
-          item.yes = true;
+      if (noexam !== null) {
+        noexam.forEach(item => {
+          item.exam.begin_time = this.changeTime(item.exam.begin_time);
+          item.exam.yes = false;
           this.passExamInfo_All.push(item);
         });
       }
@@ -205,12 +209,13 @@ export default {
     },
     changeTime(sj) {
       const date = new Date(sj); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      const dateNumFun = (num) => num < 10 ? `0${num}` : num;
       const Y = `${date.getFullYear()}/`;
-      const M = `${date.getMonth()}/`;
-      const D = `${date.getDate()} `;
-      const h = `${date.getHours()}:`;
-      const m = `${date.getMinutes()}:`;
-      const s = `${date.getSeconds()}`;
+      const M = `${dateNumFun(date.getMonth())}/`;
+      const D = `${dateNumFun(date.getDate())} `;
+      const h = `${dateNumFun(date.getHours())}:`;
+      const m = `${dateNumFun(date.getMinutes())}:`;
+      const s = `${dateNumFun(date.getSeconds())}`;
       return Y + M + D + h + m + s;
     },
   },
@@ -281,6 +286,9 @@ export default {
       flex-direction: row;
       justify-content: space-between;
 
+      span {
+        margin-right: 20px;
+      }
       img {
         width: 15px;
       }

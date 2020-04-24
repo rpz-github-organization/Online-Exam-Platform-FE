@@ -22,8 +22,7 @@
           <br />
           <br />现在是
           <br />
-          {{ new Date().toLocaleString("chinese", { hour12: false })
-          .substring(0,new Date().toLocaleString("chinese", { hour12: false }).length-3) }}
+          {{ this.nowTime }}
           <br />
           <br />
           {{ greeting }}
@@ -53,6 +52,8 @@ export default {
       Seen: true,
       isActive: true,
       male: true,
+      nowTime: '',
+      timer: '',
     };
   },
 
@@ -106,10 +107,22 @@ export default {
         }
       }
     },
+    changeTime() {
+      const date = new Date(); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      const Y = `${date.getFullYear()}/`;
+      const M = `${date.getMonth() + 1 < 12 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}/`;
+      const D = `${date.getDate() + 1 < 10 ? `0${date.getDate()}` : date.getDate()} `;
+      const h = `${date.getHours() + 1 < 10 ? `0${date.getHours()}` : date.getHours()}:`;
+      const m = `${date.getMinutes() + 1 < 10 ? `0${date.getMinutes()}` : date.getMinutes()}`;
+      return Y + M + D + h + m;
+    },
   },
 
   beforeMount() {
     this.getStuNameAndSex();
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 
   created() {
@@ -118,6 +131,9 @@ export default {
     if (d.getHours() < 12) this.greeting = '上午好！';
     else if (d.getHours() >= 12 && d.getHours() < 18) this.greeting = '下午好！';
     else this.greeting = '晚上好！';
+    this.timer = setInterval(() => {
+      this.nowTime = this.changeTime();
+    }, 1000);
   },
 };
 </script>

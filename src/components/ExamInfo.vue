@@ -17,7 +17,7 @@
                         <label class="iden">考生人数：{{ this.stuN }}</label>
                     </div>
                     <div class="exam_row" v-if="status !== 1">
-                        <label class="iden">实际考生：{{ this.stuNum }}</label>
+                        <label class="iden">实际考生：{{ this.stuAc }}</label>
                     </div>
                     <div class="exam_row" v-if="status === 1">
                         <label>题目编辑：</label>
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       examName: '体育',
-      stuNum: 0,
+      stuAc: 0,
       stuN: 0,
       examTime: '120min',
       startTime: '2020-02-02',
@@ -98,8 +98,8 @@ export default {
         console.log(info);
         this.isHand = info.is_distribute;
         this.examName = info.exam_name;
-        this.stuNum = info.stu_number;
-        this.StuN = info.actual_number;
+        this.stuN = info.stu_number;
+        this.stuAc = info.actual_number;
         this.examTime = info.last_time;
         const time = this.timestampToTime(info.begin_time);
         if (info.status === '考试未开始') {
@@ -164,7 +164,7 @@ export default {
     // 查看成绩
     GetScore() {
       this.$store.dispatch('set_examId', this.examId);
-      this.$router.push('/AddQuestion');
+      this.$router.push('/StuGradesCenter');
     },
     // 查看题目
     QuesView() {

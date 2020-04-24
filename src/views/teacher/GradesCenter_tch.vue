@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       exams: [],
-      ExamInfo_All: '',
+      ExamInfo_All: [],
       start: 0,
       nowpage: 1,
       totalpage: '',
@@ -75,16 +75,19 @@ export default {
           tea_id: this.uid,
         });
         const info = res.data.data;
+        console.log(info);
         if (res.data.code === 200) {
           info.forEach(element => {
-            this.exams.push({
+            this.ExamInfo_All.push({
               name: element.exam_name,
-              begin_time: element.begin_time,
+              begin_time: this.changeTime(element.begin_time),
               last_time: element.last_time,
               co_name: element.co_name,
               exam_id: element.exam_id,
             });
           });
+          this.pager();
+          this.showPage();
         } else {
           this.$message({
             message: info.message,
@@ -93,6 +96,7 @@ export default {
           });
         }
       } catch (err) {
+        console.log(err);
         if (err.response.status === 401) {
           this.sessionJudge();
         } else {
@@ -136,6 +140,16 @@ export default {
     toCheckGrades(examId) {
       this.$store.dispatch('set_examId', examId);
       window.location.href = '/StuGradesCenter';
+    },
+    changeTime(sj) {
+      const date = new Date(sj); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      const Y = `${date.getFullYear()}/`;
+      const M = `${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}/`;
+      const D = `${date.getDate() + 1 < 10 ? `0${date.getDate() + 1}` : date.getDate() + 1} `;
+      const h = `${date.getHours() + 1 < 10 ? `0${date.getHours() + 1}` : date.getHours() + 1}:`;
+      const m = `${date.getMinutes() + 1<10?`0${date.getMinutes() + 1}` : date.getMinutes() + 1}:`;
+      const s = `${date.getSeconds() + 1<10?`0${date.getSeconds() + 1}` : date.getSeconds() + 1}`;
+      return Y + M + D + h + m + s;
     },
   },
 

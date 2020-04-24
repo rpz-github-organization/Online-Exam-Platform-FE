@@ -8,7 +8,7 @@
         <div>任课老师：{{ exam.tea_name }}</div>
         <div>考试时间：{{ exam.begin_time }}</div>
         <div style="fontWeight:bold">考试总成绩：{{ exam.grade }} 分</div>
-        <div class="detail" v-for="(bigQues,index_1) in exam.Ques" :key="index_1">
+        <div class="detail" v-for="(bigQues,index_1) in this.Ques" :key="index_1">
           <div class="title">{{ bigQues.type}}</div>
           <div class="eachs">
             <div
@@ -124,7 +124,8 @@ export default {
       index_01: -1,
       index_02: -1,
       num: -1,
-      exam: '',
+      exam: [],
+      Ques: [],
       question: '',
     };
   },
@@ -149,8 +150,13 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          // console.log('data', info.data);
+          console.log('data', info.data);
           this.exam = info.data;
+          this.exam.Ques.forEach((item) => {
+            if (item.type !==null) {
+              this.Ques.push(item);
+            }
+          })
           this.timestampToDate();
           this.toChinese();
         } else {
@@ -161,6 +167,7 @@ export default {
           });
         }
       } catch (err) {
+        console.log(err);
         if (err.response.status === 401) {
           this.sessionJudge();
         } else {

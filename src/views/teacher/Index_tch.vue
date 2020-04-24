@@ -41,7 +41,7 @@
           <br />
           <br />现在是
           <br />
-           {{ new Date().toLocaleString("chinese", { hour12: false }).substring(0, 15) }}
+           {{ this.nowTime }}
           <br />
           <br />
           {{ greeting }}
@@ -113,6 +113,8 @@ export default {
       coMayjor: [],
       coHour: '',
       coCredit: '',
+      nowTime: '',
+      timer: '',
     };
   },
   watch: {
@@ -279,6 +281,18 @@ export default {
       this.$router.push(NewPage);
       this.$router.go(-1);
     },
+    changeTime() {
+      const date = new Date(); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      const Y = `${date.getFullYear()}/`;
+      const M = `${date.getMonth() + 1 < 12 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}/`;
+      const D = `${date.getDate() + 1 < 10 ? `0${date.getDate()}` : date.getDate()} `;
+      const h = `${date.getHours() + 1 < 10 ? `0${date.getHours()}` : date.getHours()}:`;
+      const m = `${date.getMinutes() + 1 < 10 ? `0${date.getMinutes()}` : date.getMinutes()}`;
+      return Y + M + D + h + m;
+    },
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 
   created() {
@@ -287,6 +301,10 @@ export default {
     else if (d.getHours() >= 12 && d.getHours() < 18) {
       this.greeting = '下午好！';
     } else this.greeting = '晚上好！';
+    console.log(new Date().toLocaleString());
+    this.timer = setInterval(() => {
+      this.nowTime = this.changeTime();
+    }, 1000);
   },
 
   mounted() {

@@ -49,7 +49,7 @@
                         <span>编程题</span>
                     </div>
                     <div
-                    v-for="(item, index) in Judge"
+                    v-for="(item, index) in Program"
                     :key="item.question_id"
                     class="ques_row">
                         <span class="row">{{ index + 1 }}.{{ item.question }}</span>

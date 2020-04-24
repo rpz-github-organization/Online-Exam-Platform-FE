@@ -1,6 +1,7 @@
 <template>
   <div class="body">
     <div class="bodyimg">
+      <span @click="DeleteCourse"><i class="el-icon-d-arrow-right"></i>点击退课</span>
       <div class="main">
         <div class="name">{{ course.name }}</div>
         <div class="detail">
@@ -113,6 +114,35 @@ export default {
         }
       }
     },
+    async DeleteCourse() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/course/remove`, {
+          co_id: this.coId,
+          tea_id: this.uid,
+        });
+        const info = res.data;
+        if (info.code === 200) {
+          this.$message({
+            message: '退课成功',
+            type: 'success',
+            offset: 70,
+          });
+          window.location.href = '/indexTch';
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
+      } catch (err) {
+        this.$message({
+          message: '系统异常',
+          type: 'error',
+          offset: 70,
+        });
+      }
+    },
     timestamp() {
       this.exams.forEach((item) => {
         const timestamp = item.begin_time;
@@ -141,6 +171,11 @@ export default {
     padding-bottom: 10px;
     background: url('../../assets/index_background_stu.gif');
 
+    span {
+      color: #BC3520;
+      cursor: pointer;
+      margin-left: 60%;
+    }
     .main {
       background-color: #fff;
       margin: 0px auto;

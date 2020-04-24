@@ -57,7 +57,12 @@
           </div>
           <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
             <label>选择题-{{ index+1 }}</label>
-            <single :index="index"  :score="scoreS" :ques="Single[index]"></single>
+            <div v-if="Single">
+              <single :index="index" :score="scoreS" :ques="Single[index]"/>
+            </div>
+            <div v-else>
+              <single :index="index" :score="scoreS"></single>
+            </div>
           </div>
         </el-card>
       </div>
@@ -69,7 +74,12 @@
           </div>
           <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
             <label>判断题-{{ index+1 }}</label>
-            <judge ref="judge" :index="index" :score="scoreJ" :ques="Judge[index]"/>
+            <div v-if="Judge">
+              <judge ref="judge" :index="index" :score="scoreJ" :ques="Judge[index]"/>
+            </div>
+            <div v-else>
+              <judge ref="judge" :index="index" :score="scoreJ"/>
+            </div>
           </div>
         </el-card>
       </div>
@@ -77,7 +87,12 @@
         <el-card class="ques_card">
           <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
             <label>讨论题-{{ index+1 }}</label>
-            <discussion :index="index" :ques="Discussion[index]"/>
+            <div v-if="Discussion">
+              <discussion :index="index" :ques="Discussion[index]"/>
+            </div>
+            <div v-else>
+              <discussion :index="index"/>
+            </div>
           </div>
         </el-card>
       </div>
@@ -85,7 +100,12 @@
         <el-card class="ques_card">
           <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
             <label>编程题-{{ index+1 }}</label>
-            <program :index="index" :ques="Program[index]"/>
+            <div v-if="Program">
+              <program :index="index" :ques="Program[index]"/>
+            </div>
+            <div v-else>
+              <program :index="index"/>
+            </div>
           </div>
         </el-card>
       </div>
@@ -160,7 +180,7 @@ export default {
 
   methods: {
     AddCount(counter) {
-      counter.push('');
+      counter.push('a');
     },
     JumpTo(key, counterW) {
       const PageId = document.querySelector(`#${counterW}${key}`);
@@ -197,6 +217,7 @@ export default {
           this.scoreS = `${info.singleScore}`;
           this.scoreJ = `${info.judgeScore}`;
           this.Count();
+          this.isShow = true;
         } else {
           this.$message({
             message: info.message,
@@ -205,7 +226,7 @@ export default {
           });
         }
       } catch (err) {
-        // console.log(err);
+        console.log(err);
         if (err.response.status === 401) {
           this.sessionJudge();
         } else {
@@ -222,7 +243,6 @@ export default {
         for (let i = 0; i < this.Single.length; i += 1) {
           this.AddCount(this.counterS);
         }
-        this.isShow = true;
       }
       if (this.Judge) {
         for (let i = 0; i < this.Judge.length; i += 1) {

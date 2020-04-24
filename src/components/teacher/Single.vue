@@ -80,7 +80,7 @@ export default {
     },
     score: {
       type: String,
-      required: false,
+      required: true,
     },
     ques: {
       required: false,
@@ -94,6 +94,7 @@ export default {
       this.tag = this.ques.tag;
       this.questionid = this.ques.question_id;
     }
+    console.log(this.score);
   },
   data() {
     return {
@@ -271,19 +272,27 @@ export default {
       }
     },
     async SubmitSingle() {
-      if (!this.isSubmit()) { // 未填写完整的提示信息
-        this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          showCancelButton: true,
-        }).then(async () => {
+      if (!this.score) {
+        this.$message({
+          message: '未填写分数',
+          type: 'error',
+          offset: 70,
+        });
+      } else if (this.score) {
+        if (!this.isSubmit()) { // 未填写完整的提示信息
+          this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            showCancelButton: true,
+          }).then(async () => {
+            await this.getInfo();
+            this.isChange = false;
+          }).catch(() => {
+          });
+        } else { // 填写完整直接提交。
           await this.getInfo();
           this.isChange = false;
-        }).catch(() => {
-        });
-      } else { // 填写完整直接提交。
-        await this.getInfo();
-        this.isChange = false;
+        }
       }
     },
   },

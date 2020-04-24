@@ -58,7 +58,10 @@
             </div>
           </div>
         </el-card>
-        <button @click="SubmitScore()">submit</button>
+        <div>
+          <button @click="SubmitScore()">submit</button>
+        </div>
+        <span @click="ScoreWhole">[全部评完请点这里]</span>
       </div>
     </div>
   </div>
@@ -71,7 +74,7 @@ export default {
   name: 'scoreCenter',
   created() {
     this.getQues();
-    console.log(this.examId);
+    // console.log(this.examId);
   },
   computed: {
     ...mapState(['examId']),
@@ -129,15 +132,12 @@ export default {
           });
         }
       } catch (err) {
-        if (err.response.status === 401) {
-          this.sessionJudge();
-        } else {
-          this.$message({
-            message: '系统异常',
-            type: 'error',
-            offset: 70,
-          });
-        }
+        console.log(err);
+        this.$message({
+          message: '系统异常',
+          type: 'error',
+          offset: 70,
+        });
       }
     },
     showStuQues(index) {
@@ -147,19 +147,53 @@ export default {
       for (let i = 0; i < this.List.length; i += 1) {
         this.List[i].stuanswer = stuques[i].answer;
       }
-      const data = JSON.parse(localStorage.getItem(this.id));
+      const data = JSON.parse(sessionStorage.getItem(this.id));
       if (data) {
         this.score = data;
       }
     },
+    async ScoreWhole() {
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/completeJudge`, {
+          exam_id: this.examId,
+        });
+        const info = res.data;
+        if (info.code === 200) {
+          this.$router.push('/ExamInfo');
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     SubmitScore() {
-      if (this.score.length !== this.List.length) {
+      let isOk = false;
+      for (let i = 0; i < this.score.length; i += 1) {
+        if (this.score[i] > this.List[i].score) {
+          isOk = false;
+        } else {
+          isOk = true;
+        }
+      }
+      if (this.score.length < this.List.length) {
         this.$alert('您还有题目没有进行打分', '提示', {
           confirmButtonText: '确定',
         });
-      } else {
-        localStorage.setItem(this.id, JSON.stringify(this.score));
+      }
+      if (isOk) {
+        sessionStorage.setItem(this.id, JSON.stringify(this.score));
         this.HandIn();
+      } else {
+        this.$message({
+          message: '学生得分大于满分',
+          type: 'error',
+          offset: 70,
+        });
       }
     },
     async HandIn() {
@@ -170,10 +204,11 @@ export default {
           question_id: this.quesList[i],
           score,
         });
+        console.log(scoreList);
       }
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/handInScore`, {
-          exam_id: this.exam_id,
+          exam_id: this.examId,
           stu_id: this.id,
           scoreList,
         });
@@ -184,7 +219,6 @@ export default {
             message: '提交成功',
             offset: 70,
           });
-          this.$router.push('/ExamInfo');
         } else {
           this.$message({
             message: info.message,
@@ -193,15 +227,11 @@ export default {
           });
         }
       } catch (err) {
-        if (err.response.status === 401) {
-          this.sessionJudge();
-        } else {
-          this.$message({
-            message: '系统异常',
-            type: 'error',
-            offset: 70,
-          });
-        }
+        this.$message({
+          message: '系统异常',
+          type: 'error',
+          offset: 70,
+        });
       }
     },
   },
@@ -241,6 +271,10 @@ export default {
       flex-direction: column;
       justify-content: center;
       text-align: left;
+
+      label {
+        cursor: pointer;
+      }
     }
     .stu_label{
       margin: 5px;
@@ -249,6 +283,10 @@ export default {
   .right{
     margin: 0 30px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
     .ques_card{
       display: flex;
       flex-direction: column;
@@ -272,9 +310,13 @@ export default {
       }
     }
   }
+  span {
+    font-size: 90%;
+    cursor: pointer;
+  }
   button{
     color: white;
-    margin: 10px 0;
+    margin: 20px 0 10px 0;
     border: none;
     border-radius: 2px;
     padding: 5px 10px;
