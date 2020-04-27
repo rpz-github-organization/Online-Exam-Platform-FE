@@ -104,7 +104,7 @@
       </div>
     </div>
     <div>
-      <button class="back" @click="back">返回学生首页</button>
+      <button class="back" @click="back">返回</button>
     </div>
   </div>
 </template>
@@ -133,7 +133,7 @@ export default {
   beforeMount() {
     const url = document.referrer;
     console.log(url);
-    if (url.search('/StuGradesCenter') !== -1) {
+    if (url.search('/StuGradesCenter') !== -1 || url.search('GradesCenter_tch') !== -1) {
       this.stu_id = this.$route.query.id;
     } else {
       this.stu_id = this.uid;
@@ -150,7 +150,7 @@ export default {
       window.location.href('/');
     },
     back() {
-      window.location.href = '/IndexStu';
+      this.$router.back(-1);
     },
     async getStuExamInfo() {
       try {
