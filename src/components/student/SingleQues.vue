@@ -67,6 +67,7 @@ export default {
         answer: val,
         score: 0,
         type: 'Single',
+        num: this.index + 1,
       };
       this.$emit('func', this.info);
     },

@@ -127,7 +127,17 @@ export default {
       exam: [],
       Ques: [],
       question: '',
+      stu_id: '',
     };
+  },
+  beforeMount() {
+    const url = document.referrer;
+    console.log(url);
+    if (url.search('/StuGradesCenter') !== -1) {
+      this.stu_id = this.$route.query.id;
+    } else {
+      this.stu_id = this.uid;
+    }
   },
   methods: {
     sessionJudge() {
@@ -146,7 +156,7 @@ export default {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getStuExamInfo`, {
           exam_id: this.examId,
-          stu_id: this.uid,
+          stu_id: this.stu_id,
         });
         const info = res.data;
         if (info.code === 200) {
@@ -186,7 +196,7 @@ export default {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getQuestionTea`, {
           exam_id: this.examId,
-          stu_id: this.uid,
+          stu_id: this.stu_id,
           question_id: question_id,
         });
         const info = res.data;

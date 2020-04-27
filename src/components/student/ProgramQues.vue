@@ -169,6 +169,7 @@ export default {
         answer: val,
         score: this.score,
         type: this.type,
+        num: this.index + 1,
       };
       // console.log(this.info);
       this.$emit('func', this.info);

@@ -1,34 +1,42 @@
 <template>
-    <div id="GradesCenter">
-        <div class="middle">
-            <el-card>
-                <div class="title">{{ this.ExamName }}</div>
-                <div class="table">
-                    <el-table
-                    :data="grades"
-                    stripe
-                    style="width: 100%">
-                        <el-table-column
-                        prop="id"
-                        label="学号"
-                        width="200px">
-                        </el-table-column>
-                        <el-table-column
-                        prop="name"
-                        label="姓名"
-                        width="200px">
-                        </el-table-column>
-                        <el-table-column
-                        prop="score"
-                        label="成绩"
-                        width="200px">
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </el-card>
-            <el-button class="return" @click="GoBack()">返回</el-button>
+  <div id="GradesCenter">
+    <div class="middle">
+      <el-card>
+        <div class="title">{{ this.ExamName }}</div>
+        <div class="table">
+          <el-table
+          :data="grades"
+          stripe
+          style="width: 100%">
+            <el-table-column
+            prop="id"
+            label="学号"
+            width="200px">
+            </el-table-column>
+            <el-table-column
+            prop="name"
+            label="姓名"
+            width="200px">
+            </el-table-column>
+            <el-table-column
+            prop="score"
+            label="成绩"
+            width="200px">
+            </el-table-column>
+            <el-table-column
+            prop="score"
+            label="查看详情"
+            width="200px">
+              <template slot-scope="scope">
+                <el-button @click="handleClick(scope.row)">click</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
+      </el-card>
+      <el-button class="return" @click="GoBack()">返回</el-button>
     </div>
+  </div>
 </template>
 
 <script>
@@ -58,6 +66,9 @@ export default {
         offset: 70,
       });
       window.location.href('/');
+    },
+    handleClick(row) {
+      this.$router.push({ name: 'stuExamGrades', query: { id: row.id } });
     },
     async getScore() {
       try {
