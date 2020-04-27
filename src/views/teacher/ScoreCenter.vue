@@ -17,7 +17,8 @@
             v-for="(item, index) in stuList"
             :key="item.id"
             class="stu_label"
-            @click="showStuQues(index)">
+            @click="showStuQues(index)"
+            :class="{active: item.active}">
               {{ item.id }} - {{ item.name }}
             </label>
           </div>
@@ -87,6 +88,7 @@ export default {
       score: [],
       id: '',
       quesList: [],
+      index: 0,
     };
   },
   methods: {
@@ -105,7 +107,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        // console.log(info);
+        console.log(info);
         if (res.data.code === 200) {
           this.stuAnswer = info.stuInfo;
           const ques = info.question;
@@ -122,6 +124,7 @@ export default {
             this.stuList.push({
               id: item.id,
               name: item.name,
+              active: false,
             });
           });
         } else {
@@ -142,6 +145,7 @@ export default {
     },
     showStuQues(index) {
       this.score = [];
+      this.index = index;
       this.id = this.stuAnswer[index].id;
       const stuques = this.stuAnswer[index].question;
       for (let i = 0; i < this.List.length; i += 1) {
@@ -219,6 +223,7 @@ export default {
             message: '提交成功',
             offset: 70,
           });
+          this.stuList[this.index].active = true;
         } else {
           this.$message({
             message: info.message,
@@ -250,6 +255,7 @@ export default {
   display: flex;
   flex-direction: row;
   margin: 30px 0;
+  background: url(../../assets/index_background_tch.gif);
   }
   .head{
     display: flex;
@@ -328,6 +334,9 @@ export default {
   }
   button:hover{
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
+  }
+  .active {
+    color: red;
   }
 }
 </style>

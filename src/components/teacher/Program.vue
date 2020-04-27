@@ -170,6 +170,7 @@ export default {
     },
 
     testCase() {
+      this.test_case = [];
       const len = this.answer_output.length;
       for (let i = 0; i < len; i += 1) {
         this.test_case.push({ input: this.answer_input[i], output: this.answer_output[i] });
