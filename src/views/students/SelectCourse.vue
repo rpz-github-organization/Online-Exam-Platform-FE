@@ -1,76 +1,62 @@
 <template>
-    <div id="selectCourse">
-        <div class="row">
-          <div class="left">
-            <button @click="UnderSelect()" :class="{ button_active: isSelect==0 }">可选课程</button>
-            <button @click="Selected()" :class="{ button_active: isSelect==1 }">已选课程</button>
-          </div>
-          <div class="right">
-            <el-card v-if="isSelect == -1">
-              <div class="tip" style="text-align: center;font-weight: bold">
-                欢迎进入选课中心
+  <div id="selectCourse">
+    <div class="row">
+      <div class="left">
+        <button @click="UnderSelect()" :class="{ button_active: isSelect==0 }">可选课程</button>
+        <button @click="Selected()" :class="{ button_active: isSelect==1 }">已选课程</button>
+      </div>
+      <div class="right">
+        <el-card v-if="isSelect == -1">
+          <div class="tip" style="text-align: center;font-weight: bold">欢迎进入选课中心</div>
+          <div class="tip">1.选课时，相同课程只能选择一位老师。</div>
+          <div class="tip">2.退课时，只能对一门课程进行操作，若是想退多门所选课程，请重复操作。</div>
+          <div class="tip" style="font-weight: bold">祝您选课愉快！</div>
+        </el-card>
+        <el-card v-show="isSelect !== -1 && status === 'yixuan'">
+          <el-alert v-show="coursePass.length === 0" :closable="false" title="还没有已选的课程" type="info"></el-alert>
+          <el-checkbox-group v-model="deleteList" :max="1">
+            <el-card class="Course" v-for="(course, index) in coursePass" :key="index">
+              <div class="Cardrow">
+                <label class="title">{{ course.courseName }}</label>
+                <label class="time">{{ course.courseTimeon }}---{{ course.courseTimeend }}</label>
               </div>
-              <div class="tip">
-                1.选课时，相同课程只能选择一位老师。
-              </div>
-              <div class="tip">
-                2.退课时，只能对一门课程进行操作，若是想退多门所选课程，请重复操作。
-              </div>
-              <div class="tip" style="font-weight: bold">
-                祝您选课愉快！
+              <div class="Cardrow">
+                <div class="teacher">{{ course.courseTeacher }}</div>
+                <el-checkbox :label="index" />
               </div>
             </el-card>
-            <el-card v-if="isSelect !== -1 && status === 'yixuan'">
-              <el-checkbox-group v-model="deleteList" :max="1">
-                <el-card
-                class="Course"
-                v-for="(course, index) in coursePass"
-                :key="index">
-                  <div class="Cardrow">
-                    <label class="title">{{ course.courseName }}</label>
-                    <label class="time">
-                      {{ course.courseTimeon }}---{{ course.courseTimeend }}
-                    </label>
-                  </div>
-                  <div class="Cardrow">
-                    <div class="teacher">{{ course.courseTeacher }}</div>
-                    <el-checkbox :label="index">{{ }}</el-checkbox>
-                  </div>
-                </el-card>
-              </el-checkbox-group>
+          </el-checkbox-group>
+        </el-card>
+        <el-card v-show="isSelect !== -1 && status === 'kexuan'">
+          <el-alert v-show="courseOn.length === 0" :closable="false" title="还没有可选的课程" type="info"></el-alert>
+          <el-checkbox-group v-model="addList">
+            <el-card class="Course" v-for="(course, index) in courseOn" :key="index">
+              <div class="Cardrow">
+                <label class="title">{{ course.courseName }}</label>
+                <label class="time">{{ course.courseTimeon }}---{{ course.courseTimeend }}</label>
+              </div>
+              <div class="Cardrow">
+                <div class="teacher">{{ course.courseTeacher }}</div>
+                <el-checkbox :label="index">{{ }}</el-checkbox>
+              </div>
             </el-card>
-            <el-card v-if="isSelect !== -1 && status === 'kexuan'">
-              <el-checkbox-group v-model="addList">
-                <el-card
-                class="Course"
-                v-for="(course, index) in courseOn"
-                :key="index">
-                  <div class="Cardrow">
-                    <label class="title">{{ course.courseName }}</label>
-                    <label class="time">
-                      {{ course.courseTimeon }}---{{ course.courseTimeend }}
-                    </label>
-                  </div>
-                  <div class="Cardrow">
-                    <div class="teacher">{{ course.courseTeacher }}</div>
-                    <el-checkbox :label="index">{{ }}</el-checkbox>
-                  </div>
-                </el-card>
-              </el-checkbox-group>
-            </el-card>
-            <div class="button_row">
-              <el-button
-              class="submit"
-              @click="SubmitAdd()"
-              v-show="isSelect !== -1&& status === 'kexuan'">提交选课</el-button>
-              <el-button
-              class="submit"
-              @click="SubmitDelete()"
-              v-show="isSelect !== -1&& status === 'yixuan'">退课</el-button>
-            </div>
-          </div>
+          </el-checkbox-group>
+        </el-card>
+        <div class="button_row">
+          <el-button
+            class="submit"
+            @click="SubmitAdd()"
+            v-show="isSelect !== -1&& status === 'kexuan'"
+          >提交选课</el-button>
+          <el-button
+            class="submit"
+            @click="SubmitDelete()"
+            v-show="isSelect !== -1&& status === 'yixuan'"
+          >退课</el-button>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -106,7 +92,7 @@ export default {
       console.log(this.addList);
       try {
         const data = [];
-        this.addList.forEach((item) => {
+        this.addList.forEach(item => {
           data.push({
             co_id: this.courseOn[item].co_id,
             tea_id: this.courseOn[item].tea_id,
@@ -198,7 +184,7 @@ export default {
         const info = res.data.data;
         // console.log(info);
         if (res.data.code === 200) {
-          info.forEach((item) => {
+          info.forEach(item => {
             this.courseOn.push({
               courseName: item.co_name,
               courseTeacher: item.tea_name,
@@ -245,7 +231,7 @@ export default {
         });
         const info = res.data.data;
         if (res.data.code === 200) {
-          info.forEach((item) => {
+          info.forEach(item => {
             this.coursePass.push({
               courseName: item.co_name,
               courseTeacher: item.tea_name,
@@ -279,21 +265,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#selectCourse{
+#selectCourse {
   display: flex;
   width: 100%;
   height: auto;
   justify-content: center;
-  .row{
+  .row {
     width: 80%;
     margin-top: 50px;
     display: flex;
     flex-direction: row;
-    .left{
+    .left {
       display: flex;
       flex-direction: column;
       margin-right: 5%;
-      button{
+      button {
         color: white;
         margin-bottom: 20px;
         font-weight: bold;
@@ -307,26 +293,26 @@ export default {
         cursor: pointer;
         outline: none;
       }
-      .button_active{
+      .button_active {
         background-color: #5379a563;
         box-shadow: none;
         font-weight: normal;
       }
     }
-    .right{
+    .right {
       display: flex;
       flex-direction: column;
       width: 60%;
       padding: 10px;
-      .tip{
+      .tip {
         text-align: left;
         margin: 10px 5px;
       }
-      .Course{
+      .Course {
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
-        .Cardrow{
+        .Cardrow {
           margin: 0 auto;
           width: 100%;
           display: flex;
@@ -334,25 +320,25 @@ export default {
           justify-content: space-between;
           padding: 5px;
 
-          .title{
+          .title {
             font-size: 19px;
           }
-          .time{
+          .time {
             font-size: 15px;
           }
         }
-        .teacher{
+        .teacher {
           font-size: 15px;
           display: flex;
           padding: 5px;
         }
       }
-      .button_row{
+      .button_row {
         margin: 20px 0;
         display: flex;
         justify-content: center;
       }
-      .submit{
+      .submit {
         width: 100px;
       }
     }

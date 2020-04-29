@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex-col;
+}
+
+.jy-start {
+  justify-content: flex-start;
+}
+
+.jy-center {
+  justify-content: center;
+}
+
+.jy-end {
+  justify-content: flex-end;
+}
+
+.jy-between {
+  justify-content: space-between;
+}
+
+.as-start {
+  align-items: flex-start;
+}
+
+.as-center {
+  align-items: center;
+}
+
+.as-bottom {
+  align-items: flex-end;
+}
+
+/* ------- 一些界面公用样式 ----------- */
+.page-title {
+  height: 80px;
+  margin: 0px auto;
+  font-size: 40px;
+  font-weight: bold;
+  padding: 0 30px;
+  color: white;
+
+  .word {
+    height: 60px;
+    margin-top: 10px;
+  }
+
+  &-stu {
+    background-color: #276e51;
+  }
+
+  &-tchr {
+    background-color: #2850a7;
+  }
+}
+
+.black-hover-bold {
+  color: black !important;
+  font-weight: 400;
+
+  &:hover {
+    font-weight: bold;
+  }
+}

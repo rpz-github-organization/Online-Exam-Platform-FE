@@ -3,68 +3,50 @@
     <el-card class="question_card">
       <div class="ques_row">
         <label class="ques_label">题目:</label>
-        <el-input
-          type="textarea"
-          placeholder="请输入题目"
-          v-model="question"
-          autosize>
-        </el-input>
+        <el-input type="textarea" placeholder="请输入题目" v-model="question" autosize></el-input>
       </div>
       <div class="ques_row">
         <div class="left">
           <label>标准样例:</label>
-          <button class="add" @click="Addstd()">add</button>
+          <button class="add" @click="Addstd()">添加</button>
         </div>
         <div class="example">
           <label>样例输入</label>
           <el-input
-          v-for="(item, index) in answer_input"
-          :key="item.index"
-          type="textarea"
-          v-model="answer_input[index]"
-          class="std"
-          autosize>
-          </el-input>
+            v-for="(item, index) in answer_input"
+            :key="item.index"
+            type="textarea"
+            v-model="answer_input[index]"
+            class="std"
+            autosize
+          ></el-input>
           <label>样例输出</label>
           <el-input
-          v-for="(it, index) in answer_output"
-          :key="it.index"
-          type="textarea"
-          v-model="answer_output[index]"
-          class="std"
-          autosize>
-          </el-input>
+            v-for="(it, index) in answer_output"
+            :key="it.index"
+            type="textarea"
+            v-model="answer_output[index]"
+            class="std"
+            autosize
+          ></el-input>
           <label>注：一个输入框为一个输入/输出，若本题无输入，不填样例输入</label>
         </div>
       </div>
       <div class="ques_row">
         <label class="ques_label">提示:</label>
-        <el-input
-        type="textarea"
-        placeholder="请输入提示语句"
-        v-model="tip"
-        autosize>
-        </el-input>
+        <el-input type="textarea" placeholder="请输入提示语句" v-model="tip" autosize></el-input>
       </div>
       <el-divider></el-divider>
       <div class="ques_row">
         <label class="ques_label">分值:</label>
-        <el-input
-        placeholder="请输入选项"
-        v-model="score"
-        clearable>
-        </el-input>
+        <el-input placeholder="请输入选项" v-model="score" clearable></el-input>
       </div>
       <div class="ques_row">
         <label class="ques_label">知识点:</label>
-        <el-input
-        placeholder="请输入知识点"
-        v-model="tag"
-        clearable>
-        </el-input>
+        <el-input placeholder="请输入知识点" v-model="tag" clearable></el-input>
       </div>
       <div>
-        <button @click="SubmitProgram()">submit</button>
+        <button @click="SubmitProgram()">确认</button>
       </div>
     </el-card>
   </div>
@@ -101,7 +83,7 @@ export default {
       this.question = this.ques.question;
       const input = [];
       const output = [];
-      this.ques.test_case.forEach((element) => {
+      this.ques.test_case.forEach(element => {
         input.push(element.input);
         output.push(element.output);
       });
@@ -113,17 +95,23 @@ export default {
   },
   data() {
     return {
-      lans: [{
-        value: 'C',
-      }, {
-        value: 'C++',
-      }, {
-        value: 'Java',
-      }, {
-        value: 'Python2',
-      }, {
-        value: 'Python3',
-      }],
+      lans: [
+        {
+          value: 'C',
+        },
+        {
+          value: 'C++',
+        },
+        {
+          value: 'Java',
+        },
+        {
+          value: 'Python2',
+        },
+        {
+          value: 'Python3',
+        },
+      ],
 
       question: '',
       answer_input: [''],
@@ -170,7 +158,10 @@ export default {
     testCase() {
       const len = this.answer_output.length;
       for (let i = 0; i < len; i += 1) {
-        this.test_case.push({ input: this.answer_input[i], output: this.answer_output[i] });
+        this.test_case.push({
+          input: this.answer_input[i],
+          output: this.answer_output[i],
+        });
       }
     },
 
@@ -190,13 +181,16 @@ export default {
             const quesid = parseInt(this.questionid, 10);
             const scoreN = parseInt(this.score, 10);
             try {
-              const response = await this.$axios.post(`${this.HOST}/exam/addQuestionToExam`, {
-                type: this.type,
-                question_id: quesid,
-                num: this.index + 1,
-                score: scoreN,
-                exam_id: this.examId,
-              });
+              const response = await this.$axios.post(
+                `${this.HOST}/exam/addQuestionToExam`,
+                {
+                  type: this.type,
+                  question_id: quesid,
+                  num: this.index + 1,
+                  score: scoreN,
+                  exam_id: this.examId,
+                }
+              );
               const infom = response.data;
               if (infom.code === 200) {
                 this.$message({
@@ -228,13 +222,16 @@ export default {
         const quesid = parseInt(this.questionid, 10);
         const scoreN = parseInt(this.score, 10);
         try {
-          const response = await this.$axios.post(`${this.HOST}/exam/addQuestionToExam`, {
-            type: this.type,
-            question_id: quesid,
-            num: this.index + 1,
-            score: scoreN,
-            exam_id: this.examId,
-          });
+          const response = await this.$axios.post(
+            `${this.HOST}/exam/addQuestionToExam`,
+            {
+              type: this.type,
+              question_id: quesid,
+              num: this.index + 1,
+              score: scoreN,
+              exam_id: this.examId,
+            }
+          );
           const info = response.data;
           if (info.code === 200) {
             this.$message({
@@ -299,12 +296,14 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           showCancelButton: true,
-        }).then(async () => {
-          await this.getInfo();
-          this.isChange = false;
-        }).catch(() => {
-        });
-      } else { // 填写完整直接提交。
+        })
+          .then(async () => {
+            await this.getInfo();
+            this.isChange = false;
+          })
+          .catch(() => {});
+      } else {
+        // 填写完整直接提交。
         await this.getInfo();
         this.isChange = false;
       }
@@ -314,62 +313,62 @@ export default {
 </script>
 
 <style lang="less">
-#program{
+#program {
   display: flex;
   margin: 10px 5px 30px 5px;
 
-  .question_card{
+  .question_card {
     width: 100%;
     display: flex;
     flex-direction: column;
   }
-  .ques_row{
+  .ques_row {
     display: flex;
     flex-direction: row;
     margin: 10px;
 
-    .left{
-      width:15%;
+    .left {
+      width: 15%;
       display: flex;
       flex-direction: column;
 
-      label{
+      label {
         padding: 5px;
         text-align: left;
       }
-      .add{
+      .add {
         width: 50px;
         margin-left: 20%;
         border-radius: 5px;
       }
     }
-    .select{
+    .select {
       width: 100%;
     }
-    .ques_label{
+    .ques_label {
       width: 15%;
       padding: 5px;
       text-align: left;
     }
-    .example{
+    .example {
       display: flex;
       flex-direction: column;
       width: 100%;
-      label{
+      label {
         text-align: left;
         font-weight: bold;
         padding: 10px 0;
       }
-      .std{
+      .std {
         margin-bottom: 10px;
-        .el-textarea__inner{
-            background-color: #DCDDDD;
-            font-weight: bold;
+        .el-textarea__inner {
+          background-color: #dcdddd;
+          font-weight: bold;
         }
       }
     }
   }
-  button{
+  button {
     color: white;
     margin: 10px 0;
     font-weight: bold;
@@ -382,7 +381,7 @@ export default {
     cursor: pointer;
     outline: none;
   }
-  button:hover{
+  button:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
   }
 }
