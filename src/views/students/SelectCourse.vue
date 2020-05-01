@@ -85,7 +85,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     // 提交选课
     async SubmitAdd() {

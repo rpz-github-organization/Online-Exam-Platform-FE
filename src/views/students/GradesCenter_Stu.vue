@@ -83,7 +83,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async getStuNameAndSex() {
       try {

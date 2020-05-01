@@ -14,7 +14,7 @@
         <div class="row">
           <label for="name" class="ti">姓名:</label>
           <label v-if="Seen">{{this.name}}</label>
-          <input v-model="name" type="text" name="name" placeholder="请输入名字" v-if="!Seen" />
+          <el-input v-model="name" size="mini" name="name" placeholder="请输入名字" v-if="!Seen" />
         </div>
         <div class="row">
           <label for="sex" class="ti">性别:</label>
@@ -25,26 +25,48 @@
           </select>
         </div>
         <div class="row">
-          <label for="qq" class="ti">Q Q:</label>
+          <label for="qq" class="ti">QQ:</label>
           <label v-if="Seen">{{this.qq}}</label>
-          <input v-model="qq" type="text" name="qq" placeholder="请输入QQ号" v-if="!Seen" />
+          <el-input
+            v-model="qq"
+            size="mini"
+            type="text"
+            name="qq"
+            placeholder="请输入QQ号"
+            v-if="!Seen"
+          />
         </div>
         <div class="row">
           <label for="wx" class="ti">微信:</label>
           <label v-if="Seen">{{this.wx}}</label>
-          <input v-model="wx" type="text" name="wx" placeholder="请输入微信" v-if="!Seen" />
+          <el-input
+            size="mini"
+            v-model="wx"
+            type="text"
+            name="wx"
+            placeholder="请输入微信"
+            v-if="!Seen"
+          />
         </div>
         <div class="row">
           <label for="phone" class="ti">电话:</label>
           <label v-if="Seen">{{this.phone}}</label>
-          <input v-model="phone" type="text" name="phone" placeholder="请输入电话" v-if="!Seen" />
+          <el-input
+            size="mini"
+            v-model="phone"
+            type="text"
+            name="phone"
+            placeholder="请输入电话"
+            v-if="!Seen"
+          />
         </div>
         <div class="row">
           <label for="email" class="ti">邮箱:</label>
           <label>{{this.email}}</label>
           <el-button
             class="change"
-            type="text"
+            type="primary"
+            plain
             @click="submitcheck();dialogFormmail=true"
             v-if="!Seen"
           >更改邮箱</el-button>
@@ -79,15 +101,22 @@
           </el-dialog>
         </div>
         <div class="row" v-if="!Seen">
-          <label>密码:</label>
-          <label v-if="!Seen">{{this.pwd}}</label>
-          <el-button class="change" type="text" @click="submitcheck();dialogFormVisible=true">重置密码</el-button>
-          <el-dialog title="重置密码" :visible.sync="dialogFormVisible" class="dialog">
+          <el-button
+            class="change"
+            type="primary"
+            plain
+            @click="submitcheck();dialogFormVisible=true"
+          >重置密码</el-button>
+          <el-dialog
+            title="重置密码"
+            :visible.sync="dialogFormVisible"
+            class="dialog flex jy-start as-center"
+          >
             <div class="form">
               <div class="hi" v-if="isShowpwd">
                 <label for="e">已向你的邮箱发送验证码</label>
                 <input v-model="pwdNumber" type="text" name="e" placeholder="请输入验证码" />
-                <button @click="checkPwdCode()">验证</button>
+                <el-button class="verify-btn" type="primary" plain @click="checkPwdCode()">验证</el-button>
               </div>
               <div class="hi" v-if="isShowpwd">
                 <span v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</span>
@@ -173,7 +202,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async submitupdata() {
       // 获取登录教师的个人信息
@@ -571,7 +600,7 @@ export default {
   }
 
   .card {
-    width: 40vw;
+    width: 30vw;
     margin: 5px auto;
     padding: 10px 20px;
     border-radius: 15px;
@@ -594,8 +623,8 @@ export default {
       }
 
       .row {
-        height: 25px;
-        line-height: 20px;
+        height: 30px;
+        line-height: 30px;
         overflow: hidden;
         display: flex;
         margin: 10px 5px;
@@ -603,10 +632,11 @@ export default {
 
         .ti {
           font-weight: bold;
+          width: 60px;
         }
         span {
           font-size: 16px;
-          color: #999;
+          color: black;
           margin-top: 3px;
           padding-right: 10px;
         }
@@ -633,15 +663,13 @@ export default {
                 margin-top: 5px;
                 text-align: left;
                 width: 150px;
+                min-width: max-content;
               }
-              button {
+              .verify-btn {
+                margin-left: 20px;
+              }
+              input {
                 padding: 5px 10px;
-                background: #909399;
-                color: white;
-                border-radius: 4px;
-                margin: 0 10px;
-                border: none;
-                cursor: pointer;
               }
             }
             .tip {
@@ -654,11 +682,10 @@ export default {
         }
         .change {
           font-size: 10px;
-          padding: 1px 1px;
+          padding: 1px 10px;
           border-radius: 4px;
-          background: #8dafd2;
-          color: #3d3d3d;
           margin: 0 5px;
+          width: 100%;
         }
       }
       input[name='name'],

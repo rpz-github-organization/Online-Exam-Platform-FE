@@ -17,25 +17,14 @@
         <label class="tip">提示：{{ this.tip }}</label>
       </div>
       <div class="single_row">
-          <label class="ques_label">语言：</label>
-          <el-select
-            v-model="language"
-            size="small"
-            class="selt">
-            <el-option
-              v-for="item in lis"
-              :key="item.value"
-              :label="item.value"
-              :value="item.value">
-            </el-option>
-          </el-select>
+        <label class="ques_label">语言：</label>
+        <el-select v-model="language" size="small" class="selt">
+          <el-option v-for="item in lis" :key="item.value" :label="item.value" :value="item.value"></el-option>
+        </el-select>
       </div>
       <div class="single_row">
         <!-- <el-input type="textarea" v-model="code" :rows="6"> -->
-        <codemirror
-        v-model="code"
-        :options="Options"
-        class="code"></codemirror>
+        <codemirror v-model="code" :options="Options" class="code"></codemirror>
         <!-- </el-input> -->
       </div>
       <div class="button_row">
@@ -44,15 +33,9 @@
         </button>
       </div>
     </el-card>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      title="提交结果"
-      width="1100px"
-      customClass="diatable">
+    <el-dialog :visible.sync="dialogVisible" title="提交结果" width="1100px" customClass="diatable">
       <div>
-        <el-table
-          style="width: 100%"
-          :data="statusList">
+        <el-table style="width: 100%" :data="statusList">
           <el-table-column property="date" label="提交时间" width="180"></el-table-column>
           <el-table-column property="status" label="状态" width="170"></el-table-column>
           <el-table-column property="score" label="分数" width="150"></el-table-column>
@@ -60,10 +43,7 @@
           <el-table-column property="username" label="用户" width="180"></el-table-column>
           <el-table-column property="num" label="题目" width="170"></el-table-column>
         </el-table>
-        <el-table
-          :data="testList"
-          style="width: 100%"
-          stripe>
+        <el-table :data="testList" style="width: 100%" stripe>
           <el-table-column property="number" label="测试点" width="250"></el-table-column>
           <el-table-column property="result" label="结果" width="250"></el-table-column>
           <el-table-column property="runtime" label="耗时" width="250"></el-table-column>
@@ -72,12 +52,7 @@
       </div>
       <div style="margin: 20px 0;">
         <label>代码</label>
-        <el-input
-          type="textarea"
-          v-model="code"
-          :disabled="true"
-          :rows="6">
-          </el-input>
+        <el-input type="textarea" v-model="code" :disabled="true" :rows="6"></el-input>
       </div>
     </el-dialog>
   </div>
@@ -125,17 +100,23 @@ export default {
       score: 0,
 
       language: '',
-      lis: [{
-        value: 'C',
-      }, {
-        value: 'C++',
-      }, {
-        value: 'Python2',
-      }, {
-        value: 'Python3',
-      }, {
-        value: 'Java',
-      }],
+      lis: [
+        {
+          value: 'C',
+        },
+        {
+          value: 'C++',
+        },
+        {
+          value: 'Python2',
+        },
+        {
+          value: 'Python3',
+        },
+        {
+          value: 'Java',
+        },
+      ],
 
       dialogVisible: false,
       statusList: [],
@@ -179,7 +160,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     Question() {
       this.timu = this.ProgramQ.question;
@@ -231,7 +212,7 @@ export default {
               num: info.num,
             });
             const testCase = info.test_case_res;
-            testCase.forEach((item) => {
+            testCase.forEach(item => {
               this.testList.push({
                 number: item.case_num,
                 result: item.result,
@@ -265,68 +246,68 @@ export default {
 </script>
 
 <style lang="less">
-#programQues{
+#programQues {
   display: flex;
   margin: 10px 5px 30px 5px;
 
-  .single_card{
+  .single_card {
     width: 100%;
     display: flex;
     flex-direction: column;
   }
-  .single_row{
+  .single_row {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 20px;
 
-    .timu{
-      word-wrap:break-word;
+    .timu {
+      word-wrap: break-word;
       width: 800px;
       text-align: left;
       margin-left: 5px;
       margin-top: 2px;
     }
-    .index{
+    .index {
       margin-top: 3px;
     }
-    .tip{
-      color: #CF3516;
+    .tip {
+      color: #cf3516;
     }
-    .ques_label{
+    .ques_label {
       width: 50px;
       padding: 5px;
       text-align: left;
     }
-    .example{
+    .example {
       display: flex;
       flex-direction: column;
       width: 100%;
-      label{
+      label {
         text-align: left;
         font-weight: bold;
         padding: 10px 0;
       }
-      .ex{
+      .ex {
         width: 100%;
-        background-color: #DCDDDD;
+        background-color: #dcdddd;
         padding-left: 10px;
       }
     }
   }
-  .code{
+  .code {
     width: 100%;
     text-align: left;
     font-weight: bold;
   }
-  .op{
+  .op {
     display: flex;
     width: 90%;
     margin-left: 5%;
   }
-  .button_row{
+  .button_row {
     display: flex;
     justify-content: flex-end;
-    button{
+    button {
       color: white;
       margin: 10px 0;
       border: none;
@@ -340,11 +321,11 @@ export default {
       display: flex;
       flex-direction: center;
     }
-    button:hover{
+    button:hover {
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
     }
   }
-  .diatable{
+  .diatable {
     text-align: left;
   }
 }

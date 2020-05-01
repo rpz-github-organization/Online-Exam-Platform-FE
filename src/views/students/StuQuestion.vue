@@ -1,90 +1,79 @@
 <template>
-    <div id="stuQuestion">
-      <label class="res_time">剩余时间： {{ day }}天{{ hour }}时{{ min }}:{{ second }}</label>
-      <div class="paper">
-          <div class="menu">
-            <el-card>
-              <label class="selectType">选择题</label>
-              <div class="question_list">
-              <div class="question_item" v-for="(item,index) in counterS" :key="index">
-                <label class="question_item">
+  <div id="stuQuestion">
+    <label class="res_time">剩余时间： {{ day }}天{{ hour }}时{{ min }}:{{ second }}</label>
+    <div class="paper">
+      <div class="menu">
+        <el-card>
+          <label class="selectType">选择题</label>
+          <div class="question_list">
+            <div class="question_item" v-for="(item,index) in counterS" :key="index">
+              <label class="question_item">
                 <span @click="JumpTo(index+1, 'counterS')">{{ index+1 }}</span>
-                </label>
-              </div>
-              </div>
-              <label class="selectType">判断题</label>
-              <div class="question_list">
-              <div class="question_item" v-for="(item,index) in counterJ" :key="index">
-                <label class="question_item">
-                <span @click="JumpTo(index+1, 'counterJ')">{{ index+1 }}</span>
-                </label>
-              </div>
-              </div>
-              <label class="selectType">问答题</label>
-              <div class="question_list">
-              <div class="question_item" v-for="(item,index) in counterD" :key="index">
-                <label class="question_item">
-                <span @click="JumpTo(index+1, 'counterD')">{{ index+1 }}</span>
-                </label>
-              </div>
-              </div>
-              <label class="selectType">编程题</label>
-              <div class="question_list">
-              <div class="question_item" v-for="(item,index) in counterP" :key="index">
-                <label class="question_item">
-                <span @click="JumpTo(index+1, 'counterP')">{{ index+1 }}</span>
-                </label>
-              </div>
-              </div>
-            </el-card>
-          </div>
-          <div class="ques">
-            <el-card class="ques_card" v-if="this.isShowS">
-              <div v-for="(item,index) in counterS"
-              :key="index"
-              v-bind:id="('counterS'+(index+1))">
-                <label>选择题-{{ index+1 }}</label>
-                <singleQues
-                :index="index"
-                :SingleQ="singleList[index]"
-                @func="getList"></singleQues>
-              </div>
-            </el-card>
-            <el-card class="ques_card" v-if="this.isShowJ">
-              <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
-                <label>判断题-{{ index+1 }}</label>
-                <judgeQues
-                  ref="judge"
-                  :index="index"
-                  :JudgeQ="judgeList[index]"
-                  @func="getList"/>
-              </div>
-            </el-card>
-            <el-card class="ques_card" v-if="this.isShowD">
-              <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
-                <label>讨论题-{{ index+1 }}</label>
-                <discussionQues
-                :index="index"
-                :DiscussionQ="discussionList[index]"
-                @func="getList"/>
-              </div>
-            </el-card>
-            <el-card class="ques_card" v-if="this.isShowP">
-              <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
-                <label>编程题-{{ index+1 }}</label>
-                <programQues
-                :index="index"
-                :ProgramQ="programList[index]"
-                :examId="examId"
-                @func="getList"/>
-              </div>
-            </el-card>
-            <div class="button_card">
-              <button @click="SubmitExam()">交卷</button>
+              </label>
             </div>
           </div>
+          <label class="selectType">判断题</label>
+          <div class="question_list">
+            <div class="question_item" v-for="(item,index) in counterJ" :key="index">
+              <label class="question_item">
+                <span @click="JumpTo(index+1, 'counterJ')">{{ index+1 }}</span>
+              </label>
+            </div>
+          </div>
+          <label class="selectType">问答题</label>
+          <div class="question_list">
+            <div class="question_item" v-for="(item,index) in counterD" :key="index">
+              <label class="question_item">
+                <span @click="JumpTo(index+1, 'counterD')">{{ index+1 }}</span>
+              </label>
+            </div>
+          </div>
+          <label class="selectType">编程题</label>
+          <div class="question_list">
+            <div class="question_item" v-for="(item,index) in counterP" :key="index">
+              <label class="question_item">
+                <span @click="JumpTo(index+1, 'counterP')">{{ index+1 }}</span>
+              </label>
+            </div>
+          </div>
+        </el-card>
+      </div>
+      <div class="ques">
+        <el-card class="ques_card" v-if="this.isShowS">
+          <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
+            <label>选择题-{{ index+1 }}</label>
+            <singleQues :index="index" :SingleQ="singleList[index]" @func="getList"></singleQues>
+          </div>
+        </el-card>
+        <el-card class="ques_card" v-if="this.isShowJ">
+          <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
+            <label>判断题-{{ index+1 }}</label>
+            <judgeQues ref="judge" :index="index" :JudgeQ="judgeList[index]" @func="getList" />
+          </div>
+        </el-card>
+        <el-card class="ques_card" v-if="this.isShowD">
+          <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
+            <label>讨论题-{{ index+1 }}</label>
+            <discussionQues :index="index" :DiscussionQ="discussionList[index]" @func="getList" />
+          </div>
+        </el-card>
+        <el-card class="ques_card" v-if="this.isShowP">
+          <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
+            <label>编程题-{{ index+1 }}</label>
+            <programQues
+              :index="index"
+              :ProgramQ="programList[index]"
+              :examId="examId"
+              @func="getList"
+            />
+          </div>
+        </el-card>
+        <div class="button_card">
+          <button @click="SubmitExam()">交卷</button>
+        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -142,7 +131,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     WindowJudge() {
       let co = 0;
@@ -154,11 +143,13 @@ export default {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
-          }).then(() => {
-            window.location.href = '/IndexStu';
-          }).catch(() => {
-            window.location.href = '/IndexStu';
-          });
+          })
+            .then(() => {
+              window.location.href = '/IndexStu';
+            })
+            .catch(() => {
+              window.location.href = '/IndexStu';
+            });
         }
       };
     },
@@ -181,7 +172,7 @@ export default {
         if (info.code === 200) {
           const infodata = info.data;
           // console.log(info);
-          infodata.forEach((item) => {
+          infodata.forEach(item => {
             if (item.type === 'Single') {
               this.counterS.push(item);
               // console.log(this.counterS);
@@ -219,12 +210,15 @@ export default {
       // console.log('this ouke');
       try {
         // console.log(this.counterP);
-        this.counterS.forEach(async (item) => {
+        this.counterS.forEach(async item => {
           if (item.question_id) {
             const questionId = parseInt(item.question_id, 10);
-            const res = await this.$axios.post(`${this.HOST}/exam/getQuestion`, {
-              question_id: questionId,
-            });
+            const res = await this.$axios.post(
+              `${this.HOST}/exam/getQuestion`,
+              {
+                question_id: questionId,
+              }
+            );
             const info = res.data;
             // console.log(info.data);
             const infodata = info.data;
@@ -234,12 +228,15 @@ export default {
             }
           }
         });
-        this.counterJ.forEach(async (item) => {
+        this.counterJ.forEach(async item => {
           if (item.question_id) {
             const questionId = parseInt(item.question_id, 10);
-            const res = await this.$axios.post(`${this.HOST}/exam/getQuestion`, {
-              question_id: questionId,
-            });
+            const res = await this.$axios.post(
+              `${this.HOST}/exam/getQuestion`,
+              {
+                question_id: questionId,
+              }
+            );
             const info = res.data;
             // console.log(info.data);
             const infodata = info.data;
@@ -249,12 +246,15 @@ export default {
             }
           }
         });
-        this.counterD.forEach(async (item) => {
+        this.counterD.forEach(async item => {
           if (item.question_id) {
             const questionId = parseInt(item.question_id, 10);
-            const res = await this.$axios.post(`${this.HOST}/exam/getQuestion`, {
-              question_id: questionId,
-            });
+            const res = await this.$axios.post(
+              `${this.HOST}/exam/getQuestion`,
+              {
+                question_id: questionId,
+              }
+            );
             const info = res.data;
             // console.log(info.data);
             const infodata = info.data;
@@ -264,12 +264,15 @@ export default {
             }
           }
         });
-        this.counterP.forEach(async (item) => {
+        this.counterP.forEach(async item => {
           if (item.question_id) {
             const questionId = parseInt(item.question_id, 10);
-            const res = await this.$axios.post(`${this.HOST}/exam/getQuestion`, {
-              question_id: questionId,
-            });
+            const res = await this.$axios.post(
+              `${this.HOST}/exam/getQuestion`,
+              {
+                question_id: questionId,
+              }
+            );
             const info = res.data;
             // console.log(info.data);
             const infodata = info.data;
@@ -294,7 +297,7 @@ export default {
 
     getList(data) {
       let isAdd = true;
-      this.answerList.forEach((item) => {
+      this.answerList.forEach(item => {
         if (item.question_id === data.question_id) {
           this.$set(item, 'answer', data.answer);
           isAdd = false;
@@ -305,24 +308,27 @@ export default {
       }
     },
     async SubmitExam() {
-      const len = this.counterS.length
-      + this.counterJ.length
-      + this.counterD.length
-      + this.counterP.length;
+      const len =
+        this.counterS.length +
+        this.counterJ.length +
+        this.counterD.length +
+        this.counterP.length;
       if (this.answerList.length !== len) {
         this.$confirm('您还有题目未作答, 是否继续提交?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
-        }).then(async () => {
-          await this.SubmitInfo();
-        }).catch(() => {
-          this.$message({
-            type: 'warning',
-            message: '已取消提交',
-            offset: 70,
+        })
+          .then(async () => {
+            await this.SubmitInfo();
+          })
+          .catch(() => {
+            this.$message({
+              type: 'warning',
+              message: '已取消提交',
+              offset: 70,
+            });
           });
-        });
       } else {
         this.SubmitInfo();
       }
@@ -364,41 +370,53 @@ export default {
     async JudgeStatus() {
       try {
         const interval = setInterval(async () => {
-          const res = await this.$axios.post(`${this.HOST}/exam/getTimeAndStatus`, {
-            exam_id: this.examId,
-          });
+          const res = await this.$axios.post(
+            `${this.HOST}/exam/getTimeAndStatus`,
+            {
+              exam_id: this.examId,
+            }
+          );
           const info = res.data.data;
           if (res.data.code === 200) {
-            this.curStartTime = this.changeTime(info.begin_time, info.last_time);
+            this.curStartTime = this.changeTime(
+              info.begin_time,
+              info.last_time
+            );
             this.countTime();
             if (info.status === 'end') {
               this.$confirm('考试时间到，无法继续作答', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning',
-              }).then(() => {
-                window.location.href = '/IndexStu';
-                clearInterval(interval);
-              }).catch(() => {
-                window.location.href = '/IndexStu';
-                clearInterval(interval);
-              });
+              })
+                .then(() => {
+                  window.location.href = '/IndexStu';
+                  clearInterval(interval);
+                })
+                .catch(() => {
+                  window.location.href = '/IndexStu';
+                  clearInterval(interval);
+                });
             }
-            if (this.day === 0
-            && this.hour === '00'
-            && this.min === '00'
-            && this.second === '00') {
+            if (
+              this.day === 0 &&
+              this.hour === '00' &&
+              this.min === '00' &&
+              this.second === '00'
+            ) {
               this.$confirm('考试时间到，无法继续作答', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning',
-              }).then(() => {
-                window.location.href = '/IndexStu';
-                clearInterval(interval);
-              }).catch(() => {
-                window.location.href = '/IndexStu';
-                clearInterval(interval);
-              });
+              })
+                .then(() => {
+                  window.location.href = '/IndexStu';
+                  clearInterval(interval);
+                })
+                .catch(() => {
+                  window.location.href = '/IndexStu';
+                  clearInterval(interval);
+                });
             }
           } else {
             this.$message({
@@ -426,7 +444,11 @@ export default {
       const lastHour = lastTime / 60;
       const lastMin = lastTime % 60;
       const Y = `${date.getFullYear()}/`;
-      const M = `${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}/`;
+      const M = `${
+        date.getMonth() + 1 < 10
+          ? `0${date.getMonth() + 1}`
+          : date.getMonth() + 1
+      }/`;
       const D = `${date.getDate()} `;
       const h = `${date.getHours() + lastHour}:`;
       const m = `${date.getMinutes() + lastMin}:`;
@@ -462,13 +484,15 @@ export default {
         this.second = '00';
       }
       // 等于0的时候不调用
-      if (Number(this.hour) === 0
-      && Number(this.day) === 0
-      && Number(this.min) === 0
-      && Number(this.second) === 0) {
+      if (
+        Number(this.hour) === 0 &&
+        Number(this.day) === 0 &&
+        Number(this.min) === 0 &&
+        Number(this.second) === 0
+      ) {
         console.log('a');
       } else {
-      // 递归每秒调用countTime方法，显示动态时间效果,
+        // 递归每秒调用countTime方法，显示动态时间效果,
         setTimeout(this.countTime, 1000);
       }
     },
@@ -477,13 +501,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#stuQuestion{
+#stuQuestion {
   display: flex;
   flex-direction: column;
   margin: auto 0px;
   background: url(../../assets/index_background_stu.gif);
 
-  .res_time{
+  .res_time {
     display: flex;
     justify-content: flex-start;
     margin-left: 5%;
@@ -491,29 +515,29 @@ export default {
     margin-top: 20px;
     position: fixed;
   }
-  .paper{
+  .paper {
     display: flex;
     flex-direction: row;
     margin-top: 50px;
   }
-  .menu{
+  .menu {
     width: 20%;
     height: 100%;
     margin-left: 5%;
     position: fixed;
 
-    .selectType{
-      background-color: #7CC68C;
+    .selectType {
+      background-color: #7cc68c;
       padding: 5px 10px;
-      border-radius: 4px
+      border-radius: 4px;
     }
-    .question_list{
+    .question_list {
       margin: 20px 0 30px 0;
       flex-wrap: wrap;
       display: flex;
     }
 
-    .question_item{
+    .question_item {
       margin: 4px;
       align-items: center;
       justify-content: center;
@@ -525,24 +549,24 @@ export default {
       border-radius: 2px;
       background: #f0f0f0;
     }
-    .active_item{
-    box-shadow: 0 0 0 2px #695de0;
+    .active_item {
+      box-shadow: 0 0 0 2px #695de0;
     }
   }
-  .ques{
+  .ques {
     margin-left: 30%;
     width: 60%;
 
-    .ques_card{
+    .ques_card {
       display: flex;
       flex-direction: column;
       margin-bottom: 5%;
     }
-    .button_card{
+    .button_card {
       margin-bottom: 20px;
     }
   }
-  button{
+  button {
     color: white;
     margin: 10px 0;
     border: none;
@@ -550,11 +574,11 @@ export default {
     padding: 5px 10px;
     width: 100px;
     font-size: 15px;
-    background-color: #DA6148;
+    background-color: #da6148;
     cursor: pointer;
     outline: none;
   }
-  button:hover{
+  button:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
   }
 }

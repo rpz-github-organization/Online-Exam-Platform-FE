@@ -180,7 +180,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async submitupdata() {
       // 获取登录学生的个人信息
@@ -617,7 +617,7 @@ export default {
         }
         span {
           font-size: 16px;
-          color: #999;
+          color: black;
           margin-top: 3px;
           padding-right: 10px;
         }

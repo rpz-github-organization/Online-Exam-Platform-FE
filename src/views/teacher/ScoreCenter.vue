@@ -3,8 +3,8 @@
     <div class="head">
       <el-card>
         <label class="tip">
-          尊敬的老师您好！<br>
-          这里是问答题评分中心，左侧是参与本次考试所有学生的学号和姓名，请点击您想评分的学生进行评分，
+          尊敬的老师您好！
+          <br />这里是问答题评分中心，左侧是参与本次考试所有学生的学号和姓名，请点击您想评分的学生进行评分，
           评分结束后记得及时提交，祝您阅卷愉快~
         </label>
       </el-card>
@@ -14,22 +14,18 @@
         <el-card>
           <div class="stu_list">
             <label
-            v-for="(item, index) in stuList"
-            :key="item.id"
-            class="stu_label"
-            @click="showStuQues(index)">
-              {{ item.id }} - {{ item.name }}
-            </label>
+              v-for="(item, index) in stuList"
+              :key="item.id"
+              class="stu_label"
+              @click="showStuQues(index)"
+            >{{ item.id }} - {{ item.name }}</label>
           </div>
         </el-card>
       </div>
       <div class="right">
         <el-card>
           <div class="ques_list">
-            <div
-            class="ques_card"
-            v-for="(item, index) in List"
-            :key="index">
+            <div class="ques_card" v-for="(item, index) in List" :key="index">
               <el-card>
                 <div class="row">
                   <label>题目：</label>
@@ -48,17 +44,14 @@
                   <label class="answer">{{ item.score }}</label>
                 </div>
                 <div class="row">
-                    <label>学生得分：</label>
-                    <el-input
-                      size="small"
-                      v-model="score[index]">
-                    </el-input>
+                  <label>学生得分：</label>
+                  <el-input size="small" v-model="score[index]"></el-input>
                 </div>
               </el-card>
             </div>
           </div>
         </el-card>
-        <button @click="SubmitScore()">submit</button>
+        <button @click="SubmitScore()">提交</button>
       </div>
     </div>
   </div>
@@ -94,7 +87,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async getQues() {
       try {
@@ -106,7 +99,7 @@ export default {
         if (res.data.code === 200) {
           this.stuAnswer = info.stuInfo;
           const ques = info.question;
-          ques.forEach((item) => {
+          ques.forEach(item => {
             this.List.push({
               ques: item.question,
               answer: item.answer,
@@ -115,7 +108,7 @@ export default {
             });
             this.quesList.push(item.question_id);
           });
-          this.stuAnswer.forEach((item) => {
+          this.stuAnswer.forEach(item => {
             this.stuList.push({
               id: item.id,
               name: item.name,
@@ -209,70 +202,70 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#scoreCenter{
+#scoreCenter {
   display: flex;
   flex-direction: column;
   padding-top: 20px;
   width: 100%;
   height: 100%;
   background: url(../../assets/index_background_tch.gif);
-  .center{
-  display: flex;
-  flex-direction: row;
-  margin: 30px 0;
+  .center {
+    display: flex;
+    flex-direction: row;
+    margin: 30px 0;
   }
-  .head{
+  .head {
     display: flex;
     justify-content: center;
     text-align: left;
   }
-  .left{
+  .left {
     width: 300px;
     margin-left: 20px;
     display: flex;
     flex-direction: column;
 
-    .list_label{
-      color: #1C3044;
+    .list_label {
+      color: #1c3044;
       font-weight: bold;
     }
-    .stu_list{
+    .stu_list {
       display: flex;
       flex-direction: column;
       justify-content: center;
       text-align: left;
     }
-    .stu_label{
+    .stu_label {
       margin: 5px;
     }
   }
-  .right{
+  .right {
     margin: 0 30px;
     width: 100%;
-    .ques_card{
+    .ques_card {
       display: flex;
       flex-direction: column;
       text-align: left;
       margin-bottom: 10px;
-      label{
+      label {
         font-weight: bold;
         width: 100px;
         bottom: 0;
       }
-      .row{
+      .row {
         display: flex;
         flex-direction: row;
         margin: 15px;
       }
-      .answer{
+      .answer {
         font-weight: normal;
         width: 90%;
         margin-top: 3px;
-        word-wrap:break-word;
+        word-wrap: break-word;
       }
     }
   }
-  button{
+  button {
     color: white;
     margin: 10px 0;
     border: none;
@@ -280,11 +273,11 @@ export default {
     padding: 5px 10px;
     width: 100px;
     font-size: 15px;
-    background-color: #DA6148;
+    background-color: #da6148;
     cursor: pointer;
     outline: none;
   }
-  button:hover{
+  button:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
   }
 }

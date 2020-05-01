@@ -56,7 +56,7 @@
             <el-input v-model="scoreS" clearable></el-input>
           </div>
           <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
-            <label>选择题-{{ index+1 }}</label>
+            <label>选择题 No.{{ index+1 }}</label>
             <single :index="index" :score="scoreS" :ques="Single[index]"></single>
           </div>
         </el-card>
@@ -68,15 +68,15 @@
             <el-input v-model="scoreJ" clearable></el-input>
           </div>
           <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
-            <label>判断题-{{ index+1 }}</label>
-            <judge ref="judge" :index="index" :score="scoreJ" :ques="Judge[index]" />
+            <label>判断题 No.{{ index+1 }}</label>
+            <judge :index="index" :score="scoreJ" :ques="Judge[index]" />
           </div>
         </el-card>
       </div>
       <div v-if="counterD.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
-            <label>讨论题-{{ index+1 }}</label>
+            <label>讨论题 No.{{ index+1 }}</label>
             <discussion :index="index" :ques="Discussion[index]" />
           </div>
         </el-card>
@@ -84,13 +84,14 @@
       <div v-if="counterP.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
-            <label>编程题-{{ index+1 }}</label>
+            <label>编程题 No.{{ index+1 }}</label>
             <program :index="index" :ques="Program[index]" />
           </div>
         </el-card>
       </div>
       <div class="button_row">
         <el-button type="success" plain @click="goToInfo()">点击分发试卷</el-button>
+        <el-button type="primary" plain @click="() => { $router.push('/configPDF') }">点击上传 PDF 配卷</el-button>
       </div>
       <div class="warn_tip">
         <span>
@@ -187,7 +188,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async GetWhole() {
       try {
@@ -268,6 +269,7 @@ export default {
       padding: 5px 10px;
       margin-bottom: 30%;
       border-radius: 4px;
+      font-weight: bold;
     }
     .question_list {
       margin: 10% 0 30% 0;
@@ -318,6 +320,10 @@ export default {
     }
     .button_row {
       margin-bottom: 10px;
+
+      * {
+        margin: 0 10px;
+      }
     }
     .warn_tip {
       margin-bottom: 30px;

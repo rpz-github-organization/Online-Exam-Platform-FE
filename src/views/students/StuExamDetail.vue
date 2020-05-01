@@ -53,7 +53,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     goToExam() {
       window.location.href = '/StuQuestion';
