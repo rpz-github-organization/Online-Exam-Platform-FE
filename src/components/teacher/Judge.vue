@@ -3,34 +3,20 @@
     <el-card class="question_card">
       <div class="ques_row">
         <label class="ques_label">题目:</label>
-        <el-input
-        placeholder="请输入题目"
-        v-model="question"
-        type="textarea"
-        autosize>
-        </el-input>
+        <el-input placeholder="请输入题目" v-model="question" type="textarea" autosize></el-input>
       </div>
-      <div class="ques_row">
+      <div class="ques_row flex as-center">
         <label class="ques_label">答案:</label>
-        <el-select v-model="answer" class="select">
-          <el-option v-for="item in ans"
-                     :key="item.value"
-                     :label="item.value"
-                     :value="item.value"
-          ></el-option>
-        </el-select>
+        <el-radio v-model="answer" label="true">正确</el-radio>
+        <el-radio v-model="answer" label="false">错误</el-radio>
       </div>
       <el-divider></el-divider>
       <div class="ques_row">
         <label class="ques_label">知识点:</label>
-        <el-input
-        placeholder="请输入知识点"
-        v-model="tag"
-        clearable>
-        </el-input>
+        <el-input placeholder="请输入知识点" v-model="tag" clearable></el-input>
       </div>
       <div>
-        <button @click="SubmitJudge()">submit</button>
+        <button @click="SubmitJudge()">提交</button>
       </div>
     </el-card>
   </div>
@@ -69,11 +55,14 @@ export default {
   },
   data() {
     return {
-      ans: [{
-        value: 'true',
-      }, {
-        value: 'false',
-      }],
+      ans: [
+        {
+          value: 'true',
+        },
+        {
+          value: 'false',
+        },
+      ],
 
       question: '',
       answer: '',
@@ -98,7 +87,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     isSubmit() {
       let res = true;
@@ -130,13 +119,16 @@ export default {
             // console.log(this.questionid);
             try {
               console.log(this.examId);
-              const response = await this.$axios.post(`${this.HOST}/exam/addQuestionToExam`, {
-                type: 'Judge',
-                question_id: quesid,
-                num: this.index + 1,
-                score: scoreN,
-                exam_id: this.examId,
-              });
+              const response = await this.$axios.post(
+                `${this.HOST}/exam/addQuestionToExam`,
+                {
+                  type: 'Judge',
+                  question_id: quesid,
+                  num: this.index + 1,
+                  score: scoreN,
+                  exam_id: this.examId,
+                }
+              );
               const inFo = response.data;
               if (inFo.code === 200) {
                 this.$message({
@@ -173,13 +165,16 @@ export default {
         const scoreN = parseInt(this.score, 10);
         // console.log(this.questionid);
         try {
-          const response = await this.$axios.post(`${this.HOST}/exam/addQuestionToExam`, {
-            type: 'Judge',
-            question_id: quesid,
-            num: this.index + 1,
-            score: scoreN,
-            exam_id: this.examId,
-          });
+          const response = await this.$axios.post(
+            `${this.HOST}/exam/addQuestionToExam`,
+            {
+              type: 'Judge',
+              question_id: quesid,
+              num: this.index + 1,
+              score: scoreN,
+              exam_id: this.examId,
+            }
+          );
           const inFo = response.data;
           if (inFo.code === 200) {
             this.$message({
@@ -232,27 +227,22 @@ export default {
       }
     },
     async SubmitJudge() {
-      if (!this.score) {
-        this.$message({
-          message: '未填写分数',
-          type: 'error',
-          offset: 70,
-        });
-      } else if (this.score) {
-        if (!this.isSubmit()) {
-          this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            showCancelButton: true,
-          }).then(async () => {
+      console.log(this.questionid);
+      if (!this.isSubmit()) {
+        this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          showCancelButton: true,
+        })
+          .then(async () => {
             await this.getInfo();
             this.isChange = false;
-          }).catch(() => {
-          });
-        } else { // 填写完整直接提交。
-          await this.getInfo();
-          this.isChange = false;
-        }
+          })
+          .catch(() => {});
+      } else {
+        // 填写完整直接提交。
+        await this.getInfo();
+        this.isChange = false;
       }
     },
   },
@@ -260,30 +250,30 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#judge{
+#judge {
   display: flex;
   margin: 10px 5px 30px 5px;
 
-  .question_card{
+  .question_card {
     width: 100%;
     display: flex;
     flex-direction: column;
   }
-  .ques_row{
+  .ques_row {
     display: flex;
     flex-direction: row;
     margin: 10px;
 
-    .select{
+    .select {
       width: 100%;
     }
-    .ques_label{
+    .ques_label {
       width: 15%;
       padding: 5px;
       text-align: left;
     }
   }
-  button{
+  button {
     color: white;
     margin: 10px 0;
     font-weight: bold;
@@ -296,7 +286,7 @@ export default {
     cursor: pointer;
     outline: none;
   }
-  button:hover{
+  button:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
   }
 }

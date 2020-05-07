@@ -147,7 +147,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     back() {
       this.$router.back(-1);

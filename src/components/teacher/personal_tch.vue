@@ -1,134 +1,156 @@
 <template>
-    <div class="hello">
-      <h1 class="title">个人资料</h1><hr>
-        <div class="card">
-          <div class="right_info">
-            <div class="row">
-              <span class="ti">工号:</span>
-              <span>{{this.uid}}</span>
-            </div>
-            <!-- <div class="row">
+  <div class="hello">
+    <h1 class="title">个人资料</h1>
+    <div class="card">
+      <div class="right_info">
+        <div class="row">
+          <span class="ti">工号:</span>
+          <span>{{this.uid}}</span>
+        </div>
+        <!-- <div class="row">
               <span>学院:</span>
               <span>{{this.institute}}</span>
-            </div> -->
-            <div class="line"></div>
-            <div class="row">
-              <label for="name" class="ti">姓名:</label>
-              <label v-if="Seen">{{this.name}}</label>
-              <input v-model="name" type="text" name="name" placeholder="请输入名字" v-if="!Seen"/>
-            </div>
-            <div class="row">
-              <label for="sex" class="ti">性别:</label>
-              <label v-if="Seen">{{this.sex}}</label>
-              <select id="sex" name="sex" v-model="sex" v-if="!Seen">
-                <option >女</option>
-                <option >男</option>
-              </select>
-            </div>
-            <div class="row">
-              <label for="qq" class="ti">Q  Q:</label>
-              <label v-if="Seen">{{this.qq}}</label>
-              <input v-model="qq" type="text" name="qq" placeholder="请输入QQ号" v-if="!Seen"/>
-            </div>
-            <div class="row">
-              <label for="wx" class="ti">微信:</label>
-              <label v-if="Seen">{{this.wx}}</label>
-              <input v-model="wx" type="text" name="wx" placeholder="请输入微信" v-if="!Seen"/>
-            </div>
-            <div class="row">
-              <label for="phone" class="ti">电话:</label>
-              <label v-if="Seen">{{this.phone}}</label>
-              <input v-model="phone" type="text" name="phone" placeholder="请输入电话" v-if="!Seen"/>
-            </div>
-            <div class="line"></div>
-            <div class="row">
-              <label for="email" class="ti">邮箱:</label>
-              <label>{{this.email}}</label>
-              <el-button class="change"
-                type="text"
-                @click="submitcheck();dialogFormmail=true"
-                v-if="!Seen">
-                更改邮箱</el-button>
-              <el-dialog title="更改邮箱" :visible.sync="dialogFormmail" class="dialog">
-                <div class="form">
-                  <div class="hi" v-if="isShowmail">
-                    <label>已向你的邮箱发送验证码</label>
-                    <input v-model="mailNumber" type="text" name="one" placeholder="请输入验证码">
-                    <button @click="checkEmailCode()">验证</button>
-                  </div>
-                  <div class="hi" v-if="isShowmail">
-                    <span v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</span>
-                  </div>
-                  <div class="hi" v-if="!isShowmail">
-                    <label for="newEmail">请输入新邮箱</label>
-                    <input v-model="newEmail" type="text" name="newEmail">
-                    <button  @click="submitNewcheck()" :disabled="isok" v-if="showbtn">验证码</button>
-                    <button v-else>{{ message }}</button>
-                  </div>
-                  <div class="hi" v-if="!isShowmail">
-                    <label>请输入新邮箱验证码</label>
-                    <input v-model="newNumber" type="text" name="emailCode">
-                  </div>
-                  <div class="hi" v-if="!isShowmail">
-                    <label v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</label>
-                  </div>
-                </div>
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="isShowmail=true;dialogFormmail = false;clearEmail()">
-                    取 消</el-button>
-                  <el-button type="primary" @click="updataEmail()">
-                    确 定</el-button>
-                </div>
-              </el-dialog>
-            </div>
-            <div class="row" v-if="!Seen">
-              <label >密码:</label>
-              <label v-if="!Seen">{{this.pwd}}</label>
-              <el-button class="change" type="text" @click="submitcheck();dialogFormVisible=true">
-                重置密码</el-button>
-              <el-dialog title="重置密码" :visible.sync="dialogFormVisible" class="dialog">
-                <div class="form">
-                  <div class="hi" v-if="isShowpwd">
-                    <label for="e">已向你的邮箱发送验证码</label>
-                    <input v-model="pwdNumber" type="text" name="e" placeholder="请输入验证码">
-                    <button @click="checkPwdCode()">验证</button>
-                  </div>
-                  <div class="hi" v-if="isShowpwd">
-                    <span v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</span>
-                  </div>
-                  <div class="hi" v-if="!isShowpwd">
-                    <label for="newPwd">请输入新密码</label>
-                    <input v-model="newPwd" type="password" name="new">
-                  </div>
-                  <div class="hi" v-if="!isShowpwd">
-                    <label for="reNewPwd">请再次输入新密码</label>
-                    <input v-model="renewPwd" type="password" name="reNew">
-                  </div>
-                  <div class="hi" v-if="!isShowpwd">
-                    <span v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</span>
-                  </div>
-                </div>
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="isShowpwd=true;dialogFormVisible = false;clearPwd()">
-                    取 消</el-button>
-                  <el-button type="primary" @click="upataPwd()
-                    ">
-                    确 定</el-button>
-                </div>
-              </el-dialog>
-            </div>
-          </div>
+        </div>-->
+        <div class="row">
+          <label for="name" class="ti">姓名:</label>
+          <label v-if="Seen">{{this.name}}</label>
+          <el-input v-model="name" size="mini" name="name" placeholder="请输入名字" v-if="!Seen" />
         </div>
-        <div class="submit">
-          <button @click="changeCard()" v-if="Seen">编辑</button>
-          <button @click="editStudent();" v-if="!Seen">保存</button>
-          <a href="personalTch" v-if="!Seen">取消</a>
+        <div class="row">
+          <label for="sex" class="ti">性别:</label>
+          <label v-if="Seen">{{this.sex}}</label>
+          <select id="sex" name="sex" v-model="sex" v-if="!Seen">
+            <option>女</option>
+            <option>男</option>
+          </select>
         </div>
+        <div class="row">
+          <label for="qq" class="ti">QQ:</label>
+          <label v-if="Seen">{{this.qq}}</label>
+          <el-input
+            v-model="qq"
+            size="mini"
+            type="text"
+            name="qq"
+            placeholder="请输入QQ号"
+            v-if="!Seen"
+          />
+        </div>
+        <div class="row">
+          <label for="wx" class="ti">微信:</label>
+          <label v-if="Seen">{{this.wx}}</label>
+          <el-input
+            size="mini"
+            v-model="wx"
+            type="text"
+            name="wx"
+            placeholder="请输入微信"
+            v-if="!Seen"
+          />
+        </div>
+        <div class="row">
+          <label for="phone" class="ti">电话:</label>
+          <label v-if="Seen">{{this.phone}}</label>
+          <el-input
+            size="mini"
+            v-model="phone"
+            type="text"
+            name="phone"
+            placeholder="请输入电话"
+            v-if="!Seen"
+          />
+        </div>
+        <div class="row">
+          <label for="email" class="ti">邮箱:</label>
+          <label>{{this.email}}</label>
+          <el-button
+            class="change"
+            type="primary"
+            plain
+            @click="submitcheck();dialogFormmail=true"
+            v-if="!Seen"
+          >更改邮箱</el-button>
+          <el-dialog title="更改邮箱" :visible.sync="dialogFormmail" class="dialog">
+            <div class="form">
+              <div class="hi" v-if="isShowmail">
+                <label>已向你的邮箱发送验证码</label>
+                <input v-model="mailNumber" type="text" name="one" placeholder="请输入验证码" />
+                <button @click="checkEmailCode()">验证</button>
+              </div>
+              <div class="hi" v-if="isShowmail">
+                <span v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</span>
+              </div>
+              <div class="hi" v-if="!isShowmail">
+                <label for="newEmail">请输入新邮箱</label>
+                <input v-model="newEmail" type="text" name="newEmail" />
+                <button @click="submitNewcheck()" :disabled="isok" v-if="showbtn">验证码</button>
+                <button v-else>{{ message }}</button>
+              </div>
+              <div class="hi" v-if="!isShowmail">
+                <label>请输入新邮箱验证码</label>
+                <input v-model="newNumber" type="text" name="emailCode" />
+              </div>
+              <div class="hi" v-if="!isShowmail">
+                <label v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</label>
+              </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="isShowmail=true;dialogFormmail = false;clearEmail()">取 消</el-button>
+              <el-button type="primary" @click="updataEmail()">确 定</el-button>
+            </div>
+          </el-dialog>
+        </div>
+        <div class="row" v-if="!Seen">
+          <el-button
+            class="change"
+            type="primary"
+            plain
+            @click="submitcheck();dialogFormVisible=true"
+          >重置密码</el-button>
+          <el-dialog
+            title="重置密码"
+            :visible.sync="dialogFormVisible"
+            class="dialog flex jy-start as-center"
+          >
+            <div class="form">
+              <div class="hi" v-if="isShowpwd">
+                <label for="e">已向你的邮箱发送验证码</label>
+                <input v-model="pwdNumber" type="text" name="e" placeholder="请输入验证码" />
+                <el-button class="verify-btn" type="primary" plain @click="checkPwdCode()">验证</el-button>
+              </div>
+              <div class="hi" v-if="isShowpwd">
+                <span v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</span>
+              </div>
+              <div class="hi" v-if="!isShowpwd">
+                <label for="newPwd">请输入新密码</label>
+                <input v-model="newPwd" type="password" name="new" />
+              </div>
+              <div class="hi" v-if="!isShowpwd">
+                <label for="reNewPwd">请再次输入新密码</label>
+                <input v-model="renewPwd" type="password" name="reNew" />
+              </div>
+              <div class="hi" v-if="!isShowpwd">
+                <span v-if="this.tipMessage.length>0" class="tip">{{ tipMessage }}</span>
+              </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="isShowpwd=true;dialogFormVisible = false;clearPwd()">取 消</el-button>
+              <el-button type="primary" @click="upataPwd()
+                    ">确 定</el-button>
+            </div>
+          </el-dialog>
+        </div>
+      </div>
     </div>
+    <div class="submit">
+      <button @click="changeCard()" v-if="Seen">编辑</button>
+      <button @click="editStudent();" v-if="!Seen">保存</button>
+      <a href="personalTch" v-if="!Seen">取消</a>
+    </div>
+  </div>
 </template>
 
 <script>
-
 export default {
   name: 'PersonalTch',
   mounted() {
@@ -167,7 +189,6 @@ export default {
 
       dialogFormVisible: false,
       dialogFormmail: false,
-
     };
   },
   created() {
@@ -181,12 +202,15 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
-    async submitupdata() { // 获取登录教师的个人信息
+    async submitupdata() {
+      // 获取登录教师的个人信息
       try {
-        const res = await this.$axios.get(`${this.HOST}/PersonalData/getTeacher`, {
-        });
+        const res = await this.$axios.get(
+          `${this.HOST}/PersonalData/getTeacher`,
+          {}
+        );
         const info = res.data;
         if (info.code === 200) {
           this.$message({
@@ -228,8 +252,8 @@ export default {
         }
       }
     },
-
-    async editStudent() { // 修改基本信息
+    async editStudent() {
+      // 修改基本信息
       try {
         let sex = '';
         if (this.sex === '女') {
@@ -237,13 +261,16 @@ export default {
         } else {
           sex = 'male';
         }
-        const res = await this.$axios.post(`${this.HOST}/PersonalData/editTeacherBaseData`, {
-          telephone: this.phone,
-          name: this.name,
-          sex,
-          qq: this.qq,
-          weixin: this.wx,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/PersonalData/editTeacherBaseData`,
+          {
+            telephone: this.phone,
+            name: this.name,
+            sex,
+            qq: this.qq,
+            weixin: this.wx,
+          }
+        );
         const info = res.data;
         if (info.code === 200) {
           this.$message({
@@ -282,12 +309,16 @@ export default {
       }
     },
 
-    async checkPwdCode() { // 验证邮箱是否经过验证(密码)
+    async checkPwdCode() {
+      // 验证邮箱是否经过验证(密码)
       try {
-        const res = await this.$axios.post(`${this.HOST}/PersonalData/checkCode`, {
-          email: this.email,
-          code: this.pwdNumber,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/PersonalData/checkCode`,
+          {
+            email: this.email,
+            code: this.pwdNumber,
+          }
+        );
         const info = res.data;
         console.log(info);
         if (info.code === 200) {
@@ -314,12 +345,16 @@ export default {
       }
     },
 
-    async checkEmailCode() { // 验证邮箱是否经过验证(邮箱)
+    async checkEmailCode() {
+      // 验证邮箱是否经过验证(邮箱)
       try {
-        const res = await this.$axios.post(`${this.HOST}/PersonalData/checkCode`, {
-          email: this.email,
-          code: this.mailNumber,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/PersonalData/checkCode`,
+          {
+            email: this.email,
+            code: this.mailNumber,
+          }
+        );
         const info = res.data;
         if (info.code === 200) {
           this.$message({
@@ -345,12 +380,16 @@ export default {
       }
     },
 
-    async updataEmail() { // 更新邮箱
+    async updataEmail() {
+      // 更新邮箱
       try {
-        const res = await this.$axios.post(`${this.HOST}/PersonalData/updateTeacherNewEmail`, {
-          code: this.newNumber,
-          newEmail: this.newEmail,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/PersonalData/updateTeacherNewEmail`,
+          {
+            code: this.newNumber,
+            newEmail: this.newEmail,
+          }
+        );
         const info = res.data;
         if (info.code === 200) {
           this.$message({
@@ -378,11 +417,15 @@ export default {
       }
     },
 
-    async upataPwd() { // 更新密码
+    async upataPwd() {
+      // 更新密码
       try {
-        const res = await this.$axios.post(`${this.HOST}/PersonalData/updateTeacherPassword`, {
-          newPassword: this.newPwd,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/PersonalData/updateTeacherPassword`,
+          {
+            newPassword: this.newPwd,
+          }
+        );
         const info = res.data;
         if (info.code === 200) {
           this.$message({
@@ -417,7 +460,6 @@ export default {
       }
     },
 
-
     clearEmail() {
       this.tipMessage = '';
       this.mailNumber = '';
@@ -432,11 +474,15 @@ export default {
       this.renewPwd = '';
     },
 
-    async submitcheck() { // 发送旧邮箱验证码
+    async submitcheck() {
+      // 发送旧邮箱验证码
       try {
-        const res = await this.$axios.post(`${this.HOST}/PersonalData/checkTeacherEmail `, {
-          email: this.email,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/PersonalData/checkTeacherEmail `,
+          {
+            email: this.email,
+          }
+        );
         if (res.code === 401) {
           this.sessionJudge();
         }
@@ -462,12 +508,16 @@ export default {
         });
       }
     },
-    async submitNewcheck() { // 发送新邮箱验证码
+    async submitNewcheck() {
+      // 发送新邮箱验证码
       try {
         if (this.email.search('@sicnu.edu.cn') === -1) {
-          const res = await this.$axios.post(`${this.HOST}/PersonalData/checkTeacherEmail`, {
-            email: this.newEmail,
-          });
+          const res = await this.$axios.post(
+            `${this.HOST}/PersonalData/checkTeacherEmail`,
+            {
+              email: this.newEmail,
+            }
+          );
           if (res.code === 401) {
             this.sessionJudge();
           }
@@ -508,201 +558,199 @@ export default {
 
 
 <style lang="less" scoped>
-.hello{
+.hello {
   width: 100%;
   height: 100%;
   background: url(../../assets/personal_background_tch.gif);
 
-  h1{
-  font-size: 26px;
-  color: #3d3d3d;
-  height: 90px;
-  line-height: 150px;
-  text-align:left;
-  margin: 5px 10%;
+  h1 {
+    font-size: 26px;
+    color: #3d3d3d;
+    height: 90px;
+    line-height: 150px;
+    text-align: center;
+    margin: 5px 10%;
   }
 
-  .submit{
+  .submit {
     button {
-    margin-top: 20px;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 20px;
-    padding: 5px 10px;
-    width: 80px;
-    font-size: 15px;
-    background-color: #5379a5c4;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
+      margin-top: 20px;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 20px;
+      padding: 5px 10px;
+      width: 80px;
+      font-size: 15px;
+      background-color: #5379a5c4;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.3s ease;
     }
-    button:hover{
+    button:hover {
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
     }
   }
 
-  a{
+  a {
     text-decoration: none;
     font-size: 14px;
     margin: 0 15px;
     color: dimgray;
   }
 
-  .card{
-    width: 40vw;
+  .card {
+    width: 30vw;
     margin: 5px auto;
     padding: 10px 20px;
     border-radius: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.20);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
     display: flex;
-    justify-content:center;
+    justify-content: center;
     margin-top: 25px;
     background-color: rgba(255, 251, 251, 0.87);
 
-    .right_info{
+    .right_info {
       width: 400px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-        .line{
-          height: 1px;
-          background: #302c2c;
-          margin: 10px 0;
+      .line {
+        height: 1px;
+        background: #302c2c;
+        margin: 10px 0;
+      }
+
+      .row {
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        display: flex;
+        margin: 10px 5px;
+        justify-content: flex-start;
+
+        .ti {
+          font-weight: bold;
+          width: 60px;
+        }
+        span {
+          font-size: 16px;
+          color: black;
+          margin-top: 3px;
+          padding-right: 10px;
         }
 
-        .row{
-          height: 25px;
-          line-height: 20px;
-          overflow:hidden;
-          display: flex;
-          margin: 10px 5px;
-          justify-content: flex-start;
+        label {
+          font-size: 16px;
+          color: #4d4d4d;
+          padding-right: 10px;
+        }
 
-          .ti{
-            font-weight: bold;
-          }
-          span{
-            font-size: 16px;
-            color: #999;
-            margin-top: 3px;
-            padding-right: 10px;
-          }
+        .dialog {
+          .form {
+            display: flex;
+            flex-wrap: wrap;
 
-          label{
-            font-size: 16px;
-            color: #4d4d4d;
-            padding-right: 10px;
-          }
-
-          .dialog{
-            .form{
+            .hi {
               display: flex;
-              flex-wrap:wrap;
+              margin: 10px 0px;
+              width: 100%;
 
-              .hi{
-                display: flex;
-                margin: 10px 0px;
-                width: 100%;
-
-                label{
-                  font-size: 16px;
-                  color: #4d4d4d;
-                  margin-top: 5px;
-                  text-align: left;
-                  width: 150px;
-                }
-                button{
-                  padding: 5px 10px;
-                  background:#909399;
-                  color:white;
-                  border-radius: 4px;
-                  margin: 0 10px;
-                  border: none;
-                  cursor: pointer;
-                }
+              label {
+                font-size: 16px;
+                color: #4d4d4d;
+                margin-top: 5px;
+                text-align: left;
+                width: 150px;
+                min-width: max-content;
               }
-              .tip{
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                color: #B14149;
+              .verify-btn {
+                margin-left: 20px;
+              }
+              input {
+                padding: 5px 10px;
               }
             }
-          }
-          .change{
-            font-size: 10px;
-            padding: 1px 1px;
-            border-radius: 4px;
-            background:#8DAFD2;
-            color: #3d3d3d;
-            margin: 0 5px;
+            .tip {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              color: #b14149;
+            }
           }
         }
-        input[name='name'],
-        input[name='qq'],
-        input[name='sex'],
-        input[name='wx'],
-        input[name='phone'],
-        input[name='mail']{
-          width: 55%;
-          margin: 0px 0;
-          border: 1px solid #ccc;
-          line-height: 25px;
-          outline: none;
-          transition: all 0.5s ease;
-          box-sizing: border-box;
+        .change {
+          font-size: 10px;
+          padding: 1px 10px;
           border-radius: 4px;
-          padding: 1px 2px;
+          margin: 0 5px;
+          width: 100%;
         }
-        input[name='name'],
-        input[name='qq'],
-        input[name='sex'],
-        input[name='wx'],
-        input[name='phone'],
-        input[name='mail']{
-          font-size: 16px;
-          float: left;
-        }
-        input[name='sex'],select{
-          width: 55%;
-          margin: 0px 0;
-          border: 1px solid #ccc;
-          line-height: 25px;
-          outline: none;
-          transition: all 0.5s ease;
-          box-sizing: border-box;
-          border-radius: 4px;
-        }
-        input[name='one'],
-        input[name='newEmail'],
-        input[name='e'],
-        input[name='new'],
-        input[name='reNew']{
-          width: 300px;
-          margin: 0px 0;
-          border: 1px solid #ccc;
-          line-height: 30px;
-          outline: none;
-          transition: all 0.5s ease;
-          box-sizing: border-box;
-          border-radius: 4px;
-          padding: 1px 2px;
-        }
-        input[name='emailCode']{
-          width: 150px;
-          margin: 0px 0;
-          border: 1px solid #ccc;
-          line-height: 30px;
-          outline: none;
-          transition: all 0.5s ease;
-          box-sizing: border-box;
-          border-radius: 4px;
-          padding: 1px 2px;
-        }
+      }
+      input[name='name'],
+      input[name='qq'],
+      input[name='sex'],
+      input[name='wx'],
+      input[name='phone'],
+      input[name='mail'] {
+        width: 55%;
+        margin: 0px 0;
+        border: 1px solid #ccc;
+        line-height: 25px;
+        outline: none;
+        transition: all 0.5s ease;
+        box-sizing: border-box;
+        border-radius: 4px;
+        padding: 1px 2px;
+      }
+      input[name='name'],
+      input[name='qq'],
+      input[name='sex'],
+      input[name='wx'],
+      input[name='phone'],
+      input[name='mail'] {
+        font-size: 16px;
+        float: left;
+      }
+      input[name='sex'],
+      select {
+        width: 55%;
+        margin: 0px 0;
+        border: 1px solid #ccc;
+        line-height: 25px;
+        outline: none;
+        transition: all 0.5s ease;
+        box-sizing: border-box;
+        border-radius: 4px;
+      }
+      input[name='one'],
+      input[name='newEmail'],
+      input[name='e'],
+      input[name='new'],
+      input[name='reNew'] {
+        width: 300px;
+        margin: 0px 0;
+        border: 1px solid #ccc;
+        line-height: 30px;
+        outline: none;
+        transition: all 0.5s ease;
+        box-sizing: border-box;
+        border-radius: 4px;
+        padding: 1px 2px;
+      }
+      input[name='emailCode'] {
+        width: 150px;
+        margin: 0px 0;
+        border: 1px solid #ccc;
+        line-height: 30px;
+        outline: none;
+        transition: all 0.5s ease;
+        box-sizing: border-box;
+        border-radius: 4px;
+        padding: 1px 2px;
+      }
     }
   }
 }
-
 </style>

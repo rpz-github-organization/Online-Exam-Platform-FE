@@ -56,6 +56,7 @@
             <el-input v-model="scoreS" clearable></el-input>
           </div>
           <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
+<<<<<<< HEAD
             <label>选择题-{{ index+1 }}</label>
             <div v-if="Single">
               <single :index="index" :score="scoreS" :ques="Single[index]"/>
@@ -63,6 +64,10 @@
             <div v-else>
               <single :index="index" :score="scoreS"></single>
             </div>
+=======
+            <label>选择题 No.{{ index+1 }}</label>
+            <single :index="index" :score="scoreS" :ques="Single[index]"></single>
+>>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
@@ -73,6 +78,7 @@
             <el-input v-model="scoreJ" clearable></el-input>
           </div>
           <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
+<<<<<<< HEAD
             <label>判断题-{{ index+1 }}</label>
             <div v-if="Judge">
               <judge ref="judge" :index="index" :score="scoreJ" :ques="Judge[index]"/>
@@ -80,12 +86,17 @@
             <div v-else>
               <judge ref="judge" :index="index" :score="scoreJ"/>
             </div>
+=======
+            <label>判断题 No.{{ index+1 }}</label>
+            <judge :index="index" :score="scoreJ" :ques="Judge[index]" />
+>>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
       <div v-if="counterD.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
+<<<<<<< HEAD
             <label>讨论题-{{ index+1 }}</label>
             <div v-if="Discussion">
               <discussion :index="index" :ques="Discussion[index]"/>
@@ -93,12 +104,17 @@
             <div v-else>
               <discussion :index="index"/>
             </div>
+=======
+            <label>讨论题 No.{{ index+1 }}</label>
+            <discussion :index="index" :ques="Discussion[index]" />
+>>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
       <div v-if="counterP.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
+<<<<<<< HEAD
             <label>编程题-{{ index+1 }}</label>
             <div v-if="Program">
               <program :index="index" :ques="Program[index]"/>
@@ -106,14 +122,21 @@
             <div v-else>
               <program :index="index"/>
             </div>
+=======
+            <label>编程题 No.{{ index+1 }}</label>
+            <program :index="index" :ques="Program[index]" />
+>>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
       <div class="button_row">
-        <el-button @click="goToInfo()">点击分发试卷</el-button>
+        <el-button type="success" plain @click="goToInfo()">点击分发试卷</el-button>
+        <el-button type="primary" plain @click="() => { $router.push('/configPDF') }">点击上传 PDF 配卷</el-button>
       </div>
       <div class="warn_tip">
-        <span>(注意：只有分发了试卷，学生才可以参加考试)</span>
+        <span>
+          <b>注意：只有分发了试卷，学生才可以参加考试</b>
+        </span>
       </div>
     </div>
   </div>
@@ -149,19 +172,24 @@ export default {
   },
   data() {
     return {
-      options: [{
-        value: 'single',
-        label: '选择题',
-      }, {
-        value: 'judge',
-        label: '判断题',
-      }, {
-        value: 'discussion',
-        label: '简答题',
-      }, {
-        value: 'program',
-        label: '编程题',
-      }],
+      options: [
+        {
+          value: 'single',
+          label: '选择题',
+        },
+        {
+          value: 'judge',
+          label: '判断题',
+        },
+        {
+          value: 'discussion',
+          label: '简答题',
+        },
+        {
+          value: 'program',
+          label: '编程题',
+        },
+      ],
       type: '',
       counterS: [],
       counterJ: [],
@@ -200,7 +228,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async GetWhole() {
       try {
@@ -265,28 +293,31 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#AddQuestion{
+#AddQuestion {
+  margin-top: 60px;
+  padding-top: 40px;
   background: url(../../assets/index_background_tch.gif);
   display: flex;
-  .left{
+  .left {
     width: 20%;
     height: 100%;
     margin-left: 5%;
     position: fixed;
 
-    .selectType{
+    .selectType {
       background-color: #5379a563;
       padding: 5px 10px;
       margin-bottom: 30%;
-      border-radius: 4px
+      border-radius: 4px;
+      font-weight: bold;
     }
-    .question_list{
+    .question_list {
       margin: 10% 0 30% 0;
       flex-wrap: wrap;
       display: flex;
     }
 
-    .question_item{
+    .question_item {
       margin: 4px;
       align-items: center;
       justify-content: center;
@@ -298,39 +329,43 @@ export default {
       border-radius: 2px;
       background: #f0f0f0;
     }
-    .active_item{
+    .active_item {
       box-shadow: 0 0 0 2px #695de0;
     }
   }
-  .right{
+  .right {
     width: 60%;
     height: 100%;
     margin-left: 30%;
 
-    .ques_card{
+    .ques_card {
       display: flex;
       flex-direction: column;
       margin-bottom: 5%;
 
-      .type_score{
+      .type_score {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
         width: 20%;
       }
-      .type_title{
+      .type_title {
         width: 80%;
         text-align: left;
         margin: 5% 5px;
       }
-      label{
+      label {
         color: #8590a6;
       }
     }
-    .button_row{
+    .button_row {
       margin-bottom: 10px;
+
+      * {
+        margin: 0 10px;
+      }
     }
-    .warn_tip{
+    .warn_tip {
       margin-bottom: 30px;
       color: red;
     }

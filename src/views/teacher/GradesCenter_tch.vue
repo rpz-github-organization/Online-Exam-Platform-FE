@@ -1,8 +1,6 @@
 <template>
   <div class="stu">
-    <div class="title">
-      <img src="../../assets/title_tch.png" class="word" />
-    </div>
+    <div class="page-title page-title-tchr flex as-center">Online · Exam 在线考试系统</div>
     <div class="main">
       <div class="middle">
         <div>
@@ -66,12 +64,12 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     //获取所有已打分的exam
     async getInfo() {
-      try{
-        const res = await this.$axios.post(`${this.HOST}/course/getDoneExam`,{
+      try {
+        const res = await this.$axios.post(`${this.HOST}/course/getDoneExam`, {
           tea_id: this.uid,
         });
         const info = res.data.data;
@@ -152,7 +150,6 @@ export default {
       return Y + M + D + h + m + s;
     },
   },
-
 };
 </script>
 

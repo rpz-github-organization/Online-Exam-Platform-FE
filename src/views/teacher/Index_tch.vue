@@ -1,8 +1,6 @@
 <template>
   <div class="tch">
-    <div class="title">
-      <img src="../../assets/title_tch.png" class="word" />
-    </div>
+    <div class="page-title page-title-tchr flex as-center">Online · Exam 在线考试系统</div>
     <div class="main">
       <div class="middle">
         <ul v-for="(course, index) in courses" :key="index" class="course">
@@ -21,15 +19,8 @@
         </ul>
         <ul class="course">
           <li class="cour">
-            <div class="name" @click.stop="changeVisible()">
-                + 点击添加课程
-            </div>
-            <div class="details">
-              学分：？
-              <br />
-              学时：？
-              <br />
-            </div>
+            <div class="name" @click.stop="changeVisible()">+ 点击添加课程</div>
+            <el-alert title="点击此处选择您要添加的课程" type="info" :closable="false" show-icon></el-alert>
           </li>
         </ul>
       </div>
@@ -41,7 +32,8 @@
           <br />
           <br />现在是
           <br />
-           {{ this.nowTime }}
+          {{ nowTime.toLocaleString("chinese", { hour12: false })
+          .substring(0,new Date().toLocaleString("chinese", { hour12: false }).length-3) }}
           <br />
           <br />
           {{ greeting }}
@@ -57,29 +49,17 @@
             v-for="item in courseList"
             :key="item.name"
             :label="item.name"
-            :value="item.name">
-          </el-option>
+            :value="item.name"
+          ></el-option>
         </el-select>
       </div>
       <div v-if="newCoures.length>0">
-        <div class="form_row">
-          该课程信息:
-        </div>
-        <div class="form_row">
-          名称：{{ this.coName }}
-        </div>
-        <div class="form_row">
-          课程id：{{ this.coId }}
-        </div>
-        <div class="form_row">
-          专业：{{ this.coMayjor }}
-        </div>
-        <div class="form_row">
-          学分：{{ this.coCredit }}
-        </div>
-        <div class="form_row">
-          学时：{{ this.coHour }}
-        </div>
+        <div class="form_row">该课程信息:</div>
+        <div class="form_row">名称：{{ this.coName }}</div>
+        <div class="form_row">课程id：{{ this.coId }}</div>
+        <div class="form_row">专业：{{ this.coMayjor }}</div>
+        <div class="form_row">学分：{{ this.coCredit }}</div>
+        <div class="form_row">学时：{{ this.coHour }}</div>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -98,9 +78,15 @@ export default {
   computed: {
     ...mapState(['uid']),
   },
+  mounted() {
+    setInterval(() => {
+      this.nowTime = new Date();
+    }, 1000);
+  },
 
   data() {
     return {
+      nowTime: new Date(),
       name: '川师',
       male: true,
       greeting: '',
@@ -120,7 +106,7 @@ export default {
   watch: {
     newCoures(val) {
       if (val.length > 0) {
-        this.courseList.forEach((element) => {
+        this.courseList.forEach(element => {
           if (element.name === val) {
             this.coName = element.name;
             this.coId = element.coId;
@@ -141,19 +127,22 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async changeVisible() {
       try {
-        const res = await this.$axios.post(`${this.HOST}/course/getCourseNotTea`, {
-          tea_id: this.uid,
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/course/getCourseNotTea`,
+          {
+            tea_id: this.uid,
+          }
+        );
         const info = res.data;
         // console.log(info);
         if (info.code === 200) {
           this.dialogFormVisible = true;
           if (info.data.length > 0) {
-            info.data.forEach((element) => {
+            info.data.forEach(element => {
               this.courseList.push({
                 name: element.name,
                 coId: element.co_id,
@@ -215,7 +204,7 @@ export default {
     async getTchNameAndSex() {
       try {
         const res = await this.$axios.get(
-          `${this.HOST}/PersonalData/getTeacher`,
+          `${this.HOST}/PersonalData/getTeacher`
         );
         const info = res.data;
         // console.log(info);
@@ -321,18 +310,6 @@ export default {
   margin-top: 47px;
   background: url(../../assets/index_background_tch.gif);
 
-  .title {
-    display: flex;
-    flex-direction: row;
-    height: 80px;
-    margin: 0px auto;
-    background-color: #2850a7;
-
-    .word {
-      height: 60px;
-      margin-top: 10px;
-    }
-  }
   .form_row {
     text-align: left;
     font-weight: bold;
@@ -351,6 +328,7 @@ export default {
 
     .right {
       // margin-left: 25px;
+      height: 100%;
       border-radius: 10px;
       border: 1px solid rgba(0, 0, 0, 0.2);
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
@@ -358,8 +336,7 @@ export default {
       margin-top: 15px;
       margin-right: 50px;
       width: 170px;
-      height: 230px;
-      padding-top: 20px;
+      padding: 20px;
       flex-shrink: 0;
       background-color: rgba(255, 251, 251, 0.87);
 
@@ -382,14 +359,14 @@ export default {
         display: flex;
         justify-content: space-between;
         margin-left: 4%;
-        width: 25%;
+        width: 14%;
         height: auto;
-        padding-top: 10px;
-        padding-left: 10px;
+        padding: 10px;
         background-color: #fff;
         border-radius: 15px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
+        min-width: max-content;
 
         .cour {
           display: flex;

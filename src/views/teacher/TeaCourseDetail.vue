@@ -71,7 +71,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     goToExam(examId) {
       console.log(examId);
@@ -144,7 +144,7 @@ export default {
       }
     },
     timestamp() {
-      this.exams.forEach((item) => {
+      this.exams.forEach(item => {
         const timestamp = item.begin_time;
         const newDate = new Date();
         newDate.setTime(timestamp);
@@ -212,7 +212,7 @@ export default {
           margin-left: 10px;
         }
       }
-      .button_sub{
+      .button_sub {
         width: 150px;
         margin-bottom: 30px;
       }

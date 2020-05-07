@@ -4,8 +4,7 @@
     <el-card class="exam_info">
       <div class="exam_row">
         <label class="examtitle">考试名称</label>
-        <el-input placeholder="请输入题目" v-model="examTitle" clearable>
-        </el-input>
+        <el-input placeholder="请输入题目" v-model="examTitle" clearable></el-input>
       </div>
       <div class="exam_row">
         <label class="examtitle">考试时间</label>
@@ -14,17 +13,17 @@
             v-model="date"
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择日期时间">
-          </el-date-picker>
+            placeholder="请选择日期时间"
+          ></el-date-picker>
           <div class="con">
             <span class="title min">考试时长</span>
             <el-input v-model="examTime" placeholder="请输入考试时长" clearable></el-input>
-            <span class="dan">min</span>
+            <span class="dan">分钟</span>
           </div>
         </div>
       </div>
       <div>
-        <button @click="submitExam">submit</button>
+        <button @click="submitExam">提交</button>
       </div>
     </el-card>
   </div>
@@ -57,7 +56,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     isAll() {
       if (!this.examTitle) {
@@ -131,52 +130,55 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#AddExam{
+#AddExam {
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
 
-  .title{
-    color: #324E6C;
+  .title {
+    color: #324e6c;
     font-weight: bold;
   }
-  .exam_info{
+  .exam_info {
     width: 50%;
     display: flex;
     flex-direction: column;
     margin: 20px 25%;
 
-    .exam_row{
+    .exam_row {
       display: flex;
       flex-direction: row;
       margin: 10px 5px;
 
-      .examtitle{
+      .examtitle {
         font-weight: bold;
         width: 20%;
         text-align: left;
         margin-top: 5px;
-        color: #5D6670;
+        color: #5d6670;
       }
-      .date{
+      .date {
         width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
       }
-      .con{
+      .con {
         display: flex;
         flex-direction: row;
       }
-      .min{
+      .min {
         width: 50%;
         margin: 10px 5px 10px 30px;
-        color: #5D6670;
+        color: #5d6670;
       }
-      .dan{
+      .dan {
         margin: 10px;
+        width: fit-content;
+        min-width: 40px;
       }
     }
-    button{
+    button {
       color: white;
       margin: 10px 0;
       font-weight: bold;
@@ -189,7 +191,7 @@ export default {
       cursor: pointer;
       outline: none;
     }
-    button:hover{
+    button:hover {
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
     }
   }

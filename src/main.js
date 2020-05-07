@@ -10,6 +10,8 @@ import router from './router';
 import store from './store';
 import 'element-ui/lib/theme-chalk/index.css';
 
+import './common.less';
+
 Vue.use(codemirror);
 
 Vue.use(ElementUI, { zIndex: 1000 });

@@ -116,7 +116,7 @@ export default {
 <style scoped lang="less">
 .hello {
   .card {
-    width: 45vw;
+    width: 25vw;
     margin: 5px auto;
     padding: 10px 0;
     border-radius: 15px;
@@ -149,10 +149,10 @@ export default {
           font-weight: bold;
         }
 
-        input[name="uid"],
-        input[name="password"],
-        input[name="uid"]:focus,
-        input[name="password"]:focus {
+        input[name='uid'],
+        input[name='password'],
+        input[name='uid']:focus,
+        input[name='password']:focus {
           border: none;
           outline: none;
           width: 55%;
@@ -162,10 +162,10 @@ export default {
           transition: all 0.5s ease;
         }
 
-        input[name="uid"]:focus,
-        input[name="password"]:focus,
-        input[name="uid"]:hover,
-        input[name="password"]:hover {
+        input[name='uid']:focus,
+        input[name='password']:focus,
+        input[name='uid']:hover,
+        input[name='password']:hover {
           font-size: 16px;
         }
 
@@ -174,7 +174,12 @@ export default {
           width: 80px;
         }
 
-        .phoneLogin, a, a:hover, a:focus, a:visited, a:link {
+        .phoneLogin,
+        a,
+        a:hover,
+        a:focus,
+        a:visited,
+        a:link {
           text-decoration: none;
           font-size: 12px;
           margin: 20px 20px 0 20px;
@@ -200,7 +205,7 @@ export default {
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
       }
     }
-    .tip{
+    .tip {
       color: brown;
       text-align: center;
       margin-top: -2%;

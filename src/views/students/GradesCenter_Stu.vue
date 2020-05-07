@@ -1,8 +1,6 @@
 <template>
   <div class="stu">
-    <div class="title">
-      <img src="../../assets/title_stu.png" class="word" />
-    </div>
+    <div class="page-title page-title-stu flex as-center">Online · Exam 在线考试系统</div>
     <div class="main">
       <div class="middle">
         <div>
@@ -25,13 +23,13 @@
               </div>
             </li>
           </ul>
-    <div class="buttons" v-if="pagerSeen">
-      <button @click="firstPage" class="changepage" v-if="nowpage!=1">首页</button>
-      <button @click="upPage" class="changepage">上一页</button>
-      <div class="text">当前第 {{ nowpage }} 页 ，共 {{ totalpage }} 页</div>
-      <button @click="downPage" class="changepage">下一页</button>
-      <button @click="lastPage" class="changepage" v-if="nowpage!=totalpage">末页</button>
-    </div>
+          <div class="buttons" v-if="pagerSeen">
+            <button @click="firstPage" class="changepage" v-if="nowpage!=1">首页</button>
+            <button @click="upPage" class="changepage">上一页</button>
+            <div class="text">当前第 {{ nowpage }} 页 ，共 {{ totalpage }} 页</div>
+            <button @click="downPage" class="changepage">下一页</button>
+            <button @click="lastPage" class="changepage" v-if="nowpage!=totalpage">末页</button>
+          </div>
         </div>
       </div>
       <div class="right">
@@ -54,7 +52,6 @@
   </div>
 </template>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
 import { mapState } from 'vuex';
 
@@ -86,7 +83,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async getStuNameAndSex() {
       try {
@@ -134,7 +131,7 @@ export default {
           this.ExamInfo_All = info.data;
           this.timeStamp();
         } else {
-           this.$message({
+          this.$message({
             message: info.message,
             type: 'error',
             offset: 70,
@@ -180,13 +177,13 @@ export default {
         this.showPage();
       }
     },
-    firstPage(){
+    firstPage() {
       this.start = 0;
       this.nowpage = 1;
       this.showPage();
     },
-    lastPage(){
-      this.start = (this.totalpage-1)*5;
+    lastPage() {
+      this.start = (this.totalpage - 1) * 5;
       this.nowpage = this.totalpage;
       this.showPage();
     },
@@ -194,7 +191,7 @@ export default {
       let exam_num = this.ExamInfo_All.length;
       if (exam_num <= 5) {
       } else {
-        if (exam_num % 5 == 0)exam_num -=1; // 避免页数为5的倍数时影响下一步
+        if (exam_num % 5 == 0) exam_num -= 1; // 避免页数为5的倍数时影响下一步
         this.totalpage = parseInt(exam_num / 5) + 1; // 判断页数
         this.pagerSeen = true;
       }

@@ -3,66 +3,37 @@
     <el-card class="question_card">
       <div class="ques_row">
         <label>题目:</label>
-        <el-input
-        placeholder="请输入题目"
-        v-model="question"
-        type="textarea"
-        autosize>
-        </el-input>
+        <el-input placeholder="请输入题目" v-model="question" type="textarea" autosize></el-input>
       </div>
       <div class="ques_row">
         <label>选项A:</label>
-        <el-input
-        placeholder="请输入选项"
-        v-model="option[0]"
-        clearable>
-        </el-input>
+        <el-input placeholder="请输入选项" v-model="option[0]" clearable></el-input>
       </div>
       <div class="ques_row">
         <label>选项B:</label>
-        <el-input
-        placeholder="请输入选项"
-        v-model="option[1]"
-        clearable>
-        </el-input>
+        <el-input placeholder="请输入选项" v-model="option[1]" clearable></el-input>
       </div>
       <div class="ques_row">
         <label>选项C:</label>
-        <el-input
-        placeholder="请输入选项"
-        v-model="option[2]"
-        clearable>
-        </el-input>
+        <el-input placeholder="请输入选项" v-model="option[2]" clearable></el-input>
       </div>
       <div class="ques_row">
         <label>选项D:</label>
-        <el-input
-        placeholder="请输入选项"
-        v-model="option[3]"
-        clearable>
-        </el-input>
+        <el-input placeholder="请输入选项" v-model="option[3]" clearable></el-input>
       </div>
       <div class="ques_row">
         <label>答案:</label>
         <el-select v-model="answer" class="select">
-          <el-option v-for="item in ans"
-                     :key="item.valuse"
-                     :label="item.value"
-                     :value="item.value"
-          ></el-option>
+          <el-option v-for="item in ans" :key="item.valuse" :label="item.value" :value="item.value"></el-option>
         </el-select>
       </div>
       <el-divider></el-divider>
       <div class="ques_row">
         <label>知识点:</label>
-        <el-input
-        placeholder="请输入知识点"
-        v-model="tag"
-        clearable>
-        </el-input>
+        <el-input placeholder="请输入知识点" v-model="tag" clearable></el-input>
       </div>
       <div>
-        <button @click="SubmitSingle()">submit</button>
+        <button @click="SubmitSingle()">提交</button>
       </div>
     </el-card>
   </div>
@@ -98,15 +69,20 @@ export default {
   },
   data() {
     return {
-      ans: [{
-        value: 'A',
-      }, {
-        value: 'B',
-      }, {
-        value: 'C',
-      }, {
-        value: 'D',
-      }],
+      ans: [
+        {
+          value: 'A',
+        },
+        {
+          value: 'B',
+        },
+        {
+          value: 'C',
+        },
+        {
+          value: 'D',
+        },
+      ],
       questionid: null,
 
       question: '',
@@ -135,7 +111,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     // 验证表单完整性
     isSubmit() {
@@ -153,7 +129,8 @@ export default {
     },
     // 向后台请求数据
     async getInfo() {
-      if (this.questionid === null) { // 判断，当questionid为空，请求两个接口
+      if (this.questionid === null) {
+        // 判断，当questionid为空，请求两个接口
         try {
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
             type: 'Single',
@@ -166,19 +143,23 @@ export default {
           // console.log(res);
           const info = res.data;
           console.log(info);
-          if (info.code === 200) { // 获取questionid后再请求addQuestionToExam接口
+          if (info.code === 200) {
+            // 获取questionid后再请求addQuestionToExam接口
             this.questionid = info.data;
-            const quesid = parseInt(this.questionid, 10);// 将questionid和score转换为Number
+            const quesid = parseInt(this.questionid, 10); // 将questionid和score转换为Number
             const scoreN = parseInt(this.score, 10);
             // console.log(this.questionid);
             try {
-              const response = await this.$axios.post(`${this.HOST}/exam/addQuestionToExam`, {
-                type: 'Single',
-                question_id: quesid,
-                num: this.index + 1,
-                score: scoreN,
-                exam_id: this.examId,
-              });
+              const response = await this.$axios.post(
+                `${this.HOST}/exam/addQuestionToExam`,
+                {
+                  type: 'Single',
+                  question_id: quesid,
+                  num: this.index + 1,
+                  score: scoreN,
+                  exam_id: this.examId,
+                }
+              );
               const resdata = response.data;
               // console.log(resdata);
               if (resdata.code === 200) {
@@ -209,15 +190,18 @@ export default {
         }
       } else if (this.isChange) {
         try {
-          const quesid = parseInt(this.questionid, 10);// 将questionid和score转换为Number
+          const quesid = parseInt(this.questionid, 10); // 将questionid和score转换为Number
           const scoreN = parseInt(this.score, 10);
-          const response = await this.$axios.post(`${this.HOST}/exam/addQuestionToExam`, {
-            type: 'Single',
-            question_id: quesid,
-            num: this.index + 1,
-            score: scoreN,
-            exam_id: this.examId,
-          });
+          const response = await this.$axios.post(
+            `${this.HOST}/exam/addQuestionToExam`,
+            {
+              type: 'Single',
+              question_id: quesid,
+              num: this.index + 1,
+              score: scoreN,
+              exam_id: this.examId,
+            }
+          );
           const resdata = response.data;
           // console.log(resdata);
           if (resdata.code === 200) {
@@ -238,7 +222,8 @@ export default {
             });
           }
         }
-      } else { // 只是修改题目，请求一个接口
+      } else {
+        // 只是修改题目，请求一个接口
         try {
           const quesid = parseInt(this.questionid, 10);
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
@@ -272,27 +257,22 @@ export default {
       }
     },
     async SubmitSingle() {
-      if (!this.score) {
-        this.$message({
-          message: '未填写分数',
-          type: 'error',
-          offset: 70,
-        });
-      } else if (this.score) {
-        if (!this.isSubmit()) { // 未填写完整的提示信息
-          this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            showCancelButton: true,
-          }).then(async () => {
+      if (!this.isSubmit()) {
+        // 未填写完整的提示信息
+        this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          showCancelButton: true,
+        })
+          .then(async () => {
             await this.getInfo();
             this.isChange = false;
-          }).catch(() => {
-          });
-        } else { // 填写完整直接提交。
-          await this.getInfo();
-          this.isChange = false;
-        }
+          })
+          .catch(() => {});
+      } else {
+        // 填写完整直接提交。
+        await this.getInfo();
+        this.isChange = false;
       }
     },
   },
@@ -300,30 +280,30 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#single{
+#single {
   display: flex;
   margin: 10px 5px 30px 5px;
 
-  .question_card{
+  .question_card {
     width: 100%;
     display: flex;
     flex-direction: column;
   }
-  .ques_row{
+  .ques_row {
     display: flex;
     flex-direction: row;
     margin: 10px;
 
-    .select{
+    .select {
       width: 100%;
     }
-    label{
+    label {
       width: 15%;
       padding: 5px;
       text-align: left;
     }
   }
-  button{
+  button {
     color: white;
     margin: 10px 0;
     font-weight: bold;
@@ -336,7 +316,7 @@ export default {
     cursor: pointer;
     outline: none;
   }
-  button:hover{
+  button:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
   }
 }

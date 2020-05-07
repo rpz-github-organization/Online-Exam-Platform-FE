@@ -73,7 +73,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     async getStunoExamInfo() {
       try {
@@ -173,13 +173,13 @@ export default {
         this.showPage();
       }
     },
-    firstPage(){
+    firstPage() {
       this.start = 0;
       this.nowpage = 1;
       this.showPage();
     },
-    lastPage(){
-      this.start = (this.totalpage-1)*5;
+    lastPage() {
+      this.start = (this.totalpage - 1) * 5;
       this.nowpage = this.totalpage;
       this.showPage();
     },
@@ -188,7 +188,7 @@ export default {
         let exam_num = this.onExamInfo_All.length;
         if (exam_num <= 5) {
         } else {
-          if (exam_num % 5 == 0)exam_num -=1; // 避免页数为5的倍数时影响下一步
+          if (exam_num % 5 == 0) exam_num -= 1; // 避免页数为5的倍数时影响下一步
           this.totalpage = parseInt(exam_num / 5) + 1; // 判断页数
           this.pagerSeen = true;
         }

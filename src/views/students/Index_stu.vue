@@ -1,14 +1,10 @@
 <template>
   <div class="stu">
-    <div class="title">
-      <img src="../../assets/title_stu.png" class="word" />
-    </div>
+    <div class="page-title page-title-stu flex as-center">Online · Exam 在线考试系统</div>
     <div class="main">
       <div class="left">
-        <button class="onExam" @click="ChangeToOn"
-        :class="{ notactive: !isActive }">正在进行的考试</button>
-        <button class="passExam" @click="ChangeToPass"
-        :class="{ notactive: isActive }">已经结束的考试</button>
+        <button class="onExam" @click="ChangeToOn" :class="{ notactive: !isActive }">正在进行的考试</button>
+        <button class="passExam" @click="ChangeToPass" :class="{ notactive: isActive }">已经结束的考试</button>
       </div>
       <div class="middle">
         <OnExam v-if="Seen" />
@@ -22,7 +18,8 @@
           <br />
           <br />现在是
           <br />
-          {{ this.nowTime }}
+          {{ nowTime.toLocaleString("chinese", { hour12: false })
+          .substring(0,new Date().toLocaleString("chinese", { hour12: false }).length-3) }}
           <br />
           <br />
           {{ greeting }}
@@ -44,9 +41,15 @@ export default {
     OnExam,
     PassExam,
   },
-
+  mounted() {
+    setInterval(() => {
+      this.nowTime = new Date();
+    }, 1000);
+  },
   data() {
     return {
+      nowTime: new Date(),
+
       name: '川师',
       greeting: '你好！',
       Seen: true,
@@ -80,7 +83,7 @@ export default {
       try {
         const res = await this.$axios.get(
           `${this.HOST}/PersonalData/getStudent`,
-          {},
+          {}
         );
         const info = res.data;
         // console.log(info);
@@ -129,7 +132,8 @@ export default {
     console.log(localStorage.getItem('Login'));
     const d = new Date();
     if (d.getHours() < 12) this.greeting = '上午好！';
-    else if (d.getHours() >= 12 && d.getHours() < 18) this.greeting = '下午好！';
+    else if (d.getHours() >= 12 && d.getHours() < 18)
+      this.greeting = '下午好！';
     else this.greeting = '晚上好！';
     this.timer = setInterval(() => {
       this.nowTime = this.changeTime();
@@ -145,19 +149,6 @@ export default {
   width: 100%;
   margin-top: 47px;
   background: url(../../assets/index_background_stu.gif);
-
-  .title {
-    display: flex;
-    flex-direction: row;
-    height: 80px;
-    margin: 0px auto;
-    background-color: #276e51;
-
-    .word {
-      height: 60px;
-      margin-top: 10px;
-    }
-  }
 
   .main {
     display: flex;

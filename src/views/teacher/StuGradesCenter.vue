@@ -4,33 +4,10 @@
       <el-card>
         <div class="title">{{ this.ExamName }}</div>
         <div class="table">
-          <el-table
-          :data="grades"
-          stripe
-          style="width: 100%">
-            <el-table-column
-            prop="id"
-            label="学号"
-            width="200px">
-            </el-table-column>
-            <el-table-column
-            prop="name"
-            label="姓名"
-            width="200px">
-            </el-table-column>
-            <el-table-column
-            prop="score"
-            label="成绩"
-            width="200px">
-            </el-table-column>
-            <el-table-column
-            prop="score"
-            label="查看详情"
-            width="200px">
-              <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)">click</el-button>
-              </template>
-            </el-table-column>
+          <el-table :data="grades" stripe style="width: 100%">
+            <el-table-column prop="id" label="学号" width="200px"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="200px"></el-table-column>
+            <el-table-column prop="score" label="成绩" width="200px"></el-table-column>
           </el-table>
         </div>
       </el-card>
@@ -65,7 +42,7 @@ export default {
         type: 'error',
         offset: 70,
       });
-      window.location.href('/');
+      this.$router.push('/');
     },
     handleClick(row) {
       this.$router.push({ name: 'stuExamGrades', query: { id: row.id } });
@@ -79,7 +56,7 @@ export default {
         // console.log(info);
         if (res.data.code === 200) {
           this.ExamName = info.exam_name;
-          info.data.forEach((element) => {
+          info.data.forEach(element => {
             this.grades.push({
               id: element.stu_id,
               name: element.stu_name,
@@ -113,28 +90,28 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#GradesCenter{
+#GradesCenter {
   height: 100%;
   width: 100%;
   background: url(../../assets/index_background_tch.gif);
   display: flex;
   justify-content: center;
 
-  .middle{
-      margin-top: 40px;
-      width: auto;
+  .middle {
+    margin-top: 40px;
+    width: auto;
   }
-  .title{
-      text-align: left;
-      font-weight: bold;
-      margin-left: 20px;
-      font-size: 26px;
-      margin-bottom: 30px;
+  .title {
+    text-align: left;
+    font-weight: bold;
+    margin-left: 20px;
+    font-size: 26px;
+    margin-bottom: 30px;
   }
-  .table{
-      margin: 10px 40px;
+  .table {
+    margin: 10px 40px;
   }
-  .return{
+  .return {
     margin-top: 20px;
   }
 }
