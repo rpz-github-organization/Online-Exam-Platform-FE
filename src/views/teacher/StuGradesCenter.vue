@@ -4,7 +4,7 @@
       <el-card>
         <div class="title">{{ this.ExamName }}</div>
         <div class="table">
-          <el-table :data="grades" stripe style="width: 100%">
+          <el-table :data="grades" stripe style="width: 100%" @row-click="handleClick">
             <el-table-column prop="id" label="学号" width="200px"></el-table-column>
             <el-table-column prop="name" label="姓名" width="200px"></el-table-column>
             <el-table-column prop="score" label="成绩" width="200px"></el-table-column>
@@ -45,6 +45,7 @@ export default {
       this.$router.push('/');
     },
     handleClick(row) {
+      // console.log(row);
       this.$router.push({ name: 'stuExamGrades', query: { id: row.id } });
     },
     async getScore() {

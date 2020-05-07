@@ -99,7 +99,6 @@ export default {
       coMayjor: [],
       coHour: '',
       coCredit: '',
-      nowTime: '',
       timer: '',
     };
   },

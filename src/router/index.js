@@ -131,12 +131,12 @@ const routes = [
     meta: { requireAuth: true },
     component: () => import('../views/teacher/ExamDetail.vue'),
   },
-  {
-    path: '/configPDF',
-    name: 'configPDF',
-    meta: { requireAuth: true },
-    component: () => import('../views/teacher/configPDF.vue'),
-  },
+  // {
+  //   path: '/configPDF',
+  //   name: 'configPDF',
+  //   meta: { requireAuth: true },
+  //   component: () => import('../views/teacher/configPDF.vue'),
+  // },
 ];
 
 const router = new VueRouter({

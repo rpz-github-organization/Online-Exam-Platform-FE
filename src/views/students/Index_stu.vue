@@ -55,7 +55,6 @@ export default {
       Seen: true,
       isActive: true,
       male: true,
-      nowTime: '',
       timer: '',
     };
   },

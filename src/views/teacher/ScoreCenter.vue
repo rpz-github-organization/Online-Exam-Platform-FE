@@ -14,21 +14,11 @@
         <el-card>
           <div class="stu_list">
             <label
-<<<<<<< HEAD
-            v-for="(item, index) in stuList"
-            :key="item.id"
-            class="stu_label"
-            @click="showStuQues(index)"
-            :class="{active: item.active}">
-              {{ item.id }} - {{ item.name }}
-            </label>
-=======
               v-for="(item, index) in stuList"
               :key="item.id"
               class="stu_label"
               @click="showStuQues(index)"
             >{{ item.id }} - {{ item.name }}</label>
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
@@ -61,14 +51,7 @@
             </div>
           </div>
         </el-card>
-<<<<<<< HEAD
-        <div>
-          <button @click="SubmitScore()">submit</button>
-        </div>
-        <span @click="ScoreWhole">[全部评完请点这里]</span>
-=======
         <button @click="SubmitScore()">提交</button>
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
       </div>
     </div>
   </div>
@@ -144,7 +127,7 @@ export default {
         console.log(err);
         this.$message({
           message: '系统异常',
-          type: 'error',
+          type: 'error',  
           offset: 70,
         });
       }
@@ -257,18 +240,12 @@ export default {
   width: 100%;
   height: 100%;
   background: url(../../assets/index_background_tch.gif);
-<<<<<<< HEAD
-  .center{
-  display: flex;
-  flex-direction: row;
-  margin: 30px 0;
-  background: url(../../assets/index_background_tch.gif);
-=======
+
   .center {
     display: flex;
     flex-direction: row;
     margin: 30px 0;
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
+
   }
   .head {
     display: flex;
@@ -302,15 +279,7 @@ export default {
   .right {
     margin: 0 30px;
     width: 100%;
-<<<<<<< HEAD
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-
-    .ques_card{
-=======
     .ques_card {
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
       display: flex;
       flex-direction: column;
       text-align: left;
@@ -333,15 +302,7 @@ export default {
       }
     }
   }
-<<<<<<< HEAD
-  span {
-    font-size: 90%;
-    cursor: pointer;
-  }
-  button{
-=======
   button {
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
     color: white;
     margin: 20px 0 10px 0;
     border: none;
