@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'Login',
   data() {
@@ -39,7 +41,15 @@ export default {
     };
   },
   created() {
+    if (localStorage.getItem('Login') === 'true') {
+      this.$router.push({
+        path: this.authlevel === 0 ? '/indexStu' : '/indexTch',
+      });
+    }
     window.addEventListener('keydown', this.handleKeyDown, true);
+  },
+  computed: {
+    ...mapState(['authLevel']),
   },
   methods: {
     // 监听按键
@@ -116,7 +126,7 @@ export default {
 <style scoped lang="less">
 .hello {
   .card {
-    width: 25vw;
+    width: 45vw;
     margin: 5px auto;
     padding: 10px 0;
     border-radius: 15px;

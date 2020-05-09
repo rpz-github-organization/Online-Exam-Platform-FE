@@ -143,6 +143,10 @@ export default {
     background: url(../../assets/index_background_stu.gif);
 
     .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       margin-left: 25px;
       border-radius: 10px;
       border: 1px solid rgba(0, 0, 0, 0.2);
@@ -152,7 +156,7 @@ export default {
       margin-right: 50px;
       width: 170px;
       height: 230px;
-      padding-top: 20px;
+      padding: 20px;
       flex-shrink: 0;
       background-color: rgba(255, 251, 251, 0.87);
 

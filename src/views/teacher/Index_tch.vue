@@ -318,6 +318,10 @@ export default {
       margin-top: 15px;
       margin-right: 50px;
       width: 170px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       padding: 20px;
       flex-shrink: 0;
       background-color: rgba(255, 251, 251, 0.87);
