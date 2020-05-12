@@ -137,7 +137,7 @@ export default {
           }
         );
         const info = res.data;
-        // console.log(info);
+        console.log(info);
         if (info.code === 200) {
           this.dialogFormVisible = true;
           if (info.data.length > 0) {
@@ -149,6 +149,7 @@ export default {
                 credit: element.credit,
                 hour: element.school_hour,
               });
+              // console.log(element.mayjor);
             });
           }
         } else {

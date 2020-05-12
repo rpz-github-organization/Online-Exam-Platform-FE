@@ -17,6 +17,7 @@
               v-for="(item, index) in stuList"
               :key="item.id"
               class="stu_label"
+              :class="{active:item.active}"
               @click="showStuQues(index)"
             >{{ item.id }} - {{ item.name }}</label>
           </div>
@@ -118,10 +119,11 @@ export default {
           });
         } else {
           this.$message({
-            message: info.message,
+            message: res.data.message,
             type: 'error',
             offset: 70,
           });
+          this.$router.go(-1);
         }
       } catch (err) {
         console.log(err);

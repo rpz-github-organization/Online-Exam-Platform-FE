@@ -90,13 +90,8 @@
         </el-card>
       </div>
       <div class="button_row">
-        <el-button type="success" plain @click="goToInfo()">点击分发试卷</el-button>
-        <el-button type="primary" plain @click="() => { $router.push('/configPDF') }">点击上传 PDF 配卷</el-button>
-      </div>
-      <div class="warn_tip">
-        <span>
-          <b>注意：只有分发了试卷，学生才可以参加考试</b>
-        </span>
+        <el-button type="success" plain @click="goToInfo()">点击完成出题</el-button>
+        <!-- <el-button type="primary" plain @click="() => { $router.push('/configPDF') }">点击上传 PDF 配卷</el-button> -->
       </div>
     </div>
   </div>
@@ -198,10 +193,15 @@ export default {
         const info = res.data.data;
         // console.log(info);
         if (res.data.code === 200) {
-          this.Single = info.single;
-          this.Judge = info.judge;
-          this.Discussion = info.discussion;
-          this.Program = info.program;
+          if (info.single) {
+            this.Single = info.single;
+          } else if (info.judge) {
+            this.Judge = info.judge;
+          } else if (info.program) {
+            this.Program = info.program;
+          } else if (info.discussion) {
+            this.Discussion = info.discussion;
+          }
           this.scoreS = `${info.singleScore}`;
           this.scoreJ = `${info.judgeScore}`;
           this.Count();

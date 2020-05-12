@@ -17,7 +17,7 @@
             <label class="iden">考生人数：{{ this.stuN }}</label>
           </div>
           <div class="exam_row" v-if="status !== 1">
-            <label class="iden">实际考生：{{ this.stuNum }}</label>
+            <label class="iden">实际考生：{{ this.stuAc }}</label>
           </div>
           <div class="exam_row" v-if="status === 1">
             <label>题目编辑：</label>
@@ -47,6 +47,11 @@
             <label>考生成绩：</label>
             <el-button size="mini" @click="GetScore()">查看成绩</el-button>
           </div>
+          <div class="warn_tip" v-if="!isHand">
+            <span>
+              <b>注意：只有分发了试卷，学生才可以参加考试</b>
+            </span>
+          </div>
         </el-card>
       </div>
     </div>
@@ -61,13 +66,14 @@ export default {
   data() {
     return {
       examName: '体育',
-      stuNum: 0,
+      stuAc: 0,
       stuN: 0,
       examTime: '120min',
       startTime: '2020-02-02',
       status: 0,
       isHand: false,
       extendTime: 0,
+      timer: '',
     };
   },
   created() {
@@ -77,6 +83,9 @@ export default {
     ...mapState(['examId']),
     ...mapState(['uid']),
     ...mapState(['coId']),
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer);
   },
   methods: {
     sessionJudge() {
@@ -136,8 +145,7 @@ export default {
     // 分发试卷
     async HandOut() {
       try {
-        const res = await this.$axios.post(
-          `${this.HOST}/exam/distributeExamToStudent`,
+        const res = await this.$axios.post(`${this.HOST}/exam/distributeExamToStudent`,
           {
             co_id: this.coId,
             exam_id: this.examId,
@@ -146,11 +154,13 @@ export default {
         // console.log(res);
         if (res.data.code === 200) {
           this.$message({
-            message: '分发成功',
+            message: '分发中',
             type: 'success',
             offset: 70,
           });
-          this.Refresh();
+          this.timer = setTimeout(() => {
+            this.Refresh();
+          }, 2000);
         }
       } catch (err) {
         if (err.response.status === 401) {
@@ -293,6 +303,9 @@ export default {
     h2 {
       margin-bottom: 0;
     }
+  }
+  b{
+    color: red;
   }
   .list {
     display: flex;
