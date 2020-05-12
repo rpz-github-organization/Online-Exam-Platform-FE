@@ -56,18 +56,8 @@
             <el-input v-model="scoreS" clearable></el-input>
           </div>
           <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
-<<<<<<< HEAD
-            <label>选择题-{{ index+1 }}</label>
-            <div v-if="Single">
-              <single :index="index" :score="scoreS" :ques="Single[index]"/>
-            </div>
-            <div v-else>
-              <single :index="index" :score="scoreS"></single>
-            </div>
-=======
             <label>选择题 No.{{ index+1 }}</label>
             <single :index="index" :score="scoreS" :ques="Single[index]"></single>
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
@@ -78,54 +68,24 @@
             <el-input v-model="scoreJ" clearable></el-input>
           </div>
           <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
-<<<<<<< HEAD
-            <label>判断题-{{ index+1 }}</label>
-            <div v-if="Judge">
-              <judge ref="judge" :index="index" :score="scoreJ" :ques="Judge[index]"/>
-            </div>
-            <div v-else>
-              <judge ref="judge" :index="index" :score="scoreJ"/>
-            </div>
-=======
             <label>判断题 No.{{ index+1 }}</label>
             <judge :index="index" :score="scoreJ" :ques="Judge[index]" />
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
       <div v-if="counterD.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
-<<<<<<< HEAD
-            <label>讨论题-{{ index+1 }}</label>
-            <div v-if="Discussion">
-              <discussion :index="index" :ques="Discussion[index]"/>
-            </div>
-            <div v-else>
-              <discussion :index="index"/>
-            </div>
-=======
             <label>讨论题 No.{{ index+1 }}</label>
             <discussion :index="index" :ques="Discussion[index]" />
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
       <div v-if="counterP.length > 0 && this.isShow">
         <el-card class="ques_card">
           <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
-<<<<<<< HEAD
-            <label>编程题-{{ index+1 }}</label>
-            <div v-if="Program">
-              <program :index="index" :ques="Program[index]"/>
-            </div>
-            <div v-else>
-              <program :index="index"/>
-            </div>
-=======
             <label>编程题 No.{{ index+1 }}</label>
             <program :index="index" :ques="Program[index]" />
->>>>>>> b3c97d96d7b4396db34ce1de5dcebae0a8bdbf52
           </div>
         </el-card>
       </div>
