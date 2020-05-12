@@ -109,7 +109,6 @@
   </div>
 </template>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
 import { mapState } from 'vuex';
 
@@ -133,7 +132,10 @@ export default {
   beforeMount() {
     const url = document.referrer;
     console.log(url);
-    if (url.search('/StuGradesCenter') !== -1 || url.search('GradesCenter_tch') !== -1) {
+    if (
+      url.search('/StuGradesCenter') !== -1 ||
+      url.search('GradesCenter_tch') !== -1
+    ) {
       this.stu_id = this.$route.query.id;
     } else {
       this.stu_id = this.uid;
@@ -162,11 +164,11 @@ export default {
         if (info.code === 200) {
           console.log('data', info.data);
           this.exam = info.data;
-          this.exam.Ques.forEach((item) => {
-            if (item.type !==null) {
+          this.exam.Ques.forEach(item => {
+            if (item.type !== null) {
               this.Ques.push(item);
             }
-          })
+          });
           this.timestampToDate();
           this.toChinese();
         } else {

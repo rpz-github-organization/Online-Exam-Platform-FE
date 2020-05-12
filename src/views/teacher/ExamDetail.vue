@@ -39,8 +39,21 @@
           <div class="label_row">
             <span>编程题</span>
           </div>
-          <div v-for="(item, index) in Judge" :key="item.question_id" class="ques_row">
-            <span class="row">{{ index + 1 }}.{{ item.question }}</span>
+          <div v-for="(item, index) in Program" :key="item.question_id" class="ques_row flex">
+            <div class="row">
+              {{ index + 1 }}.{{ item.question }}
+              <span style="color: red;">分值：{{ item.score }}分</span>
+            </div>
+            <div class="row">
+              <b>题目描述：</b>
+              {{ item.tip }}
+            </div>
+            <div class="flex as-center">
+              <el-table :data="item.test_case" style="width: 100%">
+                <el-table-column prop="input" label="输入样例" width="180"></el-table-column>
+                <el-table-column prop="output" label="输出样例" width="180"></el-table-column>
+              </el-table>
+            </div>
           </div>
         </div>
       </el-card>
@@ -69,7 +82,7 @@ export default {
   computed: {
     ...mapState(['examId']),
   },
-  created() {
+  mounted() {
     this.GetWhole();
   },
   methods: {
@@ -88,7 +101,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        // console.log(info);
+        console.log(info);
         if (res.data.code === 200) {
           this.Single = info.single;
           this.Judge = info.judge;

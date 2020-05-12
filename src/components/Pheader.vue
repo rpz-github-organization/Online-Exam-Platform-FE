@@ -1,7 +1,7 @@
 <template>
   <div id="pheader" class="flex jy-end">
     <ul class="header_list">
-      <div class="flex jy-center as-center">
+      <div class="head-text-logo flex jy-center as-center" @click="toIndex">
         <img src="../assets/sicnulogo.jpeg" alt />
         <b>四川师范大学 · SICNU</b>
       </div>
@@ -92,6 +92,13 @@ export default {
           });
       }
     },
+    toIndex() {
+      if (this.authLevel === 0) {
+        this.$router.push('/indexStu');
+      } else {
+        this.$router.push('/indexTch');
+      }
+    },
   },
 };
 </script>
@@ -118,6 +125,10 @@ export default {
     b {
       margin-left: 20px;
       font-size: 22px;
+    }
+
+    .head-text-logo {
+      cursor: pointer;
     }
 
     .func {

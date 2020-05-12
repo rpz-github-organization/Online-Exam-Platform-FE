@@ -111,6 +111,7 @@ export default {
   }
   .table {
     margin: 10px 40px;
+    cursor: pointer;
   }
   .return {
     margin-top: 20px;
