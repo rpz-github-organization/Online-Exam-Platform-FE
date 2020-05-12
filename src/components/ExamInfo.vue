@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       examName: '体育',
-      stuAc: 0,
+      stuNum: 0,
       stuN: 0,
       examTime: '120min',
       startTime: '2020-02-02',
