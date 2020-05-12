@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div v-if="this.isLogin === true">
+    <div v-if="this.isLogin === true && !['/', '/register', '/about'].includes(this.$route.path)">
       <Pheader />
     </div>
     <div class="header"></div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -23,7 +23,13 @@ export default {
   created() {
     // 在页面加载时读取sessionStorage里的状态信息
     if (sessionStorage.getItem('store')) {
-      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+      this.$store.replaceState(
+        Object.assign(
+          {},
+          this.$store.state,
+          JSON.parse(sessionStorage.getItem('store'))
+        )
+      );
     }
 
     // 在页面刷新时将vuex里的信息保存到sessionStorage里
@@ -43,14 +49,17 @@ export default {
   color: #2c3e50;
   display: inline;
 }
-.header{
+.header {
   margin-bottom: 60px;
 }
 #nav {
   padding: 50px;
 
-  a, a:hover, a:visited, a:link {
-    text-decoration: none
+  a,
+  a:hover,
+  a:visited,
+  a:link {
+    text-decoration: none;
   }
 
   a {
