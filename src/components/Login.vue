@@ -87,7 +87,7 @@ export default {
           // console.log(info);
           if (info.code === 200) {
             this.$message({
-              message: '发送成功',
+              message: '登录成功',
               type: 'success',
               offset: 90,
             });
