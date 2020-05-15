@@ -345,7 +345,7 @@ export default {
       background-color: rgba(255, 251, 251, 0.87);
 
       img {
-        width: 60px;
+        width: 120px;
       }
     }
 
