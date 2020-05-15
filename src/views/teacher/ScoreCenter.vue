@@ -26,8 +26,8 @@
       <div class="right">
         <el-card>
           <div class="row">
-            <label>考生：</label>
-            <label class="answer">{{ this.id }}</label>
+            <label class="ing">考生：</label>
+            <label class="answer ing">{{ this.id }}</label>
           </div>
           <div class="ques_list">
             <div class="ques_card" v-for="(item, index) in List" :key="index">
@@ -312,6 +312,9 @@ export default {
       display: flex;
       flex-direction: row;
       margin: 15px;
+    }
+    .ing {
+      color: red;
     }
   }
   button {
