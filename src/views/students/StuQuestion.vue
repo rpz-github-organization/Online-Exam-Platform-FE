@@ -460,6 +460,16 @@ export default {
       const h = `${date.getHours() + lastHour}:`;
       const m = `${date.getMinutes() + lastMin}:`;
       const s = `${date.getSeconds()}`;
+      if (date.getSeconds() > 60) {
+        s = s - 60;
+        m = `${date.getMinutes() + lastMin + 1}:`;
+      } else if (date.getMinutes() + lastMin > 60) {
+        h = `${date.getHours() + lastHour + 1}:`
+        m = `${date.getMinutes() + lastMin - 60}:`
+      } else if (date.getHours() + lastHour > 24) {
+        h = `${date.getHours() + lastHour - 24}:`
+        D = `${date.getDate() + 1} `;
+      }
       return Y + M + D + h + m + s;
     },
     countTime() {
