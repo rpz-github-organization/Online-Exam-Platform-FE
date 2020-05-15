@@ -255,7 +255,6 @@ export default {
     async editStudent() {
       //检测输入是否为空
       if (this.inputNull()) {
-        console.log("lalala",this.inputNotNull());
         return;
       }
       // 修改基本信息
