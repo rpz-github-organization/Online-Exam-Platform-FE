@@ -253,6 +253,11 @@ export default {
       }
     },
     async editStudent() {
+      //检测输入是否为空
+      if (this.inputNull()) {
+        console.log("lalala",this.inputNotNull());
+        return;
+      }
       // 修改基本信息
       try {
         let sex = '';
@@ -307,6 +312,25 @@ export default {
           });
         }
       }
+    },
+
+    inputNull() {
+      if (this.name == '') {
+        this.$message({
+          message: '姓名不能为空',
+          type: 'error',
+          offset: 70,
+        });
+        return true;
+      } else if (this.phone == '') {
+        this.$message({
+          message: '电话不能为空',
+          type: 'error',
+          offset: 70,
+        });
+        return true;
+      }
+      return false;
     },
 
     async checkPwdCode() {

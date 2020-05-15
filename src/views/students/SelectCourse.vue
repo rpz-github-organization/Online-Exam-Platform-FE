@@ -1,58 +1,63 @@
 <template>
-  <div id="selectCourse">
-    <div class="row">
-      <div class="left">
-        <button @click="UnderSelect()" :class="{ button_active: isSelect==0 }">可选课程</button>
-        <button @click="Selected()" :class="{ button_active: isSelect==1 }">已选课程</button>
-      </div>
-      <div class="right">
-        <el-card v-if="isSelect == -1">
-          <div class="tip" style="text-align: center;font-weight: bold">欢迎进入选课中心</div>
-          <div class="tip">1.选课时，相同课程只能选择一位老师。</div>
-          <div class="tip">2.退课时，只能对一门课程进行操作，若是想退多门所选课程，请重复操作。</div>
-          <div class="tip" style="font-weight: bold">祝您选课愉快！</div>
-        </el-card>
-        <el-card v-show="isSelect !== -1 && status === 'yixuan'">
-          <el-alert v-show="coursePass.length === 0" :closable="false" title="还没有已选的课程" type="info"></el-alert>
-          <el-checkbox-group v-model="deleteList" :max="1">
-            <el-card class="Course" v-for="(course, index) in coursePass" :key="index">
-              <div class="Cardrow">
-                <label class="title">{{ course.courseName }}</label>
-                <label class="time">{{ course.courseTimeon }}---{{ course.courseTimeend }}</label>
-              </div>
-              <div class="Cardrow">
-                <div class="teacher">{{ course.courseTeacher }}</div>
-                <el-checkbox :label="index" />
-              </div>
-            </el-card>
-          </el-checkbox-group>
-        </el-card>
-        <el-card v-show="isSelect !== -1 && status === 'kexuan'">
-          <el-alert v-show="courseOn.length === 0" :closable="false" title="还没有可选的课程" type="info"></el-alert>
-          <el-checkbox-group v-model="addList">
-            <el-card class="Course" v-for="(course, index) in courseOn" :key="index">
-              <div class="Cardrow">
-                <label class="title">{{ course.courseName }}</label>
-                <label class="time">{{ course.courseTimeon }}---{{ course.courseTimeend }}</label>
-              </div>
-              <div class="Cardrow">
-                <div class="teacher">{{ course.courseTeacher }}</div>
-                <el-checkbox :label="index">{{ }}</el-checkbox>
-              </div>
-            </el-card>
-          </el-checkbox-group>
-        </el-card>
-        <div class="button_row">
-          <el-button
-            class="submit"
-            @click="SubmitAdd()"
-            v-show="isSelect !== -1&& status === 'kexuan'"
-          >提交选课</el-button>
-          <el-button
-            class="submit"
-            @click="SubmitDelete()"
-            v-show="isSelect !== -1&& status === 'yixuan'"
-          >退课</el-button>
+  <div id="back">
+    <div id="selectCourse">
+      <div class="row">
+        <div class="left">
+          <button @click="UnderSelect()" :class="{ button_active: isSelect==0 }">可选课程</button>
+          <button @click="Selected()" :class="{ button_active: isSelect==1 }">已选课程</button>
+        </div>
+        <div class="right">
+          <el-card v-if="isSelect == -1">
+            <div class="tip" style="text-align: center;font-weight: bold">欢迎进入选课中心</div>
+            <div class="tip">1.选课时，相同课程只能选择一位老师。</div>
+            <div class="tip">2.退课时，只能对一门课程进行操作，若是想退多门所选课程，请重复操作。</div>
+            <div class="tip" style="font-weight: bold">祝您选课愉快！</div>
+          </el-card>
+          <el-card v-show="isSelect !== -1 && status === 'yixuan'">
+            <el-alert
+              v-show="coursePass.length === 0"
+              :closable="false"
+              title="还没有已选的课程"
+              type="info"
+            ></el-alert>
+            <el-checkbox-group v-model="deleteList" :max="1">
+              <el-card class="Course" v-for="(course, index) in coursePass" :key="index">
+                <div class="Cardrow">
+                  <label class="title">{{ course.courseName }}</label>
+                </div>
+                <div class="Cardrow">
+                  <div class="teacher">任课老师：{{ course.courseTeacher }}</div>
+                  <el-checkbox :label="index" />
+                </div>
+              </el-card>
+            </el-checkbox-group>
+          </el-card>
+          <el-card v-show="isSelect !== -1 && status === 'kexuan'">
+            <el-alert v-show="courseOn.length === 0" :closable="false" title="还没有可选的课程" type="info"></el-alert>
+            <el-checkbox-group v-model="addList">
+              <el-card class="Course" v-for="(course, index) in courseOn" :key="index">
+                <div class="Cardrow">
+                  <label class="title">{{ course.courseName }}</label>
+                </div>
+                <div class="Cardrow">
+                  <div class="teacher">任课老师：{{ course.courseTeacher }}</div>
+                  <el-checkbox :label="index">{{ }}</el-checkbox>
+                </div>
+              </el-card>
+            </el-checkbox-group>
+          </el-card>
+          <div class="button_row">
+            <el-button
+              class="submit"
+              @click="SubmitAdd()"
+              v-show="isSelect !== -1&& status === 'kexuan'"
+            >提交选课</el-button>
+            <el-button
+              class="submit"
+              @click="SubmitDelete()"
+              v-show="isSelect !== -1&& status === 'yixuan'"
+            >退课</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -265,81 +270,87 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#selectCourse {
-  display: flex;
+#back {
+  height: 100%;
   width: 100%;
-  height: auto;
-  justify-content: center;
-  .row {
-    width: 80%;
-    margin-top: 50px;
+  background: url(../../assets/index_background_stu.gif);
+  #selectCourse {
     display: flex;
-    flex-direction: row;
-    .left {
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    background: url(../../assets/index_background_stu.gif);
+    .row {
+      width: 80%;
+      margin-top: 50px;
       display: flex;
-      flex-direction: column;
-      margin-right: 5%;
-      button {
-        color: white;
-        margin-bottom: 20px;
-        font-weight: bold;
-        border: none;
-        border-radius: 10px;
-        padding: 5px 10px;
-        width: 100px;
-        font-size: 15px;
-        background-color: #5379a5c4;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
-        cursor: pointer;
-        outline: none;
-      }
-      .button_active {
-        background-color: #5379a563;
-        box-shadow: none;
-        font-weight: normal;
-      }
-    }
-    .right {
-      display: flex;
-      flex-direction: column;
-      width: 60%;
-      padding: 10px;
-      .tip {
-        text-align: left;
-        margin: 10px 5px;
-      }
-      .Course {
+      flex-direction: row;
+      .left {
         display: flex;
         flex-direction: column;
-        margin-bottom: 10px;
-        .Cardrow {
-          margin: 0 auto;
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          padding: 5px;
-
-          .title {
-            font-size: 19px;
-          }
-          .time {
-            font-size: 15px;
-          }
-        }
-        .teacher {
+        margin-right: 5%;
+        button {
+          color: white;
+          margin-bottom: 20px;
+          font-weight: bold;
+          border: none;
+          border-radius: 10px;
+          padding: 5px 10px;
+          width: 100px;
           font-size: 15px;
-          display: flex;
-          padding: 5px;
+          background-color: #5379a5c4;
+          box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
+          cursor: pointer;
+          outline: none;
+        }
+        .button_active {
+          background-color: #5379a563;
+          box-shadow: none;
+          font-weight: normal;
         }
       }
-      .button_row {
-        margin: 20px 0;
+      .right {
         display: flex;
-        justify-content: center;
-      }
-      .submit {
-        width: 100px;
+        flex-direction: column;
+        width: 60%;
+        padding: 10px;
+        .tip {
+          text-align: left;
+          margin: 10px 5px;
+        }
+        .Course {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 10px;
+          .Cardrow {
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 5px;
+
+            .title {
+              font-size: 19px;
+            }
+            .time {
+              font-size: 15px;
+            }
+          }
+          .teacher {
+            font-size: 15px;
+            display: flex;
+            padding: 5px;
+          }
+        }
+        .button_row {
+          margin: 20px 0;
+          display: flex;
+          justify-content: center;
+        }
+        .submit {
+          width: 100px;
+        }
       }
     }
   }
