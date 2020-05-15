@@ -83,7 +83,7 @@ export default {
             const info = res.data;
             if (info.code === 200) {
               this.$store.dispatch('set_authLevel', 0);
-              localStorage.setItem('Login', 'false');
+              sessionStorage.setItem('Login', 'false');
               this.$store.dispatch('set_Login', 'false');
               window.location.href = '/';
             } else {

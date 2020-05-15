@@ -95,7 +95,7 @@ export default {
             const authlevel = info.data.authority;
             this.$store.dispatch('set_authLevel', authlevel);
             this.$store.dispatch('set_Login', true);
-            localStorage.setItem('Login', 'true');
+            sessionStorage.setItem('Login', 'true');
             if (authlevel === 0) {
               window.location.href = '/IndexStu';
             } else if (authlevel > 0 && authlevel < 99) {

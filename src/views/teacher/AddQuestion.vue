@@ -307,10 +307,10 @@ export default {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        width: 20%;
+        width: 200px;
       }
       .type_title {
-        width: 80%;
+        width: 200px;
         text-align: left;
         margin: 5% 5px;
       }

@@ -1,8 +1,18 @@
 <template>
   <div class="body">
     <div class="bodyimg">
-      <span @click="DeleteCourse"><i class="el-icon-d-arrow-right"></i>点击退课</span>
       <div class="main">
+        <div class="drop">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <i class="el-icon-arrow-down el-icon-s-operation"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="DeleteCourse">退课</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <i class="el-icon-s-home" @click="GoIndex"></i>
+        </div>
         <div class="name">{{ course.name }}</div>
         <div class="detail">
           <div class="row">
@@ -72,6 +82,9 @@ export default {
         offset: 70,
       });
       this.$router.push('/');
+    },
+    GoIndex () {
+      this.$router.go(-1);
     },
     goToExam(examId) {
       console.log(examId);
@@ -171,11 +184,6 @@ export default {
     padding-bottom: 10px;
     background: url('../../assets/index_background_tch.gif');
 
-    span {
-      color: #BC3520;
-      cursor: pointer;
-      margin-left: 60%;
-    }
     .main {
       background-color: #fff;
       margin: 0px auto;
@@ -191,6 +199,15 @@ export default {
       flex-direction: column;
       justify-content: flex-start;
 
+      .drop {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        font-size: 25px;
+        .el-dropdown-link {
+          font-size: 25px;
+        }
+      }
       .name {
         font-size: 30px;
         font-weight: bold;
@@ -283,6 +300,10 @@ export default {
         }
       }
     }
+  }
+  i {
+    margin: 0 5px;
+    cursor: pointer;
   }
 }
 </style>
