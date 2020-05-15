@@ -230,7 +230,7 @@ export default {
             type: 'Single',
             question: this.question,
             question_id: quesid,
-            options: `${this.optionA};${this.optionB};${this.optionC};${this.optionD}`,
+            options: this.option.join(';'),
             answer: this.answer,
             tag: this.tag,
             tea_id: this.uid,

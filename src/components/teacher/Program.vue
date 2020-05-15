@@ -46,7 +46,7 @@
         <el-input placeholder="请输入知识点" v-model="tag" clearable></el-input>
       </div>
       <div>
-        <button @click="SubmitProgram()">确认</button>
+        <button @click="SubmitProgram()">提交</button>
       </div>
     </el-card>
   </div>

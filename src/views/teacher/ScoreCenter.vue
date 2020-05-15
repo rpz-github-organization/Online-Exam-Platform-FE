@@ -79,7 +79,11 @@ export default {
       id: '',
       quesList: [],
       index: 0,
+      timer: '',
     };
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer);
   },
   methods: {
     sessionJudge() {
@@ -123,7 +127,9 @@ export default {
             type: 'error',
             offset: 70,
           });
-          this.$router.go(-1);
+          this.timer = setTimeout(() => {
+            this.$router.go(-1);
+          }, 2000);
         }
       } catch (err) {
         console.log(err);

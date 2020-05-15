@@ -128,33 +128,44 @@ export default {
       }
     },
     async DeleteCourse() {
-      try {
-        const res = await this.$axios.post(`${this.HOST}/course/remove`, {
-          co_id: this.coId,
-          tea_id: this.uid,
-        });
-        const info = res.data;
-        if (info.code === 200) {
-          this.$message({
-            message: '退课成功',
-            type: 'success',
-            offset: 70,
+      this.$confirm('您确定要退课?', '确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        try {
+          const res = await this.$axios.post(`${this.HOST}/course/remove`, {
+            co_id: this.coId,
+            tea_id: this.uid,
           });
-          window.location.href = '/indexTch';
-        } else {
+          const info = res.data;
+          if (info.code === 200) {
+            this.$message({
+              message: '退课成功',
+              type: 'success',
+              offset: 70,
+            });
+            window.location.href = '/indexTch';
+          } else {
+            this.$message({
+              message: info.message,
+              type: 'error',
+              offset: 70,
+            });
+          }
+        } catch (err) {
           this.$message({
-            message: info.message,
+            message: '系统异常',
             type: 'error',
             offset: 70,
           });
         }
-      } catch (err) {
+      }).catch(() => {
         this.$message({
-          message: '系统异常',
-          type: 'error',
-          offset: 70,
-        });
-      }
+          type: 'info',
+          message: '已取消操作'
+        });          
+      });
     },
     timestamp() {
       this.exams.forEach(item => {

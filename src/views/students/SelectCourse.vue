@@ -27,7 +27,7 @@
                 </div>
                 <div class="Cardrow">
                   <div class="teacher">任课老师：{{ course.courseTeacher }}</div>
-                  <el-checkbox :label="index" />
+                  <el-checkbox :label="index">{{ }}</el-checkbox>
                 </div>
               </el-card>
             </el-checkbox-group>

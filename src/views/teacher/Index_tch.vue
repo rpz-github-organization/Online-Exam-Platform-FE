@@ -33,7 +33,7 @@
           <br />现在是
           <br />
           {{ nowTime.toLocaleString("chinese", { hour12: false })
-          .substring(0,new Date().toLocaleString("chinese", { hour12: false }).length-3) }}
+          .substring(0,new Date().toLocaleString("chinese", { hour12: false }).length-2) }}
           <br />
           <br />
           {{ greeting }}

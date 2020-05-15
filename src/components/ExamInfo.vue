@@ -49,10 +49,13 @@
           </div>
           <div class="warn_tip" v-if="!isHand">
             <span>
-              <b>注意：只有分发了试卷，学生才可以参加考试</b>
+              <b>注意：只有发布考试后，学生才可以参加考试</b>
             </span>
           </div>
         </el-card>
+      </div>
+      <div class="button_row">
+        <el-button @click="GoBack">返回</el-button>
       </div>
     </div>
   </div>
@@ -88,6 +91,9 @@ export default {
     clearTimeout(this.timer);
   },
   methods: {
+    GoBack() {
+      this.$router.go(-1);
+    },
     sessionJudge() {
       localStorage.setItem('Login', 'false');
       this.$message({
@@ -189,34 +195,45 @@ export default {
     },
     // 结束考试
     async ExamEnd() {
-      try {
-        const res = await this.$axios.post(
-          `${this.HOST}/exam/changeExamStatus`,
-          {
-            exam_id: this.examId,
-            extend_time: 0,
+      this.$confirm('您是否要结束考试？', '确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        try {
+          const res = await this.$axios.post(
+            `${this.HOST}/exam/changeExamStatus`,
+            {
+              exam_id: this.examId,
+              extend_time: 0,
+            }
+          );
+          const info = res.data;
+          if (info.code === 200) {
+            this.$message({
+              type: 'success',
+              message: '提交成功',
+              offset: 70,
+            });
+            this.Refresh();
           }
-        );
-        const info = res.data;
-        if (info.code === 200) {
-          this.$message({
-            type: 'success',
-            message: '提交成功',
-            offset: 70,
-          });
-          this.Refresh();
+        } catch (err) {
+          if (err.response.status === 401) {
+            this.sessionJudge();
+          } else {
+            this.$message({
+              message: '系统异常',
+              type: 'error',
+              offset: 70,
+            });
+          }
         }
-      } catch (err) {
-        if (err.response.status === 401) {
-          this.sessionJudge();
-        } else {
-          this.$message({
-            message: '系统异常',
-            type: 'error',
-            offset: 70,
-          });
-        }
-      }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        });          
+      });
     },
     // 延长考试
     ExtendExam() {
@@ -315,6 +332,11 @@ export default {
       text-align: left;
       margin-left: 20%;
       margin-top: 10px;
+    }
+    .button_row {
+      margin-top: 20px;
+      margin-left: 20%;
+      text-align: left;
     }
     .exam_row {
       display: flex;
