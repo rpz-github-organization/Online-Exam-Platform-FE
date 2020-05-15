@@ -174,6 +174,36 @@ export default {
       });
     },
     goToInfo() {
+      if (! this.counterS || this.counterJ || this.counterD || this.counterP) {
+        this.$confirm('本考试无题目，请选择您要进行的操作', '提示', {
+          confirmButtonText: '删除考试',
+          cancelButtonText: '继续出题',
+          type: 'warning'
+        }).then(async () => {
+          try {
+            const res = await this.$axios.post(`${this.HOST}/exam/delExam`, {
+              exam_id: this.examId,
+            });
+            const info = res.data;
+            if (info.code === 200) {
+              this.$message({
+                type: 'success',
+                offset: 70,
+                message: '删除成功'
+              });
+              window.location.href = '/ExamInfo';
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            offset: 70,
+            message: '已取消删除'
+          });          
+        });
+      }
       window.location.href = '/ExamInfo';
     },
     sessionJudge() {

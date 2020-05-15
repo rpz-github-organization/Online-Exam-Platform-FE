@@ -25,6 +25,10 @@
       </div>
       <div class="right">
         <el-card>
+          <div class="row">
+            <label>考生：</label>
+            <label class="answer">{{ this.id }}</label>
+          </div>
           <div class="ques_list">
             <div class="ques_card" v-for="(item, index) in List" :key="index">
               <el-card>
@@ -297,17 +301,17 @@ export default {
         width: 100px;
         bottom: 0;
       }
-      .row {
-        display: flex;
-        flex-direction: row;
-        margin: 15px;
-      }
       .answer {
         font-weight: normal;
         width: 90%;
         margin-top: 3px;
         word-wrap: break-word;
       }
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+      margin: 15px;
     }
   }
   button {
