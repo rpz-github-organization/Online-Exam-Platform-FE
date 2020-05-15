@@ -578,6 +578,7 @@ export default {
   }
 
   .submit {
+    background: url(../../assets/personal_background_stu.gif);
     button {
       margin-top: 20px;
       color: white;
@@ -591,6 +592,7 @@ export default {
       cursor: pointer;
       outline: none;
       transition: all 0.3s ease;
+      margin-bottom: 20px;
     }
     button:hover {
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
