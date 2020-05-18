@@ -436,7 +436,7 @@ export default {
             type: 'success',
             offset: 75,
           });
-          // window.location.href = '/ExamInfo';
+          window.location.href = '/ExamInfo';
         } else {
           this.$message({
             message: info.message,
