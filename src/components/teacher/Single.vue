@@ -223,7 +223,7 @@ export default {
           }
         }
       } else {
-         console.log("3");
+        console.log('3');
         // 只是修改题目，请求一个接口
         try {
           const quesid = parseInt(this.questionid, 10);
@@ -237,8 +237,9 @@ export default {
             tea_id: this.uid,
           });
           const info = res.data;
+          console.log(info);
           // if (info.code === 200) {
-          if (info.data === 302) {
+          if (info.code === 200) {
             this.$message({
               message: '提交成功',
               type: 'success',
@@ -258,7 +259,30 @@ export default {
         }
       }
     },
+    existNull() {
+      for (var i = 0; i < 3; i++) {
+        if (this.option[i] == '') {
+          return true;
+        }
+      }
+      if (!this.question) {
+        return true;
+      }
+      if (!this.answer) {
+        return true;
+      }
+      return false;
+    },
     async SubmitSingle() {
+      //检查必填项
+      if (this.existNull()) {
+        this.$message({
+          message: '题目内容不完整，请检查！',
+          type: 'error',
+          offset: 70,
+        });
+        return;
+      }
       if (!this.isSubmit()) {
         // 未填写完整的提示信息
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
@@ -286,7 +310,6 @@ export default {
       }
     },
     existSame() {
-      console.log('进来了');
       for (var i = 0; i < this.option.length - 1; i++) {
         for (var j = i + 1; j < this.option.length; j++) {
           if (this.option[i] == this.option[j]) {
