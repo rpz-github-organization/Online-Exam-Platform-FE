@@ -223,6 +223,7 @@ export default {
           }
         }
       } else {
+         console.log("3");
         // 只是修改题目，请求一个接口
         try {
           const quesid = parseInt(this.questionid, 10);
@@ -236,7 +237,8 @@ export default {
             tea_id: this.uid,
           });
           const info = res.data;
-          if (info.data === 200) {
+          // if (info.code === 200) {
+          if (info.data === 302) {
             this.$message({
               message: '提交成功',
               type: 'success',
@@ -270,10 +272,30 @@ export default {
           })
           .catch(() => {});
       } else {
+        if (this.existSame()) {
+          this.$message({
+            message: '有选项内容一致，请修改',
+            type: 'info',
+            offset: 70,
+          });
+          return;
+        }
         // 填写完整直接提交。
         await this.getInfo();
         this.isChange = false;
       }
+    },
+    existSame() {
+      console.log('进来了');
+      for (var i = 0; i < this.option.length - 1; i++) {
+        for (var j = i + 1; j < this.option.length; j++) {
+          if (this.option[i] == this.option[j]) {
+            console.log(this.option[i], '==', this.option[j]);
+            return true;
+          }
+        }
+      }
+      return false;
     },
   },
 };
