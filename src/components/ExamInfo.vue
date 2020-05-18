@@ -403,6 +403,7 @@ export default {
       const lastTime = parseInt(this.editExamTime, 10);
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
+          examId:this.examId,
           name: this.examTitle,
           co_id: this.coId,
           tea_id: this.uid,
