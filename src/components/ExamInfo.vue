@@ -100,6 +100,7 @@ export default {
       isEditTime: false,
       date: '',
       editExamTime: '',
+      beginTime: '',
       examName: '',
       stuAc: 0,
       stuN: 0,
@@ -149,6 +150,7 @@ export default {
         this.stuAc = info.actual_number;
         this.examTime = info.last_time;
         const time = this.timestampToTime(info.begin_time);
+        this.beginTime = info.begin_time;
         if (info.status === '考试未开始') {
           this.status = 1;
         }
@@ -180,8 +182,29 @@ export default {
       window.location.href = document.referrer;
       window.location.href = '/AddQuestion';
     },
+    // 检查考试时间是否过期
+    timeDeprecatied() {
+      // console.log("time",this.beginTime);
+      // console.log(new Date().getTime());
+      var nowTime = new Date().getTime();
+      var beginTime = this.beginTime;
+      console.log(nowTime, '--', beginTime);
+      if (nowTime > beginTime) {
+        this.$message({
+          message: '请修改考试开考时间！',
+          type: 'error',
+          offset: 70,
+        });
+        return true;
+      } else {
+        return false;
+      }
+    },
     // 分发试卷
     async HandOut() {
+      if (this.timeDeprecatied()) {
+        return;
+      }
       try {
         const res = await this.$axios.post(
           `${this.HOST}/exam/distributeExamToStudent`,
@@ -354,7 +377,7 @@ export default {
         if (info.code === 200) {
           this.$store.dispatch('set_examId', info.data);
           this.$message({
-            message: "修改成功！",
+            message: '修改成功！',
             type: 'success',
             offset: 75,
           });
