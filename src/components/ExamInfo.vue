@@ -404,7 +404,7 @@ export default {
       //验证是否设置了开考时间
       if(!(date instanceof Date && !isNaN(date.getTime()))){
          this.$message({
-            message: "请完成开考时间的修改或将其取消！",
+            message: "请完成开考时间的修改或取消修改！",
             type: 'error',
             offset: 70,
           });
@@ -420,8 +420,8 @@ export default {
       }
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
+          name:this.examName,
           exam_id:this.examId,
-          name: this.examTitle,
           co_id: this.coId,
           tea_id: this.uid,
           begin_time: date.valueOf(),
@@ -436,7 +436,7 @@ export default {
             type: 'success',
             offset: 75,
           });
-          window.location.href = '/ExamInfo';
+          // window.location.href = '/ExamInfo';
         } else {
           this.$message({
             message: info.message,
