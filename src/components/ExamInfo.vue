@@ -85,6 +85,7 @@
       </div>
       <div class="button_row">
         <el-button @click="GoBack">返回</el-button>
+        <el-button style="color:red" @click="DeleteExam()">删除该试卷</el-button>
       </div>
     </div>
   </div>
@@ -135,6 +136,41 @@ export default {
         offset: 70,
       });
       this.$router.push('/');
+    },
+    // 删除试卷
+    DeleteExam() {
+      {
+        this.$confirm('删除操作不可撤销，确认删除吗？', '提示', {
+          confirmButtonText: '删除考试',
+          cancelButtonText: '取消删除',
+          type: 'warning',
+        })
+          .then(async () => {
+            try {
+              const res = await this.$axios.post(`${this.HOST}/exam/delExam`, {
+                exam_id: this.examId,
+              });
+              const info = res.data;
+              if (info.code === 200) {
+                this.$message({
+                  type: 'success',
+                  offset: 70,
+                  message: '删除成功',
+                });
+                window.location.href = '/TeaCourseDetail';
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              offset: 70,
+              message: '已取消删除！',
+            });
+          });
+      }
     },
     // 获取考试详情
     async GetList() {
