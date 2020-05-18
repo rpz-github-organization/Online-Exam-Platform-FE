@@ -286,7 +286,7 @@ export default {
       }:`;
       const m = `${
         date.getMinutes() + 1 < 10 ? `0${date.getMinutes()}` : date.getMinutes()
-      }`;
+      }:`;
       const s = `${
         date.getSeconds() + 1 < 10 ? `0${date.getSeconds()}` : date.getSeconds()
       }`;
