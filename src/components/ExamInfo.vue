@@ -23,6 +23,35 @@
             <label>题目编辑：</label>
             <el-button size="mini" @click="EditExam()">编辑题目</el-button>
           </div>
+          <div class="exam_row" v-if="status === 1">
+            <label>修改时间：</label>
+            <el-button size="mini" @click="EditTime()">修改时间</el-button>
+            <el-button
+              size="mini"
+              style="color:green"
+              v-show="this.isEditTime"
+              @click="ComfirmEditTime()"
+            >确认修改</el-button>
+            <el-button
+              size="mini"
+              style="color:red"
+              v-show="this.isEditTime"
+              @click="CancleEditTime()"
+            >取消修改</el-button>
+          </div>
+          <div class="date" v-show="this.isEditTime">
+            <el-date-picker
+              v-model="date"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择日期时间"
+            ></el-date-picker>
+            <div class="con">
+              <span class="title min">考试时长</span>
+              <el-input v-model="editExamTime" placeholder="请输入考试时长" clearable></el-input>
+              <span class="dan">分钟</span>
+            </div>
+          </div>
           <div class="exam_row" v-if="status !== 1">
             <label>题目查看：</label>
             <el-button size="mini" @click="QuesView()">查看题目</el-button>
@@ -68,7 +97,10 @@ export default {
   name: 'examManagement',
   data() {
     return {
-      examName: '体育',
+      isEditTime: false,
+      date: '',
+      editExamTime: '',
+      examName: '',
       stuAc: 0,
       stuN: 0,
       examTime: '120min',
@@ -87,7 +119,7 @@ export default {
     ...mapState(['uid']),
     ...mapState(['coId']),
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearTimeout(this.timer);
   },
   methods: {
@@ -151,7 +183,8 @@ export default {
     // 分发试卷
     async HandOut() {
       try {
-        const res = await this.$axios.post(`${this.HOST}/exam/distributeExamToStudent`,
+        const res = await this.$axios.post(
+          `${this.HOST}/exam/distributeExamToStudent`,
           {
             co_id: this.coId,
             exam_id: this.examId,
@@ -198,42 +231,44 @@ export default {
       this.$confirm('您是否要结束考试？', '确认', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async () => {
-        try {
-          const res = await this.$axios.post(
-            `${this.HOST}/exam/changeExamStatus`,
-            {
-              exam_id: this.examId,
-              extend_time: 0,
+        type: 'warning',
+      })
+        .then(async () => {
+          try {
+            const res = await this.$axios.post(
+              `${this.HOST}/exam/changeExamStatus`,
+              {
+                exam_id: this.examId,
+                extend_time: 0,
+              }
+            );
+            const info = res.data;
+            if (info.code === 200) {
+              this.$message({
+                type: 'success',
+                message: '提交成功',
+                offset: 70,
+              });
+              this.Refresh();
             }
-          );
-          const info = res.data;
-          if (info.code === 200) {
-            this.$message({
-              type: 'success',
-              message: '提交成功',
-              offset: 70,
-            });
-            this.Refresh();
+          } catch (err) {
+            if (err.response.status === 401) {
+              this.sessionJudge();
+            } else {
+              this.$message({
+                message: '系统异常',
+                type: 'error',
+                offset: 70,
+              });
+            }
           }
-        } catch (err) {
-          if (err.response.status === 401) {
-            this.sessionJudge();
-          } else {
-            this.$message({
-              message: '系统异常',
-              type: 'error',
-              offset: 70,
-            });
-          }
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消操作'
-        });          
-      });
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作',
+          });
+        });
     },
     // 延长考试
     ExtendExam() {
@@ -283,7 +318,6 @@ export default {
         }
       }
     },
-
     Refresh() {
       const NewPage = `${'_empty?time='}${new Date().getTime() / 500}`;
       this.$router.push(NewPage);
@@ -303,6 +337,53 @@ export default {
       const s = date.getSeconds();
       return Y + M + D + h + m + s;
     },
+    async ComfirmEditTime() {
+      console.log(this.date);
+      const date = new Date(this.date.replace(/-/g, '/'));
+      const lastTime = parseInt(this.editExamTime, 10);
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
+          name: this.examTitle,
+          co_id: this.coId,
+          tea_id: this.uid,
+          begin_time: date.valueOf(),
+          last_time: lastTime,
+        });
+        const info = res.data;
+        // console.log(info.data);
+        if (info.code === 200) {
+          this.$store.dispatch('set_examId', info.data);
+          this.$message({
+            message: "修改成功！",
+            type: 'success',
+            offset: 75,
+          });
+          window.location.href = '/ExamInfo';
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
+      } catch (err) {
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
+      }
+    },
+    EditTime() {
+      this.isEditTime = true;
+    },
+    CancleEditTime() {
+      this.isEditTime = false;
+    },
   },
 };
 </script>
@@ -321,7 +402,7 @@ export default {
       margin-bottom: 0;
     }
   }
-  b{
+  b {
     color: red;
   }
   .list {
@@ -349,6 +430,26 @@ export default {
       .iden {
         width: 500px;
       }
+    }
+    .date {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    .con {
+      display: flex;
+      flex-direction: row;
+    }
+    .min {
+      width: 50%;
+      margin: 10px 5px 10px 30px;
+      color: #5d6670;
+    }
+    .dan {
+      margin: 10px;
+      width: fit-content;
+      min-width: 40px;
     }
   }
 }
