@@ -114,19 +114,19 @@ export default {
       this.$router.push('/');
     },
     // 验证表单完整性
-    isSubmit() {
-      let res = true;
-      if (!this.question) {
-        res = false;
-      } else if (this.option.length < 4) {
-        res = false;
-      } else if (!this.tag) {
-        res = false;
-      } else if (!this.answer) {
-        res = false;
-      }
-      return res;
-    },
+    // isSubmit() {
+    //   let res = true;
+    //   if (!this.question) {
+    //     res = false;
+    //   } else if (this.option.length < 4) {
+    //     res = false;
+    //   } else if (!this.tag) {
+    //     res = false;
+    //   } else if (!this.answer) {
+    //     res = false;
+    //   }
+    //   return res;
+    // },
     // 向后台请求数据
     async getInfo() {
       if (this.questionid === null) {
@@ -283,7 +283,7 @@ export default {
         });
         return;
       }
-      if (!this.isSubmit()) {
+      if (this.tag) {
         // 未填写完整的提示信息
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',

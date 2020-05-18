@@ -63,7 +63,6 @@ export default {
           value: 'false',
         },
       ],
-
       question: '',
       answer: '',
       tea_id: '',
@@ -89,17 +88,17 @@ export default {
       });
       this.$router.push('/');
     },
-    isSubmit() {
-      let res = true;
-      if (!this.question) {
-        res = false;
-      } else if (!this.tag) {
-        res = false;
-      } else if (!this.answer) {
-        res = false;
-      }
-      return res;
-    },
+    // isSubmit() {
+    //   let res = true;
+    //   if (!this.question) {
+    //     res = false;
+    //   } else if (!this.tag) {
+    //     res = false;
+    //   } else if (!this.answer) {
+    //     res = false;
+    //   }
+    //   return res;
+    // },
     async getInfo() {
       if (this.questionid === null) {
         try {
@@ -226,9 +225,27 @@ export default {
         }
       }
     },
+    existNull() {
+      if (!this.question) {
+        return true;
+      }
+      if (!this.answer) {
+        return true;
+      }
+      return false;
+    },
     async SubmitJudge() {
-      console.log(this.questionid);
-      if (!this.isSubmit()) {
+      //检查必填项
+      if (this.existNull()) {
+        this.$message({
+          message: '题目内容不完整，请检查！',
+          type: 'error',
+          offset: 70,
+        });
+        return;
+      }
+      // console.log(this.questionid);
+      if (this.tag) {
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

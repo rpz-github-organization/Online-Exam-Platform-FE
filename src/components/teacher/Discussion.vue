@@ -12,7 +12,7 @@
       <el-divider></el-divider>
       <div class="ques_row">
         <label class="ques_label">分值:</label>
-        <el-input placeholder="请输入选项" v-model="score" clearable></el-input>
+        <el-input placeholder="请输入分值" v-model="score" clearable></el-input>
       </div>
       <div class="ques_row">
         <label class="ques_label">知识点:</label>
@@ -81,17 +81,17 @@ export default {
       });
       this.$router.push('/');
     },
-    isSubmit() {
-      let res = true;
-      if (!this.question) {
-        res = false;
-      } else if (!this.tag) {
-        res = false;
-      } else if (!this.answer) {
-        res = false;
-      }
-      return res;
-    },
+    // isSubmit() {
+    //   let res = true;
+    //   if (!this.question) {
+    //     res = false;
+    //   } else if (!this.tag) {
+    //     res = false;
+    //   } else if (!this.answer) {
+    //     res = false;
+    //   }
+    //   return res;
+    // },
     async getInfo() {
       if (this.questionid === null) {
         try {
@@ -214,9 +214,30 @@ export default {
         }
       }
     },
+     existNull() {
+      if (!this.question) {
+        return true;
+      }
+      if (!this.answer) {
+        return true;
+      }
+      if (!this.score) {
+        return true;
+      }
+      return false;
+    },
     async SubmitDiscussion() {
-      console.log(this.answer);
-      if (!this.isSubmit()) {
+        //检查必填项
+      if (this.existNull()) {
+        this.$message({
+          message: '题目内容不完整，请检查！',
+          type: 'error',
+          offset: 70,
+        });
+        return;
+      }
+      // console.log(this.answer);
+      if (this.tag) {
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
