@@ -247,7 +247,7 @@ export default {
       .exams {
         display: flex;
         flex-direction: column;
-        cursor: pointer;
+        
         .exam {
           display: flex;
           flex-direction: row;
@@ -272,6 +272,7 @@ export default {
             }
           }
           .two {
+            cursor: pointer;
             margin: auto 0px;
             img {
               width: 20px;
