@@ -398,9 +398,26 @@ export default {
       return Y + M + D + h + m + s;
     },
     async ComfirmEditTime() {
-      console.log(this.date);
+      // console.log(this.date);
       const date = new Date(this.date.replace(/-/g, '/'));
       const lastTime = parseInt(this.editExamTime, 10);
+      //验证是否设置了开考时间
+      if(!(date instanceof Date && !isNaN(date.getTime()))){
+         this.$message({
+            message: "请完成开考时间的修改或将其取消！",
+            type: 'error',
+            offset: 70,
+          });
+          return;
+      }
+      if(!lastTime){
+        this.$message({
+            message: "请设置考试时长！",
+            type: 'error',
+            offset: 70,
+          });
+          return;
+      }
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
           exam_id:this.examId,
