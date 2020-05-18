@@ -23,6 +23,7 @@
         </div>
       </div>
       <div>
+        <button @click="backToCourseDetail" style="backgroundColor:grey">返回</button>
         <button @click="submitExam">提交</button>
       </div>
     </el-card>
@@ -125,6 +126,9 @@ export default {
         }
       }
     },
+    backToCourseDetail(){
+       window.location.href = '/TeaCourseDetail';
+    }
   },
 };
 </script>
@@ -190,6 +194,7 @@ export default {
       background-color: #5379a5c4;
       cursor: pointer;
       outline: none;
+      margin: 10px;
     }
     button:hover {
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
