@@ -126,7 +126,8 @@ export default {
   },
   methods: {
     GoBack() {
-      this.$router.go(-1);
+      // this.$router.go(-1);
+      window.location.href = '/IndexTch';
     },
     sessionJudge() {
       localStorage.setItem('Login', 'false');
