@@ -51,7 +51,7 @@
                 <img src="../../assets/exam_status/red.png" /> 考试已结束(未评分)
               </div>
               <div class="grey" v-if="exam.status == 3">
-                <img src="../../assets/exam_status/grey.png" />考试未发步
+                <img src="../../assets/exam_status/grey.png" />考试未发布
               </div>
             </div>
           </div>
