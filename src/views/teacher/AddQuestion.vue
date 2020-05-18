@@ -223,7 +223,31 @@ export default {
         });
         return;
       } else {
-        window.location.href = '/TeaCourseDetail';
+        if (this.scoreS) {
+          this.uploadScore('Single', this.scoreS);
+        }
+        if (!this.scoreJ) {
+          this.uploadScore('Judge', this.scoreJ);
+        }
+        // window.location.href = '/TeaCourseDetail';
+      }
+    },
+    // 上传大题的每个小题的分值
+    async uploadScore(type, score) {
+      console.log("score",score);
+      console.log("type",type);
+      
+      
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/modifyQuestionsScore`, {
+          exam_id: this.examId,
+          type: type,
+          score: parseInt(score),
+        });
+        const info = res.data;
+        console.log(info);
+      } catch (err) {
+        console.log(err);
       }
     },
     sessionJudge() {
@@ -241,7 +265,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        // console.log(info);
+        console.log(info);
         if (res.data.code === 200) {
           if (info.single) {
             this.Single = info.single;
@@ -252,10 +276,10 @@ export default {
           } else if (info.discussion) {
             this.Discussion = info.discussion;
           }
-            this.scoreS = `${info.singleScore}`;
-            this.scoreJ = `${info.judgeScore}`;
-          console.log("S:",this.scoreS);
-          console.log("J",this.scoreJ);
+          this.scoreS = `${info.singleScore}`;
+          this.scoreJ = `${info.judgeScore}`;
+          // console.log("S:",this.scoreS);
+          // console.log("J",this.scoreJ);
           this.Count();
           this.isShow = true;
         } else {

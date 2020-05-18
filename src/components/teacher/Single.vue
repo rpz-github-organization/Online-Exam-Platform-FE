@@ -84,7 +84,6 @@ export default {
         },
       ],
       questionid: null,
-
       question: '',
       option: [],
       answer: '',
