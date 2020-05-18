@@ -283,7 +283,9 @@ export default {
         });
         return;
       }
-      if (this.tag) {
+      console.log("tag",this.tag);
+      
+      if (!this.tag) {
         // 未填写完整的提示信息
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',

@@ -314,7 +314,7 @@ export default {
         });
         return;
       }
-      if (this.tag||this.answer_input||this.answer_output) {
+      if (!this.tag||!this.answer_input||!this.answer_output) {
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
