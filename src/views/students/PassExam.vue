@@ -14,6 +14,7 @@
         </div>
         <div class="two">
           <div>
+            <span>教师：{{exam.tea_name}}老师</span>
             <span>考试时长：{{exam.exam.last_time}}分钟</span>
             <span>课程：{{exam.co_name}}</span>
           </div>
@@ -81,7 +82,7 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          // console.log(info.data);
+          console.log(info.data);
           return info.data;
         } else {
           this.$message({
