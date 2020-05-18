@@ -87,7 +87,8 @@ export default {
       this.$router.push('/');
     },
     GoIndex () {
-      this.$router.go(-1);
+      // this.$router.go(-1);
+      window.location.href = '/IndexTch';
     },
     goToExam(examId) {
       console.log(examId);
