@@ -204,11 +204,10 @@ export default {
             this.$message({
               type: 'info',
               offset: 70,
-              message: '已取消删除',
+              message: '已取消',
             });
           });
       }
-      window.location.href = '/ExamInfo';
     },
     sessionJudge() {
       localStorage.setItem('Login', 'false');
