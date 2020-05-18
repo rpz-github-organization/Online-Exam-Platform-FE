@@ -138,20 +138,6 @@ export default {
       });
       this.$router.push('/');
     },
-    // isSubmit() {
-    //   let res = true;
-    //   if (!this.question) {
-    //     res = false;
-    //   } else if (!this.tag) {
-    //     res = false;
-    //   } else if (!this.answer_input) {
-    //     res = false;
-    //   } else if (!this.answer_output) {
-    //     res = false;
-    //   }
-    //   return res;
-    // },
-
     Addstd() {
       this.answer_input.push('');
       this.answer_output.push('');
@@ -292,7 +278,7 @@ export default {
       if (!this.question) {
         return true;
       }
-      if (!this.answer) {
+      if (!this.score) {
         return true;
       }
       return false;
