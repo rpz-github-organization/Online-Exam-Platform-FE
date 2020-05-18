@@ -176,22 +176,18 @@ export default {
       });
     },
     goToInfo() {
-      this.GetWhole();
-      console.log(
-        this.counterS.length,
-        '-',
-        this.counterJ.length,
-        '-',
-        this.counterD.length,
-        '-',
-        this.counterP.length,
-      );
-
-      if (!(
-        this.counterS.length ||
-        this.counterJ.length ||
-        this.counterD.length ||
-        this.counterP.length)
+      // this.GetWhole();
+      // console.log(
+      //   this.counterS.length, '-',this.counterJ.length,'-',
+      //   this.counterD.length,'-',this.counterP.length,
+      // );
+      if (
+        !(
+          this.counterS.length ||
+          this.counterJ.length ||
+          this.counterD.length ||
+          this.counterP.length
+        )
       ) {
         this.$confirm('本考试无题目，请选择您要进行的操作', '提示', {
           confirmButtonText: '删除考试',
@@ -223,6 +219,13 @@ export default {
               message: '已取消',
             });
           });
+      } else if (this.scoreS == '' || this.scoreJ == '') {
+        this.$message({
+          type: 'error',
+          offset: 70,
+          message: '请为小题设置分数！',
+        });
+        return;
       } else {
         window.location.href = '/TeaCourseDetail';
       }
@@ -253,8 +256,18 @@ export default {
           } else if (info.discussion) {
             this.Discussion = info.discussion;
           }
-          this.scoreS = `${info.singleScore}`;
-          this.scoreJ = `${info.judgeScore}`;
+          if (`${info.singleScore}` != '') {
+            this.scoreS = `${info.singleScore}`;
+          } else {
+            this.scoreS = 0;
+          }
+          if (`${info.judgeScore}` != '') {
+            this.scoreJ = `${info.judgeScore}`;
+          } else {
+            this.scoreJ = 0;
+          }
+          console.log(this.scoreS);
+          console.log(this.scoreJ);
           this.Count();
           this.isShow = true;
         } else {
@@ -282,11 +295,13 @@ export default {
         for (let i = 0; i < this.Single.length; i += 1) {
           this.AddCount(this.counterS);
         }
+        if (this.scoreS == '') this.scoreS = '-1';
       }
       if (this.Judge) {
         for (let i = 0; i < this.Judge.length; i += 1) {
           this.AddCount(this.counterJ);
         }
+        if (this.scoreJ == '') this.scoreJ = '-1';
       }
       if (this.Discussion) {
         for (let i = 0; i < this.Discussion.length; i += 1) {
