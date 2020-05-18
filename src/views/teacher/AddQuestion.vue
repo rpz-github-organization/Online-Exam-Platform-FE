@@ -194,7 +194,7 @@ export default {
                   offset: 70,
                   message: '删除成功',
                 });
-                window.location.href = '/ExamInfo';
+                window.location.href = '/AddExam';
               }
             } catch (err) {
               console.log(err);
