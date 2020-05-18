@@ -229,15 +229,11 @@ export default {
         if (!this.scoreJ) {
           this.uploadScore('Judge', this.scoreJ);
         }
-        // window.location.href = '/TeaCourseDetail';
+        window.location.href = '/TeaCourseDetail';
       }
     },
     // 上传大题的每个小题的分值
     async uploadScore(type, score) {
-      console.log("score",score);
-      console.log("type",type);
-      
-      
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/modifyQuestionsScore`, {
           exam_id: this.examId,
