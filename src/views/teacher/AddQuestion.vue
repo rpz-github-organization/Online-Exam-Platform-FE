@@ -235,11 +235,14 @@ export default {
     // 上传大题的每个小题的分值
     async uploadScore(type, score) {
       try {
-        const res = await this.$axios.post(`${this.HOST}/exam/modifyQuestionsScore`, {
-          exam_id: this.examId,
-          type: type,
-          score: parseInt(score),
-        });
+        const res = await this.$axios.post(
+          `${this.HOST}/exam/modifyQuestionsScore`,
+          {
+            exam_id: this.examId,
+            type: type,
+            score: parseInt(score),
+          }
+        );
         const info = res.data;
         console.log(info);
       } catch (err) {
@@ -265,15 +268,20 @@ export default {
         if (res.data.code === 200) {
           if (info.single) {
             this.Single = info.single;
-          } else if (info.judge) {
+          }
+          if (info.judge) {
             this.Judge = info.judge;
-          } else if (info.program) {
+          }
+          if (info.program) {
             this.Program = info.program;
-          } else if (info.discussion) {
+          }
+          if (info.discussion) {
             this.Discussion = info.discussion;
           }
           this.scoreS = `${info.singleScore}`;
           this.scoreJ = `${info.judgeScore}`;
+          // console.log("pro",this.Program);
+
           // console.log("S:",this.scoreS);
           // console.log("J",this.scoreJ);
           this.Count();
