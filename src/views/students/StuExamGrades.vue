@@ -86,7 +86,7 @@
                 <br />
                 <textarea
                   class="pre.text"
-                  cols="70"
+                  cols="50"
                   rows="10"
                   wrap="hard"
                   readonly
