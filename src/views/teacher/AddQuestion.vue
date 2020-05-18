@@ -176,7 +176,23 @@ export default {
       });
     },
     goToInfo() {
-      if (!this.counterS || this.counterJ || this.counterD || this.counterP) {
+      this.GetWhole();
+      console.log(
+        this.counterS.length,
+        '-',
+        this.counterJ.length,
+        '-',
+        this.counterD.length,
+        '-',
+        this.counterP.length,
+      );
+
+      if (!(
+        this.counterS.length ||
+        this.counterJ.length ||
+        this.counterD.length ||
+        this.counterP.length)
+      ) {
         this.$confirm('本考试无题目，请选择您要进行的操作', '提示', {
           confirmButtonText: '删除考试',
           cancelButtonText: '继续出题',
@@ -207,6 +223,8 @@ export default {
               message: '已取消',
             });
           });
+      } else {
+        window.location.href = '/TeaCourseDetail';
       }
     },
     sessionJudge() {
@@ -296,7 +314,7 @@ export default {
     display: flex;
     .left {
       width: 20%;
-      height: 100%;
+      // height: 80%;
       margin-left: 5%;
       position: fixed;
 
