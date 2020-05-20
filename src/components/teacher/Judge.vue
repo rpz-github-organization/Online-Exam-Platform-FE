@@ -100,7 +100,7 @@ export default {
     //   return res;
     // },
     async getInfo() {
-      if (this.questionid === null) {
+      if (this.questionid === null) { // 当questionid为null，即此题未提交过，调用两个接口
         try {
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
             type: 'Judge',
@@ -117,7 +117,7 @@ export default {
             const scoreN = parseInt(this.score, 10);
             // console.log(this.questionid);
             try {
-              console.log(this.examId);
+              // console.log(this.examId);
               const response = await this.$axios.post(
                 `${this.HOST}/exam/addQuestionToExam`,
                 {
@@ -159,7 +159,7 @@ export default {
             });
           }
         }
-      } else if (this.isChange) {
+      } else if (this.isChange) { // 当小题分值变化，调用addQuestionToExam接口
         const quesid = parseInt(this.questionid, 10);
         const scoreN = parseInt(this.score, 10);
         // console.log(this.questionid);
@@ -193,7 +193,7 @@ export default {
             });
           }
         }
-      } else {
+      } else { // 已经出过的题目再次修改，只调用addQuestion
         try {
           const quesid = parseInt(this.questionid, 10);
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {

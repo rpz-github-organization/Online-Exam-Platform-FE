@@ -138,7 +138,7 @@ export default {
       });
       this.$router.push('/');
     },
-    Addstd() {
+    Addstd() { // 添加样例
       this.answer_input.push('');
       this.answer_output.push('');
     },
@@ -155,7 +155,7 @@ export default {
     },
 
     async getInfo() {
-      if (this.questionid === null) {
+      if (this.questionid === null) { // 当questionid为null，即此题未提交过，调用两个接口
         try {
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
             type: this.type,
@@ -208,7 +208,7 @@ export default {
             });
           }
         }
-      } else if (this.isChange) {
+      } else if (this.isChange) { // 当小题分值变化，调用addQuestionToExam接口
         const quesid = parseInt(this.questionid, 10);
         const scoreN = parseInt(this.score, 10);
         try {
@@ -241,7 +241,7 @@ export default {
             });
           }
         }
-      } else {
+      } else { // 已经出过的题目再次修改，只调用addQuestion
         try {
           const quesid = parseInt(this.questionid, 10);
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {

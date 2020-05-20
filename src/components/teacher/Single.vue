@@ -113,25 +113,6 @@ export default {
       });
       this.$router.push('/');
     },
-    // DeleteSingle() {
-    //   if (this.questionid === null) {
-    //     this.$emit('deleteSingle',this.index);
-    //   }
-    // },
-    // 验证表单完整性
-    // isSubmit() {
-    //   let res = true;
-    //   if (!this.question) {
-    //     res = false;
-    //   } else if (this.option.length < 4) {
-    //     res = false;
-    //   } else if (!this.tag) {
-    //     res = false;
-    //   } else if (!this.answer) {
-    //     res = false;
-    //   }
-    //   return res;
-    // },
     // 向后台请求数据
     async getInfo() {
       if (this.questionid === null) {
@@ -227,9 +208,7 @@ export default {
             });
           }
         }
-      } else {
-        console.log('3');
-        // 只是修改题目，请求一个接口
+      } else { // 已经出过的题目再次修改，只调用addQuestion
         try {
           const quesid = parseInt(this.questionid, 10);
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
