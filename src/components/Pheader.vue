@@ -66,14 +66,14 @@ export default {
     ...mapState(['authLevel']),
   },
   methods: {
-    GoIndex() {
+    GoIndex() { // 点击左上角返回主页
       if (this.authLevel ===0 ) {
         window.location.href = '/indexStu';
       } else {
         window.location.href = '/indexTch';
       }
     },
-    handleCommand(command) {
+    handleCommand(command) { // 选择个人中心或退出登录
       if (command === 'modify') {
         if (this.authLevel === 0) {
           window.location.href = '/personalStu';

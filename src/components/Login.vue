@@ -91,12 +91,12 @@ export default {
               type: 'success',
               offset: 90,
             });
-            this.$store.dispatch('set_uid', this.uid);
-            const authlevel = info.data.authority;
+            this.$store.dispatch('set_uid', this.uid); // 修改store里的uid
+            const authlevel = info.data.authority; // 设置用户权限并修改store里的authlevel
             this.$store.dispatch('set_authLevel', authlevel);
             this.$store.dispatch('set_Login', true);
             sessionStorage.setItem('Login', 'true');
-            if (authlevel === 0) {
+            if (authlevel === 0) { // 判断用户权限，登陆成功跳转对应页面
               window.location.href = '/IndexStu';
             } else if (authlevel > 0 && authlevel < 99) {
               window.location.href = '/IndexTch';

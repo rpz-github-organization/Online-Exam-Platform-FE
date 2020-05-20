@@ -127,7 +127,7 @@ export default {
     clearTimeout(this.timer);
   },
   methods: {
-    GoBack() {
+    GoBack() { // 返回
       this.$router.go(-1);
       // window.location.href = '/IndexTch';
     },
@@ -351,7 +351,7 @@ export default {
           });
         });
     },
-    async SubExtend() {
+    async SubExtend() { // 延长考试
       try {
         const res = await this.$axios.post(
           `${this.HOST}/exam/changeExamStatus`,
@@ -381,12 +381,12 @@ export default {
         }
       }
     },
-    Refresh() {
+    Refresh() { // 刷新页面，通过进入一个构造的页面又返回来实现
       const NewPage = `${'_empty?time='}${new Date().getTime() / 500}`;
       this.$router.push(NewPage);
       this.$router.go(-1);
     },
-    timestampToTime(cjsj) {
+    timestampToTime(cjsj) { // 时间戳转换为时间
       const date = new Date(cjsj); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
       const Y = `${date.getFullYear()}-`;
       const M = `${
@@ -400,7 +400,7 @@ export default {
       const s = date.getSeconds();
       return Y + M + D + h + m + s;
     },
-    async ComfirmEditTime() {
+    async ComfirmEditTime() { // 确实编辑时间
       // console.log(this.date);
       const date = new Date(this.date.replace(/-/g, '/'));
       const lastTime = parseInt(this.editExamTime, 10);
