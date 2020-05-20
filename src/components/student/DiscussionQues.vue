@@ -21,7 +21,7 @@
 <script>
 export default {
   name: 'singleQues',
-  props: {
+  props: { // 父组件传值，index：下标，DiscussionQ：讨论题
     index: {
       type: Number,
       required: true,
@@ -48,14 +48,14 @@ export default {
         type: 'Discussion',
         num: this.index + 1,
       };
-      this.$emit('func', this.info);
+      this.$emit('func', this.info); // 学生答题时，实时向父组件传值（父组件统一提交所有答案）
     },
   },
   methods: {
     Question() {
-      this.timu = this.DiscussionQ.question;
+      this.timu = this.DiscussionQ.question; // 渲染获取到的题目
     },
-    handlePaste() {
+    handlePaste() { // 粘贴操作不执行任何事件，阻止粘贴操作向下传
     },
   },
 };
