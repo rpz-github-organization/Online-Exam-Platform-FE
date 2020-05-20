@@ -1,5 +1,5 @@
 <template>
-  <div id="examManagement">
+  <div id="examManagement" v-show="isShow">
     <div class="title">
       <h2>{{ this.examName }}</h2>
     </div>
@@ -76,7 +76,7 @@
             <label>考生成绩：</label>
             <el-button size="mini" @click="GetScore()">查看成绩</el-button>
           </div>
-          <div class="warn_tip" v-if="!isHand">
+          <div class="warn_tip" v-show="!isHand">
             <span>
               <b>注意：只有发布考试后，学生才可以参加考试</b>
             </span>
@@ -111,9 +111,11 @@ export default {
       isHand: false,
       extendTime: 0,
       timer: '',
+
+      isShow: false,
     };
   },
-  created() {
+  beforeMount() {
     this.GetList();
   },
   computed: {
@@ -126,8 +128,8 @@ export default {
   },
   methods: {
     GoBack() {
-      // this.$router.go(-1);
-      window.location.href = '/IndexTch';
+      this.$router.go(-1);
+      // window.location.href = '/IndexTch';
     },
     sessionJudge() {
       localStorage.setItem('Login', 'false');
@@ -201,6 +203,7 @@ export default {
           this.status = 4;
         }
         this.startTime = time;
+        this.isShow = true;
       } catch (err) {
         console.log(err);
         // if (err.response.status === 401) {

@@ -34,6 +34,7 @@
       </div>
       <div>
         <button @click="SubmitSingle()">提交</button>
+        <!-- <button class="delete" @click="DeleteSingle">删除</button> -->
       </div>
     </el-card>
   </div>
@@ -65,7 +66,7 @@ export default {
       this.tag = this.ques.tag;
       this.questionid = this.ques.question_id;
     }
-    console.log(this.score);
+    // console.log(this.score);
   },
   data() {
     return {
@@ -112,6 +113,11 @@ export default {
       });
       this.$router.push('/');
     },
+    // DeleteSingle() {
+    //   if (this.questionid === null) {
+    //     this.$emit('deleteSingle',this.index);
+    //   }
+    // },
     // 验证表单完整性
     // isSubmit() {
     //   let res = true;
@@ -361,6 +367,10 @@ export default {
     background-color: #5379a5c4;
     cursor: pointer;
     outline: none;
+    margin-left: 20px;
+  }
+  .delete {
+    background-color: #E34A4A;
   }
   button:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);

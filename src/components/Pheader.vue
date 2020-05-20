@@ -1,7 +1,7 @@
 <template>
   <div id="pheader" class="flex jy-end">
     <ul class="header_list">
-      <div class="flex jy-center as-center">
+      <div class="flex jy-center as-center title" @click="GoIndex">
         <img src="../assets/sicnulogo.jpeg" alt />
         <b>四川师范大学 · SICNU</b>
       </div>
@@ -66,6 +66,13 @@ export default {
     ...mapState(['authLevel']),
   },
   methods: {
+    GoIndex() {
+      if (this.authLevel ===0 ) {
+        window.location.href = '/indexStu';
+      } else {
+        window.location.href = '/indexTch';
+      }
+    },
     handleCommand(command) {
       if (command === 'modify') {
         if (this.authLevel === 0) {
@@ -129,6 +136,9 @@ export default {
       display: inline-block;
       margin-right: 20px;
     }
+  }
+  .title {
+    cursor: pointer;
   }
 }
 
