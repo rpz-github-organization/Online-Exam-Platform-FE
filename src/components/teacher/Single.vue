@@ -34,6 +34,7 @@
       </div>
       <div>
         <button @click="SubmitSingle()">提交</button>
+        <!-- <button class="delete" @click="DeleteSingle">删除</button> -->
       </div>
     </el-card>
   </div>
@@ -65,7 +66,7 @@ export default {
       this.tag = this.ques.tag;
       this.questionid = this.ques.question_id;
     }
-    console.log(this.score);
+    // console.log(this.score);
   },
   data() {
     return {
@@ -84,7 +85,6 @@ export default {
         },
       ],
       questionid: null,
-
       question: '',
       option: [],
       answer: '',
@@ -112,20 +112,6 @@ export default {
         offset: 70,
       });
       this.$router.push('/');
-    },
-    // 验证表单完整性
-    isSubmit() {
-      let res = true;
-      if (!this.question) {
-        res = false;
-      } else if (this.option.length < 4) {
-        res = false;
-      } else if (!this.tag) {
-        res = false;
-      } else if (!this.answer) {
-        res = false;
-      }
-      return res;
     },
     // 向后台请求数据
     async getInfo() {
@@ -222,21 +208,22 @@ export default {
             });
           }
         }
-      } else {
-        // 只是修改题目，请求一个接口
+      } else { // 已经出过的题目再次修改，只调用addQuestion
         try {
           const quesid = parseInt(this.questionid, 10);
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
             type: 'Single',
             question: this.question,
             question_id: quesid,
-            options: `${this.optionA};${this.optionB};${this.optionC};${this.optionD}`,
+            options: this.option.join(';'),
             answer: this.answer,
             tag: this.tag,
             tea_id: this.uid,
           });
           const info = res.data;
-          if (info.data === 200) {
+          console.log(info);
+          // if (info.code === 200) {
+          if (info.code === 200) {
             this.$message({
               message: '提交成功',
               type: 'success',
@@ -256,8 +243,33 @@ export default {
         }
       }
     },
+    existNull() {
+      for (var i = 0; i < 3; i++) {
+        if (this.option[i] == '') {
+          return true;
+        }
+      }
+      if (!this.question) {
+        return true;
+      }
+      if (!this.answer) {
+        return true;
+      }
+      return false;
+    },
     async SubmitSingle() {
-      if (!this.isSubmit()) {
+      //检查必填项
+      if (this.existNull()) {
+        this.$message({
+          message: '题目内容不完整，请检查！',
+          type: 'error',
+          offset: 70,
+        });
+        return;
+      }
+      console.log("tag",this.tag);
+      
+      if (!this.tag) {
         // 未填写完整的提示信息
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',
@@ -270,10 +282,29 @@ export default {
           })
           .catch(() => {});
       } else {
+        if (this.existSame()) {
+          this.$message({
+            message: '有选项内容一致，请修改',
+            type: 'info',
+            offset: 70,
+          });
+          return;
+        }
         // 填写完整直接提交。
         await this.getInfo();
         this.isChange = false;
       }
+    },
+    existSame() {
+      for (var i = 0; i < this.option.length - 1; i++) {
+        for (var j = i + 1; j < this.option.length; j++) {
+          if (this.option[i] == this.option[j]) {
+            console.log(this.option[i], '==', this.option[j]);
+            return true;
+          }
+        }
+      }
+      return false;
     },
   },
 };
@@ -315,6 +346,10 @@ export default {
     background-color: #5379a5c4;
     cursor: pointer;
     outline: none;
+    margin-left: 20px;
+  }
+  .delete {
+    background-color: #E34A4A;
   }
   button:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);

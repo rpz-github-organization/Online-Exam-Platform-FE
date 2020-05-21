@@ -1,5 +1,5 @@
 <template>
-  <div id="examManagement">
+  <div id="examManagement" v-show="isShow">
     <div class="title">
       <h2>{{ this.examName }}</h2>
     </div>
@@ -17,11 +17,40 @@
             <label class="iden">考生人数：{{ this.stuN }}</label>
           </div>
           <div class="exam_row" v-if="status !== 1">
-            <label class="iden">实际考生：{{ this.stuNum }}</label>
+            <label class="iden">实际考生：{{ this.stuAc }}</label>
           </div>
           <div class="exam_row" v-if="status === 1">
             <label>题目编辑：</label>
             <el-button size="mini" @click="EditExam()">编辑题目</el-button>
+          </div>
+          <div class="exam_row" v-if="status === 1">
+            <label>修改时间：</label>
+            <el-button size="mini" @click="EditTime()">修改时间</el-button>
+            <el-button
+              size="mini"
+              style="color:green"
+              v-show="this.isEditTime"
+              @click="ComfirmEditTime()"
+            >确认修改</el-button>
+            <el-button
+              size="mini"
+              style="color:red"
+              v-show="this.isEditTime"
+              @click="CancleEditTime()"
+            >取消修改</el-button>
+          </div>
+          <div class="date" v-show="this.isEditTime">
+            <el-date-picker
+              v-model="date"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择日期时间"
+            ></el-date-picker>
+            <div class="con">
+              <span class="title min">考试时长</span>
+              <el-input v-model="editExamTime" placeholder="请输入考试时长" clearable></el-input>
+              <span class="dan">分钟</span>
+            </div>
           </div>
           <div class="exam_row" v-if="status !== 1">
             <label>题目查看：</label>
@@ -47,7 +76,16 @@
             <label>考生成绩：</label>
             <el-button size="mini" @click="GetScore()">查看成绩</el-button>
           </div>
+          <div class="warn_tip" v-show="!isHand">
+            <span>
+              <b>注意：只有发布考试后，学生才可以参加考试</b>
+            </span>
+          </div>
         </el-card>
+      </div>
+      <div class="button_row">
+        <el-button @click="GoBack">返回</el-button>
+        <el-button style="color:red" @click="DeleteExam()">删除该试卷</el-button>
       </div>
     </div>
   </div>
@@ -60,17 +98,24 @@ export default {
   name: 'examManagement',
   data() {
     return {
-      examName: '体育',
-      stuNum: 0,
+      isEditTime: false,
+      date: '',
+      editExamTime: '',
+      beginTime: '',
+      examName: '',
+      stuAc: 0,
       stuN: 0,
       examTime: '120min',
       startTime: '2020-02-02',
       status: 0,
       isHand: false,
       extendTime: 0,
+      timer: '',
+
+      isShow: false,
     };
   },
-  created() {
+  beforeMount() {
     this.GetList();
   },
   computed: {
@@ -78,7 +123,14 @@ export default {
     ...mapState(['uid']),
     ...mapState(['coId']),
   },
+  beforeDestroy() {
+    clearTimeout(this.timer);
+  },
   methods: {
+    GoBack() { // 返回
+      this.$router.go(-1);
+      // window.location.href = '/IndexTch';
+    },
     sessionJudge() {
       localStorage.setItem('Login', 'false');
       this.$message({
@@ -87,6 +139,41 @@ export default {
         offset: 70,
       });
       this.$router.push('/');
+    },
+    // 删除试卷
+    DeleteExam() {
+      {
+        this.$confirm('删除操作不可撤销，确认删除吗？', '提示', {
+          confirmButtonText: '删除考试',
+          cancelButtonText: '取消删除',
+          type: 'warning',
+        })
+          .then(async () => {
+            try {
+              const res = await this.$axios.post(`${this.HOST}/exam/delExam`, {
+                exam_id: this.examId,
+              });
+              const info = res.data;
+              if (info.code === 200) {
+                this.$message({
+                  type: 'success',
+                  offset: 70,
+                  message: '删除成功',
+                });
+                window.location.href = '/TeaCourseDetail';
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              offset: 70,
+              message: '已取消删除！',
+            });
+          });
+      }
     },
     // 获取考试详情
     async GetList() {
@@ -102,6 +189,7 @@ export default {
         this.stuAc = info.actual_number;
         this.examTime = info.last_time;
         const time = this.timestampToTime(info.begin_time);
+        this.beginTime = info.begin_time;
         if (info.status === '考试未开始') {
           this.status = 1;
         }
@@ -115,6 +203,7 @@ export default {
           this.status = 4;
         }
         this.startTime = time;
+        this.isShow = true;
       } catch (err) {
         // console.log(err);
         // if (err.response.status === 401) {
@@ -133,8 +222,29 @@ export default {
       window.location.href = document.referrer;
       window.location.href = '/AddQuestion';
     },
+    // 检查考试时间是否过期
+    timeDeprecatied() {
+      // console.log("time",this.beginTime);
+      // console.log(new Date().getTime());
+      var nowTime = new Date().getTime();
+      var beginTime = this.beginTime;
+      console.log(nowTime, '--', beginTime);
+      if (nowTime > beginTime) {
+        this.$message({
+          message: '请修改考试开考时间！',
+          type: 'error',
+          offset: 70,
+        });
+        return true;
+      } else {
+        return false;
+      }
+    },
     // 分发试卷
     async HandOut() {
+      if (this.timeDeprecatied()) {
+        return;
+      }
       try {
         const res = await this.$axios.post(
           `${this.HOST}/exam/distributeExamToStudent`,
@@ -146,11 +256,13 @@ export default {
         // console.log(res);
         if (res.data.code === 200) {
           this.$message({
-            message: '分发成功',
+            message: '分发中',
             type: 'success',
             offset: 70,
           });
-          this.Refresh();
+          this.timer = setTimeout(() => {
+            this.Refresh();
+          }, 2000);
         }
       } catch (err) {
         if (err.response.status === 401) {
@@ -179,34 +291,47 @@ export default {
     },
     // 结束考试
     async ExamEnd() {
-      try {
-        const res = await this.$axios.post(
-          `${this.HOST}/exam/changeExamStatus`,
-          {
-            exam_id: this.examId,
-            extend_time: 0,
+      this.$confirm('您是否要结束考试？', '确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          try {
+            const res = await this.$axios.post(
+              `${this.HOST}/exam/changeExamStatus`,
+              {
+                exam_id: this.examId,
+                extend_time: 0,
+              }
+            );
+            const info = res.data;
+            if (info.code === 200) {
+              this.$message({
+                type: 'success',
+                message: '提交成功',
+                offset: 70,
+              });
+              this.Refresh();
+            }
+          } catch (err) {
+            if (err.response.status === 401) {
+              this.sessionJudge();
+            } else {
+              this.$message({
+                message: '系统异常',
+                type: 'error',
+                offset: 70,
+              });
+            }
           }
-        );
-        const info = res.data;
-        if (info.code === 200) {
+        })
+        .catch(() => {
           this.$message({
-            type: 'success',
-            message: '提交成功',
-            offset: 70,
+            type: 'info',
+            message: '已取消操作',
           });
-          this.Refresh();
-        }
-      } catch (err) {
-        if (err.response.status === 401) {
-          this.sessionJudge();
-        } else {
-          this.$message({
-            message: '系统异常',
-            type: 'error',
-            offset: 70,
-          });
-        }
-      }
+        });
     },
     // 延长考试
     ExtendExam() {
@@ -226,7 +351,7 @@ export default {
           });
         });
     },
-    async SubExtend() {
+    async SubExtend() { // 延长考试
       try {
         const res = await this.$axios.post(
           `${this.HOST}/exam/changeExamStatus`,
@@ -256,13 +381,12 @@ export default {
         }
       }
     },
-
-    Refresh() {
+    Refresh() { // 刷新页面，通过进入一个构造的页面又返回来实现
       const NewPage = `${'_empty?time='}${new Date().getTime() / 500}`;
       this.$router.push(NewPage);
       this.$router.go(-1);
     },
-    timestampToTime(cjsj) {
+    timestampToTime(cjsj) { // 时间戳转换为时间
       const date = new Date(cjsj); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
       const Y = `${date.getFullYear()}-`;
       const M = `${
@@ -275,6 +399,71 @@ export default {
       const m = `${date.getMinutes()}:`;
       const s = date.getSeconds();
       return Y + M + D + h + m + s;
+    },
+    async ComfirmEditTime() { // 确实编辑时间
+      // console.log(this.date);
+      const date = new Date(this.date.replace(/-/g, '/'));
+      const lastTime = parseInt(this.editExamTime, 10);
+      //验证是否设置了开考时间
+      if(!(date instanceof Date && !isNaN(date.getTime()))){
+         this.$message({
+            message: "请完成开考时间的修改或取消修改！",
+            type: 'error',
+            offset: 70,
+          });
+          return;
+      }
+      if(!lastTime){
+        this.$message({
+            message: "请设置考试时长！",
+            type: 'error',
+            offset: 70,
+          });
+          return;
+      }
+      try {
+        const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
+          name:this.examName,
+          exam_id:this.examId,
+          co_id: this.coId,
+          tea_id: this.uid,
+          begin_time: date.valueOf(),
+          last_time: lastTime,
+        });
+        const info = res.data;
+        // console.log(info.data);
+        if (info.code === 200) {
+          this.$store.dispatch('set_examId', info.data);
+          this.$message({
+            message: '修改成功！',
+            type: 'success',
+            offset: 75,
+          });
+          window.location.href = '/ExamInfo';
+        } else {
+          this.$message({
+            message: info.message,
+            type: 'error',
+            offset: 70,
+          });
+        }
+      } catch (err) {
+        if (err.response.status === 401) {
+          this.sessionJudge();
+        } else {
+          this.$message({
+            message: '系统异常',
+            type: 'error',
+            offset: 70,
+          });
+        }
+      }
+    },
+    EditTime() {
+      this.isEditTime = true;
+    },
+    CancleEditTime() {
+      this.isEditTime = false;
     },
   },
 };
@@ -294,6 +483,9 @@ export default {
       margin-bottom: 0;
     }
   }
+  b {
+    color: red;
+  }
   .list {
     display: flex;
     flex-direction: column;
@@ -302,6 +494,11 @@ export default {
       text-align: left;
       margin-left: 20%;
       margin-top: 10px;
+    }
+    .button_row {
+      margin-top: 20px;
+      margin-left: 20%;
+      text-align: left;
     }
     .exam_row {
       display: flex;
@@ -314,6 +511,26 @@ export default {
       .iden {
         width: 500px;
       }
+    }
+    .date {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    .con {
+      display: flex;
+      flex-direction: row;
+    }
+    .min {
+      width: 50%;
+      margin: 10px 5px 10px 30px;
+      color: #5d6670;
+    }
+    .dan {
+      margin: 10px;
+      width: fit-content;
+      min-width: 40px;
     }
   }
 }

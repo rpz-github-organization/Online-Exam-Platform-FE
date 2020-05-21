@@ -1,8 +1,18 @@
 <template>
   <div class="body">
     <div class="bodyimg">
-      <span @click="DeleteCourse"><i class="el-icon-d-arrow-right"></i>点击退课</span>
       <div class="main">
+        <div class="drop">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <i class="el-icon-arrow-down el-icon-s-operation"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="DeleteCourse">退课</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <i class="el-icon-s-home" @click="GoIndex"></i>
+        </div>
         <div class="name">{{ course.name }}</div>
         <div class="detail">
           <div class="row">
@@ -40,6 +50,9 @@
               <div class="red" v-if="exam.status == 2 && !exam.is_judge">
                 <img src="../../assets/exam_status/red.png" /> 考试已结束(未评分)
               </div>
+              <div class="grey" v-if="exam.status == 3">
+                <img src="../../assets/exam_status/grey.png" />考试未发布
+              </div>
             </div>
           </div>
         </div>
@@ -72,6 +85,10 @@ export default {
         offset: 70,
       });
       this.$router.push('/');
+    },
+    GoIndex () {
+      // this.$router.go(-1);
+      window.location.href = '/IndexTch';
     },
     goToExam(examId) {
       console.log(examId);
@@ -115,33 +132,44 @@ export default {
       }
     },
     async DeleteCourse() {
-      try {
-        const res = await this.$axios.post(`${this.HOST}/course/remove`, {
-          co_id: this.coId,
-          tea_id: this.uid,
-        });
-        const info = res.data;
-        if (info.code === 200) {
-          this.$message({
-            message: '退课成功',
-            type: 'success',
-            offset: 70,
+      this.$confirm('您确定要退课?', '确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        try {
+          const res = await this.$axios.post(`${this.HOST}/course/remove`, {
+            co_id: this.coId,
+            tea_id: this.uid,
           });
-          window.location.href = '/indexTch';
-        } else {
+          const info = res.data;
+          if (info.code === 200) {
+            this.$message({
+              message: '退课成功',
+              type: 'success',
+              offset: 70,
+            });
+            window.location.href = '/indexTch';
+          } else {
+            this.$message({
+              message: info.message,
+              type: 'error',
+              offset: 70,
+            });
+          }
+        } catch (err) {
           this.$message({
-            message: info.message,
+            message: '系统异常',
             type: 'error',
             offset: 70,
           });
         }
-      } catch (err) {
+      }).catch(() => {
         this.$message({
-          message: '系统异常',
-          type: 'error',
-          offset: 70,
-        });
-      }
+          type: 'info',
+          message: '已取消操作'
+        });          
+      });
     },
     timestamp() {
       this.exams.forEach(item => {
@@ -166,16 +194,11 @@ export default {
 .body {
   height: 100%;
   padding-top: 20px;
-  background: url('../../assets/index_background_stu.gif');
+  background: url('../../assets/index_background_tch.gif');
   .bodyimg {
     padding-bottom: 10px;
-    background: url('../../assets/index_background_stu.gif');
+    background: url('../../assets/index_background_tch.gif');
 
-    span {
-      color: #BC3520;
-      cursor: pointer;
-      margin-left: 60%;
-    }
     .main {
       background-color: #fff;
       margin: 0px auto;
@@ -191,6 +214,15 @@ export default {
       flex-direction: column;
       justify-content: flex-start;
 
+      .drop {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        font-size: 25px;
+        .el-dropdown-link {
+          font-size: 25px;
+        }
+      }
       .name {
         font-size: 30px;
         font-weight: bold;
@@ -219,7 +251,7 @@ export default {
       .exams {
         display: flex;
         flex-direction: column;
-        cursor: pointer;
+        
         .exam {
           display: flex;
           flex-direction: row;
@@ -244,6 +276,7 @@ export default {
             }
           }
           .two {
+            cursor: pointer;
             margin: auto 0px;
             img {
               width: 20px;
@@ -279,10 +312,17 @@ export default {
             .blue {
               color: blue;
             }
+            }
+            .blue {
+              color: grey;
+            }
           }
         }
-      }
     }
+  }
+  i {
+    margin: 0 5px;
+    cursor: pointer;
   }
 }
 </style>

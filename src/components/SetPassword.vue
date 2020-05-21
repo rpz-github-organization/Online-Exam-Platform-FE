@@ -52,7 +52,7 @@ export default {
     };
   },
   methods: {
-    async submitcheck() {
+    async submitcheck() { // 邮箱验证
       try {
         const res = await this.$axios.post(`${this.HOST}/lostPassword/sendEmail`, {
           email: this.email,
@@ -65,7 +65,7 @@ export default {
             offset: 70,
           });
           this.isok = true;
-          const timer = setInterval(() => {
+          const timer = setInterval(() => { // 发送验证码后等待60秒的循环执行更改秒数
             this.sec = this.sec - 1;
             this.code = `${this.sec}S`;
             this.showbtn = false;
@@ -82,7 +82,7 @@ export default {
         console.log(err);
       }
     },
-    async submitCode() {
+    async submitCode() { // 提交验证码
       try {
         const res = await this.$axios.post(`${this.HOST}/lostPassword/checkCode`, {
           email: this.email,
@@ -107,7 +107,7 @@ export default {
         console.log(err);
       }
     },
-    async submitPwd() {
+    async submitPwd() { // 提交新密码
       try {
         if (this.pwd === this.pwdR) {
           if (this.pwd.length >= 8) {

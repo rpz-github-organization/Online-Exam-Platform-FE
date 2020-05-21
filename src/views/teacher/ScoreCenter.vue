@@ -17,6 +17,7 @@
               v-for="(item, index) in stuList"
               :key="item.id"
               class="stu_label"
+              :class="{active:item.active}"
               @click="showStuQues(index)"
             >{{ item.id }} - {{ item.name }}</label>
           </div>
@@ -24,6 +25,10 @@
       </div>
       <div class="right">
         <el-card>
+          <div class="row">
+            <label class="ing">考生：</label>
+            <label class="answer ing">{{ this.id }}</label>
+          </div>
           <div class="ques_list">
             <div class="ques_card" v-for="(item, index) in List" :key="index">
               <el-card>
@@ -78,7 +83,11 @@ export default {
       id: '',
       quesList: [],
       index: 0,
+      timer: '',
     };
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer);
   },
   methods: {
     sessionJudge() {
@@ -118,10 +127,13 @@ export default {
           });
         } else {
           this.$message({
-            message: info.message,
+            message: res.data.message,
             type: 'error',
             offset: 70,
           });
+          this.timer = setTimeout(() => {
+            this.$router.go(-1);
+          }, 2000);
         }
       } catch (err) {
         // console.log(err);
@@ -289,17 +301,20 @@ export default {
         width: 100px;
         bottom: 0;
       }
-      .row {
-        display: flex;
-        flex-direction: row;
-        margin: 15px;
-      }
       .answer {
         font-weight: normal;
         width: 90%;
         margin-top: 3px;
         word-wrap: break-word;
       }
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+      margin: 15px;
+    }
+    .ing {
+      color: red;
     }
   }
   button {

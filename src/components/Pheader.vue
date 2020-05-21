@@ -1,7 +1,7 @@
 <template>
   <div id="pheader" class="flex jy-end">
     <ul class="header_list">
-      <div class="head-text-logo flex jy-center as-center" @click="toIndex">
+      <div class="flex jy-center as-center title" @click="GoIndex">
         <img src="../assets/sicnulogo.jpeg" alt />
         <b>四川师范大学 · SICNU</b>
       </div>
@@ -66,7 +66,14 @@ export default {
     ...mapState(['authLevel']),
   },
   methods: {
-    handleCommand(command) {
+    GoIndex() { // 点击左上角返回主页
+      if (this.authLevel ===0 ) {
+        window.location.href = '/indexStu';
+      } else {
+        window.location.href = '/indexTch';
+      }
+    },
+    handleCommand(command) { // 选择个人中心或退出登录
       if (command === 'modify') {
         if (this.authLevel === 0) {
           window.location.href = '/personalStu';
@@ -83,7 +90,7 @@ export default {
             const info = res.data;
             if (info.code === 200) {
               this.$store.dispatch('set_authLevel', 0);
-              localStorage.setItem('Login', 'false');
+              sessionStorage.setItem('Login', 'false');
               this.$store.dispatch('set_Login', 'false');
               window.location.href = '/';
             } else {
@@ -140,6 +147,9 @@ export default {
       display: inline-block;
       margin-right: 20px;
     }
+  }
+  .title {
+    cursor: pointer;
   }
 }
 

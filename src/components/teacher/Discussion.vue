@@ -12,7 +12,7 @@
       <el-divider></el-divider>
       <div class="ques_row">
         <label class="ques_label">分值:</label>
-        <el-input placeholder="请输入选项" v-model="score" clearable></el-input>
+        <el-input placeholder="请输入分值" v-model="score" clearable></el-input>
       </div>
       <div class="ques_row">
         <label class="ques_label">知识点:</label>
@@ -39,12 +39,12 @@ export default {
       type: Number,
       required: true,
     },
-    ques: {
+    ques: { // 再次编辑题目，父组件传的已出题目的信息
       required: false,
     },
   },
   created() {
-    if (this.ques) {
+    if (this.ques) { // 渲染已出题目数据
       // console.log(this.ques);
       this.question = this.ques.question;
       this.answer = this.ques.answer;
@@ -54,7 +54,7 @@ export default {
     }
   },
   watch: {
-    score(val, oldval) {
+    score(val, oldval) { // 判断小题分值是否变化
       if (val !== oldval) {
         this.isChange = true;
       }
@@ -81,19 +81,8 @@ export default {
       });
       this.$router.push('/');
     },
-    isSubmit() {
-      let res = true;
-      if (!this.question) {
-        res = false;
-      } else if (!this.tag) {
-        res = false;
-      } else if (!this.answer) {
-        res = false;
-      }
-      return res;
-    },
     async getInfo() {
-      if (this.questionid === null) {
+      if (this.questionid === null) { // 当questionid为null，即此题未提交过，调用两个接口
         try {
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
             type: 'Discussion',
@@ -149,7 +138,7 @@ export default {
             });
           }
         }
-      } else if (this.isChange) {
+      } else if (this.isChange) { // 当小题分值变化，调用addQuestionToExam接口
         const quesid = parseInt(this.questionid, 10);
         const scoreN = parseInt(this.score, 10);
         try {
@@ -182,7 +171,7 @@ export default {
             });
           }
         }
-      } else {
+      } else { // 已经出过的题目再次修改，只调用addQuestion
         try {
           const quesid = parseInt(this.questionid, 10);
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
@@ -214,9 +203,30 @@ export default {
         }
       }
     },
+     existNull() { // 判空
+      if (!this.question) {
+        return true;
+      }
+      if (!this.answer) {
+        return true;
+      }
+      if (!this.score) {
+        return true;
+      }
+      return false;
+    },
     async SubmitDiscussion() {
-      console.log(this.answer);
-      if (!this.isSubmit()) {
+        //检查必填项
+      if (this.existNull()) {
+        this.$message({
+          message: '题目内容不完整，请检查！',
+          type: 'error',
+          offset: 70,
+        });
+        return;
+      }
+      // console.log(this.answer);
+      if (!this.tag) {
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

@@ -128,13 +128,6 @@
 <script>
 export default {
   name: 'PersonalStu',
-  mounted() {
-    if (document.getElementById('nav')) {
-      const p = document.getElementById('app');
-      const c = document.getElementById('nav');
-      p.removeChild(c);
-    }
-  },
   data() {
     return {
       Seen: true, // changcard
@@ -229,6 +222,10 @@ export default {
     },
 
     async editStudent() {
+      //检测输入是否为空
+      if (this.inputNull()) {
+        return;
+      }
       // 修改基本信息
       try {
         let sex = '';
@@ -283,6 +280,25 @@ export default {
           });
         }
       }
+    },
+
+    inputNull() {
+      if (this.name == '') {
+        this.$message({
+          message: '姓名不能为空',
+          type: 'error',
+          offset: 70,
+        });
+        return true;
+      } else if (this.phone == '') {
+        this.$message({
+          message: '电话不能为空',
+          type: 'error',
+          offset: 70,
+        });
+        return true;
+      }
+      return false;
     },
 
     async checkPwdCode() {
@@ -555,6 +571,7 @@ export default {
   }
 
   .submit {
+    background: url(../../assets/personal_background_stu.gif);
     button {
       margin-top: 20px;
       color: white;
@@ -568,6 +585,7 @@ export default {
       cursor: pointer;
       outline: none;
       transition: all 0.3s ease;
+      margin-bottom: 20px;
     }
     button:hover {
       box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);

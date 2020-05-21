@@ -73,7 +73,7 @@ require('codemirror/addon/fold/comment-fold.js');
 
 export default {
   name: 'progarmQues',
-  props: {
+  props: {// 父组件传值，index：下标，ProgramQ：编程题，examId：考试id
     index: {
       type: Number,
       required: true,
@@ -138,7 +138,7 @@ export default {
     // console.log(this.ProgramQ);
   },
   watch: {
-    dialogVisible(val) {
+    dialogVisible(val) { // 实时判断运行后的弹框是否关闭，关闭将编译状态等置空
       if (val === false) {
         this.testList = [];
         this.statusList = [];
@@ -153,11 +153,11 @@ export default {
         num: this.index + 1,
       };
       // console.log(this.info);
-      this.$emit('func', this.info);
+      this.$emit('func', this.info); // 学生答题时，实时向父组件传值（父组件统一提交所有答案）
     },
   },
   methods: {
-    sessionJudge() {
+    sessionJudge() { // session判断
       localStorage.setItem('Login', 'false');
       this.$message({
         message: '登录过期，请重新登录',
@@ -166,7 +166,7 @@ export default {
       });
       this.$router.push('/');
     },
-    Question() {
+    Question() { // 渲染获取到的题目
       this.timu = this.ProgramQ.question;
       this.type = this.ProgramQ.type;
       this.tip = this.ProgramQ.tip;
@@ -177,7 +177,7 @@ export default {
       }
       this.stdoutput = this.ProgramQ.output;
     },
-    getTime() {
+    getTime() { // 时间戳转换时间
       const date = new Date();
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
@@ -187,7 +187,7 @@ export default {
       const seconds = date.getSeconds();
       return `${year}/${month}/${day}/  ${hours}:${minutes}:${seconds}`;
     },
-    async submit() {
+    async submit() { // 运行编程题
       // console.log(this.code);
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/judgeProgram`, {
@@ -206,7 +206,7 @@ export default {
               message: '编译错误',
               offset: 70,
             });
-          } else {
+          } else { // 编译成功后的数据渲染
             this.score = info.score;
             // console.log(info);
             this.statusList.push({
@@ -216,8 +216,8 @@ export default {
               language: info.language,
               username: info.username,
               num: info.num,
-            });
-            const testCase = info.test_case_res;
+            }); // 状态数据渲染
+            const testCase = info.test_case_res; // 测试样例数据渲染
             testCase.forEach(item => {
               this.testList.push({
                 number: item.case_num,
@@ -226,9 +226,9 @@ export default {
                 memory: item.memory,
               });
             });
-            this.dialogVisible = true;
+            this.dialogVisible = true; // 渲染弹框
           }
-        } else {
+        } else { // 报错提醒
           this.$message({
             type: 'error',
             message: res.data.message,

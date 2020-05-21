@@ -1,102 +1,99 @@
 <template>
-  <div id="AddQuestion">
-    <div class="left">
-      <el-card>
-        <label class="selectType">选择题</label>
-        <div class="question_list">
-          <div class="question_item" v-for="(item,index) in counterS" :key="index">
-            <label class="question_item">
-              <span @click="JumpTo(index+1, 'counterS')">{{ index+1 }}</span>
+  <div id="back">
+    <div id="AddQuestion">
+      <div class="left">
+        <el-card>
+          <label class="selectType">选择题</label>
+          <div class="question_list">
+            <div class="question_item" v-for="(item,index) in counterS" :key="index">
+              <label class="question_item">
+                <span @click="JumpTo(index+1, 'counterS')">{{ index+1 }}</span>
+              </label>
+            </div>
+            <label class="question_item" @click="AddCount(counterS)">
+              <span>+</span>
             </label>
           </div>
-          <label class="question_item" @click="AddCount(counterS)">
-            <span>+</span>
-          </label>
-        </div>
-        <label class="selectType">判断题</label>
-        <div class="question_list">
-          <div class="question_item" v-for="(item,index) in counterJ" :key="index">
-            <label class="question_item">
-              <span @click="JumpTo(index+1, 'counterJ')">{{ index+1 }}</span>
+          <label class="selectType">判断题</label>
+          <div class="question_list">
+            <div class="question_item" v-for="(item,index) in counterJ" :key="index">
+              <label class="question_item">
+                <span @click="JumpTo(index+1, 'counterJ')">{{ index+1 }}</span>
+              </label>
+            </div>
+            <label class="question_item" @click="AddCount(counterJ)">
+              <span>+</span>
             </label>
           </div>
-          <label class="question_item" @click="AddCount(counterJ)">
-            <span>+</span>
-          </label>
-        </div>
-        <label class="selectType">问答题</label>
-        <div class="question_list">
-          <div class="question_item" v-for="(item,index) in counterD" :key="index">
-            <label class="question_item">
-              <span @click="JumpTo(index+1, 'counterD')">{{ index+1 }}</span>
+          <label class="selectType">问答题</label>
+          <div class="question_list">
+            <div class="question_item" v-for="(item,index) in counterD" :key="index">
+              <label class="question_item">
+                <span @click="JumpTo(index+1, 'counterD')">{{ index+1 }}</span>
+              </label>
+            </div>
+            <label class="question_item" @click="AddCount(counterD)">
+              <span>+</span>
             </label>
           </div>
-          <label class="question_item" @click="AddCount(counterD)">
-            <span>+</span>
-          </label>
-        </div>
-        <label class="selectType">编程题</label>
-        <div class="question_list">
-          <div class="question_item" v-for="(item,index) in counterP" :key="index">
-            <label class="question_item">
-              <span @click="JumpTo(index+1, 'counterP')">{{ index+1 }}</span>
+          <label class="selectType">编程题</label>
+          <div class="question_list">
+            <div class="question_item" v-for="(item,index) in counterP" :key="index">
+              <label class="question_item">
+                <span @click="JumpTo(index+1, 'counterP')">{{ index+1 }}</span>
+              </label>
+            </div>
+            <label class="question_item" @click="AddCount(counterP)">
+              <span>+</span>
             </label>
-          </div>
-          <label class="question_item" @click="AddCount(counterP)">
-            <span>+</span>
-          </label>
-        </div>
-      </el-card>
-    </div>
-    <div class="right">
-      <div v-if="counterS.length > 0 && this.isShow">
-        <el-card class="ques_card">
-          <div class="type_score">
-            <label class="type_title">小题分值</label>
-            <el-input v-model="scoreS" clearable></el-input>
-          </div>
-          <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
-            <label>选择题 No.{{ index+1 }}</label>
-            <single :index="index" :score="scoreS" :ques="Single[index]"></single>
           </div>
         </el-card>
       </div>
-      <div v-if="counterJ.length > 0 && this.isShow">
-        <el-card class="ques_card">
-          <div class="type_score">
-            <label class="type_title">小题分值</label>
-            <el-input v-model="scoreJ" clearable></el-input>
-          </div>
-          <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
-            <label>判断题 No.{{ index+1 }}</label>
-            <judge :index="index" :score="scoreJ" :ques="Judge[index]" />
-          </div>
-        </el-card>
-      </div>
-      <div v-if="counterD.length > 0 && this.isShow">
-        <el-card class="ques_card">
-          <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
-            <label>讨论题 No.{{ index+1 }}</label>
-            <discussion :index="index" :ques="Discussion[index]" />
-          </div>
-        </el-card>
-      </div>
-      <div v-if="counterP.length > 0 && this.isShow">
-        <el-card class="ques_card">
-          <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
-            <label>编程题 No.{{ index+1 }}</label>
-            <program :index="index" :ques="Program[index]" />
-          </div>
-        </el-card>
-      </div>
-      <div class="button_row">
-        <el-button type="success" plain @click="goToInfo()">点击分发试卷</el-button>
-        <!-- <el-button type="primary" plain @click="() => { $router.push('/configPDF') }">点击上传 PDF 配卷</el-button> -->
-      </div>
-      <div class="warn_tip">
-        <span>
-          <b>注意：只有分发了试卷，学生才可以参加考试</b>
-        </span>
+      <div class="right">
+        <div v-if="counterS.length > 0 && this.isShow">
+          <el-card class="ques_card">
+            <div class="type_score">
+              <label class="type_title">小题分值</label>
+              <el-input v-model="scoreS" clearable></el-input>
+            </div>
+            <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
+              <label>选择题 No.{{ index+1 }}</label>
+              <single :index="index" :score="scoreS" :ques="Single[index]" @deleteSingle="del"></single>
+            </div>
+          </el-card>
+        </div>
+        <div v-if="counterJ.length > 0 && this.isShow">
+          <el-card class="ques_card">
+            <div class="type_score">
+              <label class="type_title">小题分值</label>
+              <el-input v-model="scoreJ" clearable></el-input>
+            </div>
+            <div v-for="(item,index) in counterJ" :key="index" v-bind:id="('counterJ'+(index+1))">
+              <label>判断题 No.{{ index+1 }}</label>
+              <judge :index="index" :score="scoreJ" :ques="Judge[index]" />
+            </div>
+          </el-card>
+        </div>
+        <div v-if="counterD.length > 0 && this.isShow">
+          <el-card class="ques_card">
+            <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
+              <label>讨论题 No.{{ index+1 }}</label>
+              <discussion :index="index" :ques="Discussion[index]" />
+            </div>
+          </el-card>
+        </div>
+        <div v-if="counterP.length > 0 && this.isShow">
+          <el-card class="ques_card">
+            <div v-for="(item,index) in counterP" :key="index" v-bind:id="('counterP'+(index+1))">
+              <label>编程题 No.{{ index+1 }}</label>
+              <program :index="index" :ques="Program[index]" />
+            </div>
+          </el-card>
+        </div>
+        <div class="button_row">
+          <el-button type="success" plain @click="goToInfo()">点击完成出题</el-button>
+          <!-- <el-button type="primary" plain @click="() => { $router.push('/configPDF') }">点击上传 PDF 配卷</el-button> -->
+        </div>
       </div>
     </div>
   </div>
@@ -167,6 +164,13 @@ export default {
   },
 
   methods: {
+    // del(index) {
+    //   for(let i = 0; i<this.counterS.length; i += 1) {
+    //     if (i === index) {
+    //       this.counterS.splice(i, 1);
+    //     }
+    //   }
+    // },
     AddCount(counter) {
       counter.push('a');
     },
@@ -179,7 +183,78 @@ export default {
       });
     },
     goToInfo() {
-      window.location.href = '/ExamInfo';
+      if (
+        !(
+          this.counterS.length ||
+          this.counterJ.length ||
+          this.counterD.length ||
+          this.counterP.length
+        )
+      ) {
+        this.$confirm('本考试无题目，请选择您要进行的操作', '提示', {
+          confirmButtonText: '删除考试',
+          cancelButtonText: '继续出题',
+          type: 'warning',
+        })
+          .then(async () => {
+            try {
+              const res = await this.$axios.post(`${this.HOST}/exam/delExam`, {
+                exam_id: this.examId,
+              });
+              const info = res.data;
+              if (info.code === 200) {
+                this.$message({
+                  type: 'success',
+                  offset: 70,
+                  message: '删除成功',
+                });
+                window.location.href = '/AddExam';
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              offset: 70,
+              message: '已取消',
+            });
+          });
+      } else if (this.scoreS == '0' || this.scoreJ == '0') {
+        // console.log("S",this.scoreS,"J",this.scoreJ);
+        this.$message({
+          type: 'error',
+          offset: 70,
+          message: '请为小题设置分数！',
+        });
+        return;
+      } else {
+        if (this.scoreS) {
+          this.uploadScore('Single', this.scoreS);
+        }
+        if (!this.scoreJ) {
+          this.uploadScore('Judge', this.scoreJ);
+        }
+        window.location.href = '/TeaCourseDetail';
+      }
+    },
+    // 上传大题的每个小题的分值
+    async uploadScore(type, score) {
+      try {
+        const res = await this.$axios.post(
+          `${this.HOST}/exam/modifyQuestionsScore`,
+          {
+            exam_id: this.examId,
+            type: type,
+            score: parseInt(score),
+          }
+        );
+        const info = res.data;
+        console.log(info);
+      } catch (err) {
+        console.log(err);
+      }
     },
     sessionJudge() {
       localStorage.setItem('Login', 'false');
@@ -196,14 +271,26 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        // console.log(info);
+        console.log(info);
         if (res.data.code === 200) {
-          this.Single = info.single;
-          this.Judge = info.judge;
-          this.Discussion = info.discussion;
-          this.Program = info.program;
+          if (info.single) {
+            this.Single = info.single;
+          }
+          if (info.judge) {
+            this.Judge = info.judge;
+          }
+          if (info.program) {
+            this.Program = info.program;
+          }
+          if (info.discussion) {
+            this.Discussion = info.discussion;
+          }
           this.scoreS = `${info.singleScore}`;
           this.scoreJ = `${info.judgeScore}`;
+          // console.log("pro",this.Program);
+
+          // console.log("S:",this.scoreS);
+          // console.log("J",this.scoreJ);
           this.Count();
           this.isShow = true;
         } else {
@@ -253,81 +340,85 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#AddQuestion {
-  margin-top: 60px;
-  padding-top: 40px;
+#back {
+  height: 100%;
   background: url(../../assets/index_background_tch.gif);
-  display: flex;
-  .left {
-    width: 20%;
-    height: 100%;
-    margin-left: 5%;
-    position: fixed;
+  #AddQuestion {
+    margin-top: 60px;
+    padding-top: 40px;
+    background: url(../../assets/index_background_tch.gif);
+    display: flex;
+    .left {
+      width: 20%;
+      // height: 80%;
+      margin-left: 5%;
+      position: fixed;
 
-    .selectType {
-      background-color: #5379a563;
-      padding: 5px 10px;
-      margin-bottom: 30%;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-    .question_list {
-      margin: 10% 0 30% 0;
-      flex-wrap: wrap;
-      display: flex;
-    }
-
-    .question_item {
-      margin: 4px;
-      align-items: center;
-      justify-content: center;
-      height: 24px;
-      width: 24px;
-      min-width: 24px;
-      text-align: center;
-      line-height: 24px;
-      border-radius: 2px;
-      background: #f0f0f0;
-    }
-    .active_item {
-      box-shadow: 0 0 0 2px #695de0;
-    }
-  }
-  .right {
-    width: 60%;
-    height: 100%;
-    margin-left: 30%;
-
-    .ques_card {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 5%;
-
-      .type_score {
+      .selectType {
+        background-color: #5379a563;
+        padding: 5px 10px;
+        margin-bottom: 30%;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .question_list {
+        margin: 10% 0 30% 0;
+        flex-wrap: wrap;
         display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        width: 20%;
       }
-      .type_title {
-        width: 80%;
-        text-align: left;
-        margin: 5% 5px;
-      }
-      label {
-        color: #8590a6;
-      }
-    }
-    .button_row {
-      margin-bottom: 10px;
 
-      * {
-        margin: 0 10px;
+      .question_item {
+        margin: 4px;
+        align-items: center;
+        justify-content: center;
+        height: 24px;
+        width: 24px;
+        min-width: 24px;
+        text-align: center;
+        line-height: 24px;
+        border-radius: 2px;
+        background: #f0f0f0;
+      }
+      .active_item {
+        box-shadow: 0 0 0 2px #695de0;
       }
     }
-    .warn_tip {
-      margin-bottom: 30px;
-      color: red;
+    .right {
+      width: 60%;
+      height: 100%;
+      margin-left: 30%;
+
+      .ques_card {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 5%;
+
+        .type_score {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          width: 200px;
+        }
+        .type_title {
+          width: 200px;
+          text-align: left;
+          margin: 5% 5px;
+        }
+        label {
+          color: #8590a6;
+        }
+      }
+      .button_row {
+        margin-bottom: 10px;
+
+        * {
+          margin: 0 10px;
+        }
+      }
+      .warn_tip {
+        margin-bottom: 30px;
+        color: red;
+      }
     }
   }
 }

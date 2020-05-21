@@ -63,7 +63,6 @@ export default {
           value: 'false',
         },
       ],
-
       question: '',
       answer: '',
       tea_id: '',
@@ -89,19 +88,19 @@ export default {
       });
       this.$router.push('/');
     },
-    isSubmit() {
-      let res = true;
-      if (!this.question) {
-        res = false;
-      } else if (!this.tag) {
-        res = false;
-      } else if (!this.answer) {
-        res = false;
-      }
-      return res;
-    },
+    // isSubmit() {
+    //   let res = true;
+    //   if (!this.question) {
+    //     res = false;
+    //   } else if (!this.tag) {
+    //     res = false;
+    //   } else if (!this.answer) {
+    //     res = false;
+    //   }
+    //   return res;
+    // },
     async getInfo() {
-      if (this.questionid === null) {
+      if (this.questionid === null) { // 当questionid为null，即此题未提交过，调用两个接口
         try {
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
             type: 'Judge',
@@ -160,7 +159,7 @@ export default {
             });
           }
         }
-      } else if (this.isChange) {
+      } else if (this.isChange) { // 当小题分值变化，调用addQuestionToExam接口
         const quesid = parseInt(this.questionid, 10);
         const scoreN = parseInt(this.score, 10);
         // console.log(this.questionid);
@@ -194,7 +193,7 @@ export default {
             });
           }
         }
-      } else {
+      } else { // 已经出过的题目再次修改，只调用addQuestion
         try {
           const quesid = parseInt(this.questionid, 10);
           const res = await this.$axios.post(`${this.HOST}/exam/addQuestion`, {
@@ -226,9 +225,27 @@ export default {
         }
       }
     },
+    existNull() {
+      if (!this.question) {
+        return true;
+      }
+      if (!this.answer) {
+        return true;
+      }
+      return false;
+    },
     async SubmitJudge() {
-      console.log(this.questionid);
-      if (!this.isSubmit()) {
+      //检查必填项
+      if (this.existNull()) {
+        this.$message({
+          message: '题目内容不完整，请检查！',
+          type: 'error',
+          offset: 70,
+        });
+        return;
+      }
+      // console.log(this.questionid);
+      if (!this.tag) {
         this.$alert('本道题还有未填写部分，您确定要提交吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

@@ -147,11 +147,11 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   console.log(`router to: ${to.path}, from: ${from.path}`)
-  if (localStorage.getItem('Login') === 'true' && to.path === '/') {
+  if (sessionStorage.getItem('Login') === 'true' && to.path === '/') {
     next(false)
   }
   if (to.matched.some(record => record.meta.requireAuth)) { // 判断该路由是否需要登录权限
-    if (localStorage.getItem('Login') === 'true') {
+    if (sessionStorage.getItem('Login') === 'true') {
       next();
     } else {
       next({

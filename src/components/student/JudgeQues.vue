@@ -22,7 +22,7 @@
 <script>
 export default {
   name: 'singleQues',
-  props: {
+  props: {// 父组件传值，index：下标，JudgeQ：判断题
     index: {
       type: Number,
       required: true,
@@ -49,12 +49,12 @@ export default {
         type: 'Judge',
         num: this.index + 1,
       };
-      this.$emit('func', this.info);
+      this.$emit('func', this.info); // 学生答题时，实时向父组件传值（父组件统一提交所有答案）
     },
   },
   methods: {
     Question() {
-      this.timu = this.JudgeQ.question;
+      this.timu = this.JudgeQ.question; // 渲染获取到的题目
     },
   },
 };

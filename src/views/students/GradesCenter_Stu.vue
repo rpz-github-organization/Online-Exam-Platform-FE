@@ -13,7 +13,8 @@
                 </div>
                 <div class="time">{{ exam.begin_time }}</div>
               </div>
-              <div class="two">考试课程：{{exam.co_name}} 任课教师：{{exam.tea_name}}</div>
+              <div class="two">任课教师：{{exam.tea_name}}老师</div>
+              <div class="two">考试课程：{{exam.co_name}}</div>
               <div class="two">
                 <div>考试时长：{{exam.last_time}}分钟</div>
                 <div class="green" style="cursor:pointer" @click.stop="toCheckGrades(exam.exam_id)">
