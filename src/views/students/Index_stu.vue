@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      nowTime: new Date().toLocaleString("chinese", { hour12: false }),
+      nowTime: new Date().toLocaleString('chinese', { hour12: false }),
       name: '川师',
       greeting: '你好！',
       Seen: true,
@@ -181,8 +181,8 @@ export default {
       margin-top: 15px;
       margin-right: 50px;
       width: 170px;
-      height: 230px;
-      padding: 20px;
+      height: 300px;
+      padding: 14px;
       flex-shrink: 0;
       background-color: rgba(255, 251, 251, 0.87);
 

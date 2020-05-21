@@ -28,7 +28,12 @@
           <el-button @click="AddExam()" class="button_sub">+ 添加考试</el-button>
         </div>
         <div class="exams">
-          <div class="exam" v-for="(exam,index) in exams" :key="index">
+          <div
+            class="exam"
+            v-for="(exam,index) in exams"
+            :key="index"
+            @click="goToExam(exam.exam_id)"
+          >
             <div class="one">
               <div class="name">{{exam.exam_name}}</div>
               <div class="time">
@@ -37,7 +42,7 @@
                 考试时长：{{exam.last_time}} 分钟
               </div>
             </div>
-            <div class="two" @click="goToExam(exam.exam_id)">
+            <div class="two">
               <div class="orange" v-if="exam.status == 0">
                 <img src="../../assets/exam_status/orange.png" />考试未开始
               </div>
@@ -86,7 +91,7 @@ export default {
       });
       this.$router.push('/');
     },
-    GoIndex () {
+    GoIndex() {
       // this.$router.go(-1);
       window.location.href = '/IndexTch';
     },
@@ -135,41 +140,43 @@ export default {
       this.$confirm('您确定要退课?', '确认', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async () => {
-        try {
-          const res = await this.$axios.post(`${this.HOST}/course/remove`, {
-            co_id: this.coId,
-            tea_id: this.uid,
-          });
-          const info = res.data;
-          if (info.code === 200) {
-            this.$message({
-              message: '退课成功',
-              type: 'success',
-              offset: 70,
+        type: 'warning',
+      })
+        .then(async () => {
+          try {
+            const res = await this.$axios.post(`${this.HOST}/course/remove`, {
+              co_id: this.coId,
+              tea_id: this.uid,
             });
-            window.location.href = '/indexTch';
-          } else {
+            const info = res.data;
+            if (info.code === 200) {
+              this.$message({
+                message: '退课成功',
+                type: 'success',
+                offset: 70,
+              });
+              window.location.href = '/indexTch';
+            } else {
+              this.$message({
+                message: info.message,
+                type: 'error',
+                offset: 70,
+              });
+            }
+          } catch (err) {
             this.$message({
-              message: info.message,
+              message: '系统异常',
               type: 'error',
               offset: 70,
             });
           }
-        } catch (err) {
+        })
+        .catch(() => {
           this.$message({
-            message: '系统异常',
-            type: 'error',
-            offset: 70,
+            type: 'info',
+            message: '已取消操作',
           });
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消操作'
-        });          
-      });
+        });
     },
     timestamp() {
       this.exams.forEach(item => {
@@ -251,7 +258,7 @@ export default {
       .exams {
         display: flex;
         flex-direction: column;
-        
+
         .exam {
           display: flex;
           flex-direction: row;
@@ -261,6 +268,7 @@ export default {
           box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
           margin-bottom: 10px;
           padding: 10px 20px;
+          cursor: pointer;
 
           .one {
             display: flex;
@@ -312,12 +320,12 @@ export default {
             .blue {
               color: blue;
             }
-            }
-            .blue {
-              color: grey;
-            }
+          }
+          .blue {
+            color: grey;
           }
         }
+      }
     }
   }
   i {
