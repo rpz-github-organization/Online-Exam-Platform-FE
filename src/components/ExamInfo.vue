@@ -95,7 +95,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        console.log(info);
+        // console.log(info);
         this.isHand = info.is_distribute;
         this.examName = info.exam_name;
         this.stuN = info.stu_number;
@@ -116,7 +116,7 @@ export default {
         }
         this.startTime = time;
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         // if (err.response.status === 401) {
         //   this.sessionJudge();
         // } else {

@@ -96,7 +96,7 @@ export default {
           exam_id: this.examId,
         });
         const info = res.data.data;
-        console.log(info);
+        // console.log(info);
         if (res.data.code === 200) {
           this.stuAnswer = info.stuInfo;
           const ques = info.question;
@@ -124,7 +124,7 @@ export default {
           });
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         this.$message({
           message: '系统异常',
           type: 'error',  

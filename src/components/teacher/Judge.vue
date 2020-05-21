@@ -118,7 +118,7 @@ export default {
             const scoreN = parseInt(this.score, 10);
             // console.log(this.questionid);
             try {
-              console.log(this.examId);
+              // console.log(this.examId);
               const response = await this.$axios.post(
                 `${this.HOST}/exam/addQuestionToExam`,
                 {

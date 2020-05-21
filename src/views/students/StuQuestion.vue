@@ -344,7 +344,7 @@ export default {
           data: this.answerList,
           exam_id: this.examId,
         });
-        console.log(this.answerList);
+        // console.log(this.answerList);
         const info = res.data;
         // console.log(info);
         if (info.code === 200) {

@@ -91,7 +91,7 @@
       </div>
       <div class="button_row">
         <el-button type="success" plain @click="goToInfo()">点击分发试卷</el-button>
-        <el-button type="primary" plain @click="() => { $router.push('/configPDF') }">点击上传 PDF 配卷</el-button>
+        <!-- <el-button type="primary" plain @click="() => { $router.push('/configPDF') }">点击上传 PDF 配卷</el-button> -->
       </div>
       <div class="warn_tip">
         <span>
@@ -123,7 +123,7 @@ export default {
   },
   beforeMount() {
     const url = document.referrer;
-    console.log(url);
+    // console.log(url);
     if (url.search('/ExamInfo') !== -1) {
       this.GetWhole();
     } else {

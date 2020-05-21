@@ -58,7 +58,7 @@ export default {
   },
   created() {
     this.Question();
-    console.log(this.SingleQ);
+    // console.log(this.SingleQ);
   },
   watch: {
     answer(val) {

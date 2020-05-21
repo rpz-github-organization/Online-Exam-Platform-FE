@@ -208,7 +208,7 @@ export default {
             });
           } else {
             this.score = info.score;
-            console.log(info);
+            // console.log(info);
             this.statusList.push({
               date: this.getTime(),
               status: info.status,

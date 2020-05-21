@@ -5,8 +5,8 @@ module.exports = {
   },
   extends: ['plugin:vue/essential'],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // 'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // 'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'linebreak-style': [0, 'error', 'windows'],
     'no-unused-vars': 'warn', // 把该条提示信息转换成警告信息
   },
