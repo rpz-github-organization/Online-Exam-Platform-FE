@@ -128,17 +128,8 @@ export default {
   },
   methods: {
     GoBack() { // 返回
-      this.$router.go(-1);
-      // window.location.href = '/IndexTch';
-    },
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
+      // this.$router.go(-1);
+      window.location.href = '/IndexTch';
     },
     // 删除试卷
     DeleteExam() {

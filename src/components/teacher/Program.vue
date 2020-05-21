@@ -129,15 +129,6 @@ export default {
     };
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
-    },
     Addstd() { // 添加样例
       this.answer_input.push('');
       this.answer_output.push('');

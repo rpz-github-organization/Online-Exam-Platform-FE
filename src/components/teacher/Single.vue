@@ -104,15 +104,6 @@ export default {
     },
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
-    },
     // 向后台请求数据
     async getInfo() {
       if (this.questionid === null) {

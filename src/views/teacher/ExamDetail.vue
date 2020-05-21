@@ -39,7 +39,7 @@
           <div class="label_row">
             <span>编程题</span>
           </div>
-          <div v-for="(item, index) in Judge" :key="item.question_id" class="ques_row">
+          <div v-for="(item, index) in Program" :key="item.question_id" class="ques_row">
             <span class="row">{{ index + 1 }}.{{ item.question }}</span>
           </div>
         </div>
@@ -73,15 +73,6 @@ export default {
     this.GetWhole();
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
-    },
     async GetWhole() {
       try {
         const res = await this.$axios.post(`${this.HOST}/exam/getWholeExam`, {

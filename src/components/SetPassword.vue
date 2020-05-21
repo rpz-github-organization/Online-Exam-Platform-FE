@@ -65,18 +65,7 @@ export default {
             offset: 70,
           });
           this.isok = true;
-          const timer = setInterval(() => { // 发送验证码后等待60秒的循环执行更改秒数
-            this.sec = this.sec - 1;
-            this.code = `${this.sec}S`;
-            this.showbtn = false;
-            if (this.sec === 0) {
-              clearInterval(timer);
-              this.sec = 60;
-              this.code = `${this.sec}S`;
-              this.showbtn = true;
-              this.isok = false;
-            }
-          }, 1000);
+          this.interval();
         }
       } catch (err) {
         console.log(err);

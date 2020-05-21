@@ -17,20 +17,11 @@
           <li v-if="authLevel===0">
             <el-link class="black-hover-bold" type="info" href="/SelectCourse">选课中心</el-link>
           </li>
-          <!-- <li v-else-if="authLevel>0 && authLevel<=99">
-          <el-link type="info">课程管理</el-link>
-          </li>-->
           <li v-if="authLevel===0">
             <el-link class="black-hover-bold" type="info" href="/GradesCenter_Stu">成绩中心</el-link>
           </li>
           <li v-if="authLevel>0 && authLevel<=99">
             <el-link class="black-hover-bold" type="info" href="/GradesCenter_tch">课程成绩中心</el-link>
-          </li>
-          <!-- <li v-if="authLevel===0">
-          <el-link type="info">错题本</el-link>
-          </li>-->
-          <li v-if="authLevel===99">
-            <el-link class="black-hover-bold" type="info">权限管理</el-link>
           </li>
         </ul>
         <li class="user_photo" @click.stop="handlemenu">

@@ -72,15 +72,6 @@ export default {
     };
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
-    },
     async getInfo() {
       if (this.questionid === null) { // 当questionid为null，即此题未提交过，调用两个接口
         try {

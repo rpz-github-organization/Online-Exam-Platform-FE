@@ -11,8 +11,10 @@ import store from './store';
 import 'element-ui/lib/theme-chalk/index.css';
 
 import './common.less';
+import common from './common.js';
 
 Vue.use(codemirror);
+Vue.use(common);
 
 Vue.use(ElementUI, { zIndex: 1000 });
 Vue.prototype.$axios = axios;

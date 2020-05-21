@@ -86,7 +86,7 @@ export default {
       });
       this.$router.push('/');
     },
-    async getStuNameAndSex() {
+    async getStuNameAndSex() { // 获取学生名字和性别
       try {
         const res = await this.$axios.get(
           `${this.HOST}/PersonalData/getStudent`,
@@ -117,7 +117,7 @@ export default {
         }
       }
     },
-    async getStuDoneExamInfo() {
+    async getStuDoneExamInfo() { // 获取学生已经参加过的考试
       try {
         const res = await this.$axios.post(
           `${this.HOST}/exam/getStuScoreInfo`,
@@ -164,26 +164,26 @@ export default {
         this.showPage();
       }
     },
-    upPage() {
+    upPage() { // 上一页
       if (this.start !== 0) {
         this.start -= 5;
         this.nowpage -= 1;
         this.showPage();
       }
     },
-    downPage() {
+    downPage() { // 下一页
       if (this.nowpage !== this.totalpage) {
         this.start += 5;
         this.nowpage += 1;
         this.showPage();
       }
     },
-    firstPage() {
+    firstPage() { // 跳转到首页
       this.start = 0;
       this.nowpage = 1;
       this.showPage();
     },
-    lastPage() {
+    lastPage() { // 跳转到尾页
       this.start = (this.totalpage - 1) * 5;
       this.nowpage = this.totalpage;
       this.showPage();

@@ -130,17 +130,7 @@ export default {
                 type: 'success',
                 offset: 70,
               });
-              const timer = setInterval(() => {
-                this.sec = this.sec - 1;
-                this.code = `${this.sec}S`;
-                this.showbtn = false;
-                if (this.sec === 0) {
-                  clearInterval(timer);
-                  this.sec = 60;
-                  this.code = `${this.sec}S`;
-                  this.showbtn = true;
-                }
-              }, 1000);
+              this.interval();
             } else {
               this.$message({
                 message: info.message,
@@ -155,17 +145,7 @@ export default {
             });
             const info = res.data;
             if (info.code === 200) {
-              const timer = setInterval(() => {
-                this.sec = this.sec - 1;
-                this.code = `${this.sec}S`;
-                this.showbtn = false;
-                if (this.sec === 0) {
-                  clearInterval(timer);
-                  this.sec = 60;
-                  this.code = `${this.sec}S`;
-                  this.showbtn = true;
-                }
-              }, 1000);
+              this.interval();
             } else {
               this.$message({
                 message: '发送失败',

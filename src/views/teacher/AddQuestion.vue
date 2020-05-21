@@ -58,7 +58,7 @@
             </div>
             <div v-for="(item,index) in counterS" :key="index" v-bind:id="('counterS'+(index+1))">
               <label>选择题 No.{{ index+1 }}</label>
-              <single :index="index" :score="scoreS" :ques="Single[index]" @deleteSingle="del"></single>
+              <single :index="index" :score="scoreS" :ques="Single[index]"></single>
             </div>
           </el-card>
         </div>
@@ -164,13 +164,6 @@ export default {
   },
 
   methods: {
-    // del(index) {
-    //   for(let i = 0; i<this.counterS.length; i += 1) {
-    //     if (i === index) {
-    //       this.counterS.splice(i, 1);
-    //     }
-    //   }
-    // },
     AddCount(counter) {
       counter.push('a');
     },
