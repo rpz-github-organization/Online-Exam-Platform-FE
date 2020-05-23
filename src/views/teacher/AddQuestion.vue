@@ -229,7 +229,7 @@ export default {
         if (!this.scoreJ) {
           this.uploadScore('Judge', this.scoreJ);
         }
-        window.location.href = '/TeaCourseDetail';
+        window.location.href = '/ExamInfo';
       }
     },
     // 上传大题的每个小题的分值
