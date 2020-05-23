@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h2 v-if="NoExams">最近没有正在进行中的考试哦！</h2>
-    <ul v-for="(exam,index) in exams" :key="index" class="middle">
+    <h2 v-if="this.onExamInfo_All.length === 0">最近没有正在进行中的考试哦！</h2>
+    <ul v-for="(exam,index) in onExamInfo_All.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+    :key="index"
+    class="middle">
       <li id="exam">
         <div class="one" @click.stop="toDetail(exam.exam.exam_id)">
           <div class="name" :class="{ yescolor: exam.exam.yes }">
@@ -32,12 +34,15 @@
         </div>
       </li>
     </ul>
-    <div class="buttons" v-if="pagerSeen">
-      <button @click="firstPage" class="changepage" v-if="nowpage!=1">首页</button>
-      <button @click="upPage" class="changepage">上一页</button>
-      <div class="text">当前第 {{ nowpage }} 页 ，共 {{ totalpage }} 页</div>
-      <button @click="downPage" class="changepage">下一页</button>
-      <button @click="lastPage" class="changepage" v-if="nowpage!=totalpage">末页</button>
+    <div class="page" v-if="this.onExamInfo_All.length !== 0">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
+        layout="prev, pager, next, jumper"
+        :total="totalCount">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -55,26 +60,21 @@ export default {
 
   data() {
     return {
-      exams: [],
       exam_num: '',
       start: 0,
-      nowpage: 1,
-      totalpage: '',
-      pagerSeen: false,
+      pageSize: 5,
+      currentPage: 1,
+      totalCount: 0,
       onExamInfo_All: [],
-      NoExams: false,
     };
   },
 
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
+    handleCurrentChange (val) {
+      this.currentPage = val;
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`);
     },
     async getStunoExamInfo() {
       try {
@@ -156,50 +156,10 @@ export default {
           this.onExamInfo_All.push(item);
         });
       }
-      this.pager();
-      this.showPage();
-      this.check();
+      this.count();
     },
-    upPage() {
-      if (this.start !== 0) {
-        this.start -= 5;
-        this.nowpage -= 1;
-        this.showPage();
-      }
-    },
-    downPage() {
-      if (this.nowpage !== this.totalpage) {
-        this.start += 5;
-        this.nowpage += 1;
-        this.showPage();
-      }
-    },
-    firstPage() {
-      this.start = 0;
-      this.nowpage = 1;
-      this.showPage();
-    },
-    lastPage() {
-      this.start = (this.totalpage - 1) * 5;
-      this.nowpage = this.totalpage;
-      this.showPage();
-    },
-    pager() {
-      if (this.onExamInfo_All) {
-        let exam_num = this.onExamInfo_All.length;
-        if (exam_num <= 5) {
-        } else {
-          if (exam_num % 5 == 0) exam_num -= 1; // 避免页数为5的倍数时影响下一步
-          this.totalpage = parseInt(exam_num / 5) + 1; // 判断页数
-          this.pagerSeen = true;
-        }
-      }
-    },
-    // 控制显示的exams
-    showPage() {
-      this.exams = this.onExamInfo_All.slice(this.start, this.start + 5);
-      // console.log(this.onExamInfo_All);
-      scrollTo(0, 0);
+    count() {
+      this.totalCount = this.onExamInfo_All.length;
     },
     toDetail(examId) {
       this.$store.dispatch('set_examId', examId);
@@ -209,11 +169,6 @@ export default {
       this.$store.dispatch('set_examId', examId);
       // console.log(examId);
       window.location.href = '/StuExamGrades';
-    },
-    check() {
-      if (this.exams == '') {
-        this.NoExams = true;
-      }
     },
     changeTime(sj) {
       const date = new Date(sj); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000

@@ -1,7 +1,10 @@
 <template>
   <div>
     <h2 v-if="NoExams">最近没有已完成的考试哦！</h2>
-    <ul v-for="(exam,index) in exams" :key="index" class="middle">
+    <ul
+    v-for="(exam,index) in passExamInfo_All.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+    :key="index"
+    class="middle">
       <li id="exam">
         <div class="one" @click.stop="toDetail(exam.exam.exam_id)">
           <div class="name" :class="{ yescolor: exam.exam.yes }">
@@ -32,12 +35,15 @@
         </div>
       </li>
     </ul>
-    <div class="buttons" v-if="pagerSeen">
-      <button @click="firstPage" class="changepage" v-if="nowpage!=1">首页</button>
-      <button @click="upPage" class="changepage">上一页</button>
-      <div class="text">当前第 {{ nowpage }} 页 ，共 {{ totalpage }} 页</div>
-      <button @click="downPage" class="changepage">下一页</button>
-      <button @click="lastPage" class="changepage" v-if="nowpage!=totalpage">末页</button>
+    <div class="page" v-if="this.passExamInfo_All.length !== 0">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
+        layout="prev, pager, next, jumper"
+        :total="totalCount">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -54,25 +60,21 @@ export default {
 
   data() {
     return {
-      exams: [],
       passExamInfo_All: [],
       exam_num: '',
       start: 0,
-      nowpage: 1,
-      totalpage: '',
-      pagerSeen: false,
+      pageSize: 5,
+      currentPage: 1,
+      totalCount: 0,
       NoExams: false,
     };
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
+    handleCurrentChange (val) {
+      this.currentPage = val;
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`);
     },
     async getStuNoExamInfo() {
       try {
@@ -139,7 +141,6 @@ export default {
       if (yesexam !== null) {
         yesexam.forEach(item => {
           item.exam.begin_time = this.changeTime(item.exam.begin_time);
-          console.log(item.exam.begin_time);
           item.exam.yes = true;
           this.passExamInfo_All.push(item);
         });
@@ -151,49 +152,10 @@ export default {
           this.passExamInfo_All.push(item);
         });
       }
-      this.pager();
-      this.showPage();
-      this.check();
+      this.count();
     },
-    upPage() {
-      if (this.start !== 0) {
-        this.start -= 5;
-        this.nowpage -= 1;
-        this.showPage();
-      }
-    },
-    downPage() {
-      if (this.nowpage !== this.totalpage) {
-        this.start += 5;
-        this.nowpage += 1;
-        this.showPage();
-      }
-    },
-    firstPage() {
-      this.start = 0;
-      this.nowpage = 1;
-      this.showPage();
-    },
-    lastPage() {
-      this.start = (this.totalpage - 1) * 5;
-      this.nowpage = this.totalpage;
-      this.showPage();
-    },
-    pager() {
-      if (this.passExamInfo_All) {
-        let exam_num = this.passExamInfo_All.length;
-        if (exam_num <= 5) {
-        } else {
-          if (exam_num % 5 == 0) exam_num -= 1; // 避免页数为5的倍数时影响下一步
-          this.totalpage = parseInt(exam_num / 5) + 1; // 判断页数
-          this.pagerSeen = true;
-        }
-      }
-    },
-    showPage() {
-      this.exams = this.passExamInfo_All.slice(this.start, this.start + 5);
-      // console.log(this.passExamInfo_All);
-      scrollTo(0, 0);
+    count() {
+      this.totalCount = this.passExamInfo_All.length;
     },
     toDetail(examId) {
       this.$store.dispatch('set_examId', examId);
@@ -202,11 +164,6 @@ export default {
     toCheckGrades(examId) {
       this.$store.dispatch('set_examId', examId);
       window.location.href = '/StuExamGrades';
-    },
-    check() {
-      if (this.exams == '') {
-        this.NoExams = true;
-      }
     },
     changeTime(sj) {
       const date = new Date(sj); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
@@ -314,24 +271,6 @@ export default {
       height: 50px;
       line-height: 50px;
       font-size: 16px;
-    }
-
-    .changepage {
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 20px;
-      margin: 10px 20px;
-      width: 80px;
-      height: 30px;
-      font-size: 15px;
-      background-color: #5379a5c4;
-      cursor: pointer;
-      outline: none;
-      transition: all 0.3s ease;
-    }
-    .changepage:hover {
-      box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
     }
   }
 }
