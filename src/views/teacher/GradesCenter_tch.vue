@@ -27,6 +27,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPage"
+              :page-sizes="[5, 10, 20, 30, 50]"
               :page-size="pageSize"
               layout="prev, pager, next, jumper"
               :total="totalCount">
@@ -68,7 +69,7 @@ export default {
       this.currentPage = val;
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
     },
     //获取所有已打分的exam
     async getInfo() {
