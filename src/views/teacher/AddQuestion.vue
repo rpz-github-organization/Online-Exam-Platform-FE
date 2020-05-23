@@ -189,46 +189,61 @@ export default {
           cancelButtonText: '继续出题',
           type: 'warning',
         })
-          .then(async () => {
-            try {
-              const res = await this.$axios.post(`${this.HOST}/exam/delExam`, {
-                exam_id: this.examId,
-              });
-              const info = res.data;
-              if (info.code === 200) {
-                this.$message({
-                  type: 'success',
-                  offset: 70,
-                  message: '删除成功',
-                });
-                window.location.href = '/AddExam';
-              }
-            } catch (err) {
-              console.log(err);
-            }
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              offset: 70,
-              message: '已取消',
+        .then(async () => {
+          try {
+            const res = await this.$axios.post(`${this.HOST}/exam/delExam`, {
+              exam_id: this.examId,
             });
+            const info = res.data;
+            if (info.code === 200) {
+              this.$message({
+                type: 'success',
+                offset: 70,
+                message: '删除成功',
+              });
+              window.location.href = '/AddExam';
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            offset: 70,
+            message: '已取消',
           });
-      } else if (this.scoreS == '0' || this.scoreJ == '0') {
-        // console.log("S",this.scoreS,"J",this.scoreJ);
+        });
+      } else {
+        this.judgeScore();
+      }
+    },
+    judgeScore() {
+      let res1 = true;
+      let res2 = true;
+      if (this.counterS.length !== 0 && this.scoreS === '') {
         this.$message({
           type: 'error',
           offset: 70,
-          message: '请为小题设置分数！',
+          message: '请为选择题小题设置分数！',
         });
-        return;
+        res1 = false;
       } else {
-        if (this.scoreS) {
-          this.uploadScore('Single', this.scoreS);
-        }
-        if (!this.scoreJ) {
-          this.uploadScore('Judge', this.scoreJ);
-        }
+        this.uploadScore('Single', this.scoreS);
+        res1 = true;
+      }
+      if (this.counterJ.length !== 0 && this.scoreJ === '') {
+        this.$message({
+          type: 'error',
+          offset: 70,
+          message: '请为判断题小题设置分数！',
+        });
+        res2 = false;
+      } else{
+        res2 = true;
+        this.uploadScore('Judge', this.scoreJ);
+      }
+      if (res1 && res2) {
         window.location.href = '/ExamInfo';
       }
     },
@@ -248,15 +263,6 @@ export default {
       } catch (err) {
         console.log(err);
       }
-    },
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
     },
     async GetWhole() {
       try {
@@ -280,10 +286,6 @@ export default {
           }
           this.scoreS = `${info.singleScore}`;
           this.scoreJ = `${info.judgeScore}`;
-          // console.log("pro",this.Program);
-
-          // console.log("S:",this.scoreS);
-          // console.log("J",this.scoreJ);
           this.Count();
           this.isShow = true;
         } else {
