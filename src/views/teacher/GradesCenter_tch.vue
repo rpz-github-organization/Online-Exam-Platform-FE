@@ -4,7 +4,10 @@
     <div class="main">
       <div class="middle">
         <div>
-          <ul v-for="(exam,index) in exams" :key="index" class="middle">
+          <ul
+          v-for="(exam,index) in ExamInfo_All.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+          :key="index"
+          class="middle">
             <li id="exam">
               <div class="one">
                 <div class="name" @click.stop="toCheckGrades(exam.exam_id)">
@@ -19,10 +22,15 @@
               </div>
             </li>
           </ul>
-          <div class="buttons" v-if="pagerSeen">
-            <button @click="upPage" class="changepage">上一页</button>
-            <div class="text">当前第 {{ nowpage }} 页 ，共 {{ totalpage }} 页</div>
-            <button @click="downPage" class="changepage">下一页</button>
+          <div class="page" v-if="this.ExamInfo_All.length !== 0">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-size="pageSize"
+              layout="prev, pager, next, jumper"
+              :total="totalCount">
+            </el-pagination>
           </div>
         </div>
       </div>
@@ -41,11 +49,10 @@ export default {
 
   data() {
     return {
-      exams: [],
       ExamInfo_All: [],
-      start: 0,
-      nowpage: 1,
-      totalpage: '',
+      pageSize: 5,
+      currentPage: 1,
+      totalCount: 0,
       pagerSeen: false,
       isActive: true,
       male: true,
@@ -57,14 +64,11 @@ export default {
   },
 
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
+    handleCurrentChange (val) {
+      this.currentPage = val;
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`);
     },
     //获取所有已打分的exam
     async getInfo() {
@@ -73,7 +77,7 @@ export default {
           tea_id: this.uid,
         });
         const info = res.data.data;
-        console.log(info);
+        // console.log(info);
         if (res.data.code === 200) {
           info.forEach(element => {
             this.ExamInfo_All.push({
@@ -84,8 +88,7 @@ export default {
               exam_id: element.exam_id,
             });
           });
-          this.pager();
-          this.showPage();
+          this.totalCount = this.ExamInfo_All.length;
         } else {
           this.$message({
             message: info.message,
@@ -105,35 +108,6 @@ export default {
           });
         }
       }
-    },
-    upPage() {
-      if (this.start !== 0) {
-        this.start -= 5;
-        this.nowpage -= 1;
-        this.showPage();
-      }
-    },
-    downPage() {
-      if (this.nowpage !== this.totalpage) {
-        this.start += 5;
-        this.nowpage += 1;
-        this.showPage();
-      }
-    },
-    // 获得页数
-    pager() {
-      let exam_num = this.ExamInfo_All.length;
-      if (exam_num <= 5) {
-      } else {
-        const page_num = parseInt(exam_num / 5) + 1; // 判断页数
-        this.totalpage = page_num;
-        this.pagerSeen = true;
-      }
-    },
-    // 控制显示的exams
-    showPage() {
-      this.exams = this.ExamInfo_All.slice(this.start, this.start + 5);
-      scrollTo(0, 0);
     },
     toCheckGrades(examId) {
       this.$store.dispatch('set_examId', examId);

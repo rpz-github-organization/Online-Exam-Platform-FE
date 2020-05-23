@@ -84,7 +84,7 @@ export default {
         });
         const info = res.data;
         if (info.code === 200) {
-          console.log(info.data);
+          // console.log(info.data);
           return info.data;
         } else {
           this.$message({
