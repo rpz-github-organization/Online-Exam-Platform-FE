@@ -57,6 +57,7 @@
           </div>
         </el-card>
         <button @click="SubmitScore()">提交</button>
+        <button @click="GoBack()" class="back">返回</button>
       </div>
     </div>
   </div>
@@ -156,6 +157,9 @@ export default {
       if (data) {
         this.score = data;
       }
+    },
+    GoBack() {
+      this.$router.go(-1);
     },
     async ScoreWhole() {
       try {
@@ -319,7 +323,7 @@ export default {
   }
   button {
     color: white;
-    margin: 20px 0 10px 0;
+    margin: 20px 10px 10px 0;
     border: none;
     border-radius: 2px;
     padding: 5px 10px;
@@ -331,6 +335,9 @@ export default {
   }
   button:hover {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.17);
+  }
+  .back {
+    background-color:silver;
   }
   .active {
     color: red;
