@@ -220,7 +220,7 @@ export default {
       var nowTime = new Date().getTime();
       var beginTime = this.beginTime;
       console.log(nowTime, '--', beginTime);
-      if (nowTime < beginTime) {
+      if (nowTime > beginTime) {
         this.$message({
           message: '请修改考试开考时间！',
           type: 'error',

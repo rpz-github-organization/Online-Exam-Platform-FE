@@ -132,8 +132,7 @@ export default {
   },
   beforeMount() {
     const url = document.referrer;
-    console.log(this.$route.query.id);
-    if (this.$route.query.id !== this.uid) {
+    if (this.$route.query.id) {
       this.stu_id = this.$route.query.id;
     } else {
       this.stu_id = this.uid;
