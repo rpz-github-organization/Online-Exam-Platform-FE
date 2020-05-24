@@ -141,10 +141,10 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              window.location.href = '/IndexStu';
+              this.SubmitInfo();
             })
             .catch(() => {
-              window.location.href = '/IndexStu';
+              this.SubmitInfo();
             });
         }
       };
@@ -388,11 +388,11 @@ export default {
                 type: 'warning',
               })
                 .then(() => {
-                  window.location.href = '/IndexStu';
+                  this.SubmitInfo();
                   clearInterval(interval);
                 })
                 .catch(() => {
-                  window.location.href = '/IndexStu';
+                  this.SubmitInfo();
                   clearInterval(interval);
                 });
             }
@@ -408,11 +408,11 @@ export default {
                 type: 'warning',
               })
                 .then(() => {
-                  window.location.href = '/IndexStu';
+                  this.SubmitInfo();
                   clearInterval(interval);
                 })
                 .catch(() => {
-                  window.location.href = '/IndexStu';
+                  this.SubmitInfo();
                   clearInterval(interval);
                 });
             }

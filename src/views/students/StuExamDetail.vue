@@ -46,15 +46,6 @@ export default {
     };
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
-    },
     goToExam() {
       window.location.href = '/StuQuestion';
     },
@@ -66,7 +57,7 @@ export default {
         const res = await this.$axios.post(`${this.HOST}/exam/stuExamInfo`, {
           exam_id: this.examId,
         });
-        console.log(res);
+        // console.log(res);
         const info = res.data;
         if (info.code === 200) {
           // console.log(info.data)

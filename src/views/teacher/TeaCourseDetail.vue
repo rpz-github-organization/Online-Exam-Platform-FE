@@ -58,6 +58,7 @@
               </div>
             </div>
           </div>
+          <div v-if="this.exams.length > 0">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -65,9 +66,9 @@
               :page-size="pageSize"
               :page-sizes="[5, 10, 15, 20, 30, 40]"
               layout="sizes, prev, pager, next, jumper"
-              :total="totalCount"
-              v-if="exams">
+              :total="totalCount">
             </el-pagination>
+          </div>
         </div>
       </div>
     </div>
