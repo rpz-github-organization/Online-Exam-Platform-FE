@@ -129,7 +129,7 @@ export default {
   methods: {
     GoBack() { // 返回
       // this.$router.go(-1);
-      window.location.href = '/IndexTch';
+      window.location.href = '/teaCourseDetail';
     },
     // 删除试卷
     DeleteExam() {

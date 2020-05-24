@@ -28,7 +28,10 @@
           <el-button @click="AddExam()" class="button_sub">+ 添加考试</el-button>
         </div>
         <div class="exams">
-          <div class="exam" v-for="(exam,index) in exams" :key="index">
+          <div
+          class="exam"
+          v-for="(exam,index) in exams.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+          :key="index">
             <div class="one">
               <div class="name">{{exam.exam_name}}</div>
               <div class="time">
@@ -55,6 +58,16 @@
               </div>
             </div>
           </div>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-size="pageSize"
+              :page-sizes="[5, 10, 15, 20, 30, 40]"
+              layout="sizes, prev, pager, next, jumper"
+              :total="totalCount"
+              v-if="exams">
+            </el-pagination>
         </div>
       </div>
     </div>
@@ -74,17 +87,17 @@ export default {
     return {
       course: '',
       exams: '',
+      pageSize: 5,
+      currentPage: 1,
+      totalCount: 0,
     };
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
+    handleSizeChange(val) {
+      this.pageSize = val;
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
     },
     GoIndex () {
       // this.$router.go(-1);
@@ -111,6 +124,7 @@ export default {
           console.log(info.data);
           this.course = info.data;
           this.exams = this.course.exams;
+          this.totalCount = this.exams.length;
           this.timestamp();
         } else {
           this.$message({
