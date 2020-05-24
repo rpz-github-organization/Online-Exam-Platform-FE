@@ -132,8 +132,8 @@ export default {
   },
   beforeMount() {
     const url = document.referrer;
-    console.log(url);
-    if (url.search('/StuGradesCenter') !== -1 || url.search('GradesCenter_tch') !== -1 || url.search('TeaCourseDetail') !== -1) {
+    console.log(this.$route.query.id);
+    if (this.$route.query.id !== this.uid) {
       this.stu_id = this.$route.query.id;
     } else {
       this.stu_id = this.uid;

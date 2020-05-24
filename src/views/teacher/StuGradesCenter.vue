@@ -35,15 +35,6 @@ export default {
     this.getScore();
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
-    },
     handleClick(row) {
       // console.log(row);
       this.$router.push({ name: 'stuExamGrades', query: { id: row.id } });
