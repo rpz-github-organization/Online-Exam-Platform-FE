@@ -28,7 +28,8 @@
             </div>
             <div class="button_row">
                 <el-button @click="submitCode()" v-if="!this.isCheck">提交</el-button>
-                <el-button v-else @click="submitPwd()">提交a</el-button>
+                <el-button v-else @click="submitPwd()">提交</el-button>
+                <el-button type="info" @click="Back" plain>返回</el-button>
             </div>
         </el-card>
     </div>
@@ -70,6 +71,9 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    Back() {
+      window.location.href = '/';
     },
     async submitCode() { // 提交验证码
       try {

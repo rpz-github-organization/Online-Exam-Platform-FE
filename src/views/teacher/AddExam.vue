@@ -86,11 +86,22 @@ export default {
       }
       return true;
     },
+    judgeTime() {
+      if (!isNaN(this.examTime)) {
+        return true;
+      }
+      this.$message({
+        message: '考试时长不能为非数字',
+        type: 'error',
+        offset: 70,
+      });
+      return false;
+    },
     async submitExam() {
-      console.log(this.date);
+      // console.log(this.date);
       const date = new Date(this.date.replace(/-/g, '/'));
       const lastTime = parseInt(this.examTime, 10);
-      if (this.isAll()) {
+      if (this.isAll() && this.judgeTime()) {
         try {
           const res = await this.$axios.post(`${this.HOST}/exam/addExam`, {
             name: this.examTitle,
