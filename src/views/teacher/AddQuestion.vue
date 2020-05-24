@@ -162,6 +162,28 @@ export default {
       isShow: false,
     };
   },
+  watch: {
+    scoreS(val) {
+      if (val && isNaN(val)) {
+        this.$message({
+          type: 'error',
+          message: '选择题小分分值不能为非数字！',
+          offset: 70,
+        });
+        this.scoreS = '';
+      }
+    },
+    scoreJ(val) {
+      if (val && isNaN(val)) {
+        this.$message({
+          type: 'error',
+          message: '判断题小分分值不能为非数字！',
+          offset: 70,
+        });
+        this.scoreS = '';
+      }
+    }
+  },
 
   methods: {
     AddCount(counter) {

@@ -53,7 +53,7 @@
         </el-card>
         <el-card class="ques_card" v-if="this.isShowD">
           <div v-for="(item,index) in counterD" :key="index" v-bind:id="('counterD'+(index+1))">
-            <label>讨论题-{{ index+1 }}</label>
+            <label>问答题-{{ index+1 }}</label>
             <discussionQues :index="index" :DiscussionQ="discussionList[index]" @func="getList" />
           </div>
         </el-card>
@@ -124,15 +124,6 @@ export default {
     this.JudgeStatus();
   },
   methods: {
-    sessionJudge() {
-      localStorage.setItem('Login', 'false');
-      this.$message({
-        message: '登录过期，请重新登录',
-        type: 'error',
-        offset: 70,
-      });
-      this.$router.push('/');
-    },
     WindowJudge() {
       let co = 0;
       window.onblur = () => {

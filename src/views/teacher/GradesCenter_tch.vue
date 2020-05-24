@@ -29,7 +29,7 @@
               :current-page.sync="currentPage"
               :page-sizes="[5, 10, 20, 30, 50]"
               :page-size="pageSize"
-              layout="prev, pager, next, jumper"
+              layout="sizes, prev, pager, next, jumper"
               :total="totalCount">
             </el-pagination>
           </div>
