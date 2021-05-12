@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.19.1",
-    "codemirror": "^5.53.2",
+    "codemirror": "^5.58.2",
     "core-js": "^3.4.4",
     "element-ui": "^2.13.0",
     "eslint-friendly-formatter": "^4.0.1",
